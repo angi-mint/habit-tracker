@@ -1,0 +1,26 @@
+{
+  "name": "habit-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angi-mint/habit-tracker.git"
+  },
+  "keywords": [
+    "habit",
+    "tracker"
+  ],
+  "author": "angi-mint",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/angi-mint/habit-tracker/issues"
+  },
+  "homepage": "https://github.com/angi-mint/habit-tracker#readme",
+  "devDependencies": {
+    "electron": "^29.1.5"
+  }
+}
