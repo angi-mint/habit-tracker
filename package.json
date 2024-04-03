@@ -1,26 +1,43 @@
 {
   "name": "habit-tracker",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "productName": "habit-tracker",
+  "version": "0.0.1",
+  "description": "A Desktop App for tracking habits.",
+  "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "rebuild": "electron-rebuild -f -w sqlite3"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/angi-mint/habit-tracker.git"
+  "devDependencies": {
+    "@electron-forge/cli": "^7.3.1",
+    "@electron-forge/maker-deb": "^7.3.1",
+    "@electron-forge/maker-rpm": "^7.3.1",
+    "@electron-forge/maker-squirrel": "^7.3.1",
+    "@electron-forge/maker-zip": "^7.3.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.3.1",
+    "@electron-forge/plugin-fuses": "^7.3.1",
+    "@electron-forge/plugin-vite": "^7.3.1",
+    "@electron/fuses": "^1.8.0",
+    "@electron/rebuild": "^3.6.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "electron": "29.1.6",
+    "vite": "^5.2.7"
   },
   "keywords": [
     "habit",
     "tracker"
   ],
-  "author": "angi-mint",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/angi-mint/habit-tracker/issues"
+  "author": {
+    "name": "Angi Mint",
+    "email": "68991185+angi-mint@users.noreply.github.com"
   },
-  "homepage": "https://github.com/angi-mint/habit-tracker#readme",
-  "devDependencies": {
-    "electron": "^29.1.5"
+  "license": "MIT",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "sqlite3": "^5.1.7",
+    "vue": "^3.4.21"
   }
 }
