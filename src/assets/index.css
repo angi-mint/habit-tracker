@@ -7,3 +7,6 @@ If your app is running, changes here will take effect immediately.*/
   background: rgb(0 100 0 / 0.1) !important;
 }
 */
+* html {
+    margin: 0;
+}
