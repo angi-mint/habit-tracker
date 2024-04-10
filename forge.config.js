@@ -33,7 +33,7 @@ module.exports = {
         build: [
           {
             // `entry` is just an alias for `build.lib.entry` in the corresponding file of `config`.
-            entry: 'src/electron/main.js',
+            entry: 'src/electron/main.ts',
             config: 'vite/vite.main.config.mjs',
           },
           {
