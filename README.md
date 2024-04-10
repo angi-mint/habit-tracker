@@ -35,6 +35,6 @@ all code for the website will be in the `src` folder
 </template>
 
 <style scoped>
-  // style required for script goes here
+  /* style required for script goes here */
 </style>
 ```
