@@ -1,15 +1,26 @@
 {
   "name": "habit-tracker",
-  "productName": "habit-tracker",
   "version": "0.0.1",
   "description": "A Desktop App for tracking habits.",
-  "main": ".vite/build/main.js",
+  "author": {
+    "name": "Angi Mint",
+    "email": "68991185+angi-mint@users.noreply.github.com"
+  },
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
     "make": "electron-forge make",
+    "package": "electron-forge package",
     "publish": "electron-forge publish",
-    "rebuild": "electron-rebuild -f -w sqlite3"
+    "rebuild": "electron-rebuild -f -w sqlite3",
+    "start": "electron-forge start"
+  },
+  "main": ".vite/build/main.js",
+  "dependencies": {
+    "@vue/cli-service": "^5.0.8",
+    "electron-squirrel-startup": "^1.0.0",
+    "sequelize": "^6.37.2",
+    "sqlite3": "^5.1.7",
+    "vue": "^3.4.21",
+    "vue-class-component": "^8.0.0-0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.3.1",
@@ -23,22 +34,15 @@
     "@electron/fuses": "^1.8.0",
     "@electron/rebuild": "^3.6.0",
     "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/cli-plugin-typescript": "~5.0.0",
     "electron": "29.1.6",
+    "typescript": "~4.5.5",
     "vite": "^5.2.7"
   },
   "keywords": [
     "habit",
     "tracker"
   ],
-  "author": {
-    "name": "Angi Mint",
-    "email": "68991185+angi-mint@users.noreply.github.com"
-  },
   "license": "MIT",
-  "dependencies": {
-    "electron-squirrel-startup": "^1.0.0",
-    "sequelize": "^6.37.2",
-    "sqlite3": "^5.1.7",
-    "vue": "^3.4.21"
-  }
+  "productName": "habit-tracker"
 }
