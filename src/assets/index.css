@@ -1,13 +1,54 @@
-/* CSS for the app goes here.
-If your app is running, changes here will take effect immediately.*/
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
+:root {
+    --color-menu: #EB7B7B;
+    --color-background: #F0EFEC;
+    --color-font: #414141;
+    --color-backdrop: rgba(161,139,139,0.75);
+    --color-warning: red;
 
-/*
-* {
-  outline:1px blue solid;
-  background: rgb(0 100 0 / 0.1) !important;
+    --border-radius: 5%;
+
+    --spacing-1: 20px;
 }
-*/
-* html {
-    margin: 0;
-    font-family: sans-serif;
+
+* {
+    font-family: "Roboto", sans-serif;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+
+    z-index: 2;
+    background-color: var(--color-backdrop);
+}
+
+.modal-content {
+    position: absolute;
+    background-color: var(--color-background);
+    border-radius: var(--border-radius);
+
+    padding: var(--spacing-1);
+}
+
+.btn-exit {
+    top: 0;
+    right: 0;
+}
+
+.form-label {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.form-required {
+    color: var(--color-warning);
 }
