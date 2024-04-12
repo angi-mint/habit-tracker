@@ -13,7 +13,9 @@
 
 * {
     font-family: "Roboto", sans-serif;
+    background-color: var(--color-background);
 }
+
 
 .modal {
     position: fixed;
@@ -40,8 +42,13 @@
 }
 
 .btn-exit {
-    top: 0;
-    right: 0;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border-radius: 5px; 
+    border: 1px solid var(--color-menu); 
+    padding: 5px;
+    color:#414141;
 }
 
 .form-label {
@@ -49,6 +56,56 @@
     flex-wrap: nowrap;
 }
 
+.form-label p {
+    margin: 0px;
+}
+
+select {
+    border-radius: 5px; 
+    border: 1px solid var(--color-menu); 
+    padding: 5px; 
+    background-color: #F0EFEC;
+}
+
+label.form-label {
+    margin-top: 10px;
+}
+
+.form-input {
+    border-radius: 5px; 
+    border: 1px solid var(--color-menu); 
+    padding: 5px;
+    background-color: #F0EFEC;
+}
+
+.form-select {
+    border-radius: 5px; 
+    border: 1px solid var(--color-menu); 
+    padding: 5px;
+    background-color: #F0EFEC;
+}
+
 .form-required {
     color: var(--color-warning);
 }
+
+input[type="submit" i] {
+    position: absolute; 
+    bottom: 10px; 
+    right: 10px;
+    border-radius: 5px; 
+    border: 1px solid var(--color-menu); 
+    padding: 5px;
+    background-color: var(--color-menu);
+    color: var(--color-background);
+}
+
+
+button {
+    border-radius: 5px; 
+    border: 1px solid var(--color-menu); 
+    padding: 5px; 
+    background-color: var(--color-menu);
+    color: var(--color-background);
+}
+
