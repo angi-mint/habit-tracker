@@ -7,11 +7,13 @@ To use components:
 -->
 
 <script setup lang="ts">
+import HabitIcon from "./icons/HabitIcon.vue";
 </script>
 
 <template>
     <main>
         <h1>Habit Tracker</h1>
+        <HabitIcon id=""></HabitIcon>
     </main>
 </template>
 
