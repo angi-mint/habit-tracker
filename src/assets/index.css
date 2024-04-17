@@ -72,13 +72,6 @@
 }
 
 .form-input {
-    border-radius: 5px; 
-    border: 1px solid var(--color-menu); 
-    padding: var(--spacing-1);;
-    background-color: #F0EFEC;
-}
-
-.form-select {
     border-radius: 5px;
     border: 1px solid var(--color-menu);
     padding: var(--spacing-1);;
@@ -89,22 +82,18 @@
     width: 35px;
 }
 
-
 .form-required {
     color: var(--color-warning);
 }
 
-input[type='radio']:after {
-    appearance: none;
-}
+input[type="submit"] {
+    float: right;
+    padding: var(--spacing-1);
+    margin-top: var(--spacing-1);
 
-input[type="submit" i] {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
     border-radius: 5px;
     border: 1px solid var(--color-menu); 
-    padding: var(--spacing-1);
+
     background-color: var(--color-menu);
     color: var(--color-background);
 }
@@ -123,6 +112,7 @@ button {
     height: 25px;
     cursor: pointer;
     position: relative;
+    margin-left: 5px;
 }
 
 .toggler-wrapper input[type="checkbox"] {
@@ -149,17 +139,14 @@ button {
     position: absolute;
     -webkit-transition: all 300ms ease;
     transition: all 300ms ease;
-}
-
-.toggler-wrapper.style-1 input[type="checkbox"]:checked+.toggler-slider .toggler-knob {
-    left: calc(100% - 19px - 3px);
-}
-
-.toggler-wrapper.style-1 .toggler-knob {
     width: calc(25px - 6px);
     height: calc(25px - 6px);
     border-radius: 50%;
     left: 3px;
     top: 3px;
     background-color: var(--color-background);
+}
+
+.toggler-wrapper input[type="checkbox"]:checked+.toggler-slider .toggler-knob {
+    left: calc(100% - 19px - 3px);
 }
