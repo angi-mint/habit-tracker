@@ -7,11 +7,12 @@ To use components:
 -->
 
 <script setup lang="ts">
+import Header from "./components/Header.vue";
 </script>
 
 <template>
     <main>
-        <h1>Habit Tracker</h1>
+        <Header></Header>
     </main>
 </template>
 
