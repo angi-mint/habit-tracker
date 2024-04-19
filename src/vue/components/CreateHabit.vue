@@ -28,7 +28,7 @@ const habitData = ref({
     endDate: '',
 })
 const onSubmit = () => {
-    console.log(habitData.value.range)
+    console.log(habitData.value)
     open.value = false;
 }
 
@@ -49,6 +49,9 @@ const categories: Ref<Array<DatabaseList>> = computed(() => {
 const icons: Ref<Array<DatabaseList>> = computed(() => {
     const icon = [
         { pk: 1, value: "heart" },
+        { pk: 2, value: "pill" },
+        { pk: 3, value: "book" },
+        { pk: 4, value: "glass" },
     ];
 
     return icon;
