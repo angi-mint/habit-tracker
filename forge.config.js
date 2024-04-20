@@ -37,7 +37,7 @@ module.exports = {
             config: 'vite/vite.main.config.mjs',
           },
           {
-            entry: 'src/electron/preload.js',
+            entry: 'src/electron/preload.ts',
             config: 'vite/vite.preload.config.mjs',
           },
         ],
