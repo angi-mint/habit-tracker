@@ -10,9 +10,11 @@ const API = {
     onCount: (callback: any) => ipcRenderer.on("count", (event: any, args: any) => {
         callback(args);
     }),
-
     sendPromise: (msg: any) => ipcRenderer.invoke("promise-msg", msg),
+
+
     sendHabitName: (args: any) => ipcRenderer.invoke("getNameOfHabit", args),
+    sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
 };
 
 contextBridge.exposeInMainWorld('api', API);

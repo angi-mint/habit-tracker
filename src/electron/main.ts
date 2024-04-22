@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 //database import
 import db from '../database/database';
-
+import { Habit } from '../database/database';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -62,6 +62,13 @@ ipcMain.handle("getNameOfHabit", async (event: any, args: any) => {
   console.log(args.id);
   const habitName = await db.getHabit(args.id);
   return habitName;
+});
+
+// Handle for sending habit object
+ipcMain.handle("sendHabitObject", async (event: any, habit: Habit) => {
+  console.log(habit);
+  const sendHabit = await db.addHabit(habit);
+  return sendHabit;
 });
 
 
