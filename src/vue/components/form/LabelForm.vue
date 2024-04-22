@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps({
     required: Boolean,
-})
+});
 </script>
 
 <template>
@@ -14,4 +14,4 @@ const props = defineProps({
 
 <style scoped>
 
-</style>S
+</style>
