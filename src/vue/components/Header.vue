@@ -3,7 +3,7 @@ import CreateHabit from "./CreateHabit.vue";
 </script>
 
 <template>
-    <h1>Habit Tracker</h1>
+    <h1>Willkommen zurück!</h1>
     <CreateHabit />
 </template>
 
