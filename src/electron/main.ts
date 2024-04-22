@@ -1,5 +1,8 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
+//database import
+import db from '../database/database';
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -25,7 +28,42 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  // For TestDatabase.vue
+  //---------------------
+  let count = 0;
+  setInterval(() => {
+    mainWindow.webContents.send("count", count++);
+  }, 1000);
+  //---------------------
 };
+
+
+// For TestDatabase.vue
+//---------------------
+console.log("über ipcMain wird eine Nachricht empfangen");
+
+ipcMain.on("message-test", (event: any, args: any) => {
+  console.log(args);
+});
+
+ipcMain.handle("promise-msg", async (event: any, args: any) => {
+  console.log(args);
+
+  const cpuUsage = process.cpuUsage();
+  console.log(cpuUsage);
+  return cpuUsage;
+});
+//---------------------
+
+
+// Handle for getting habit name
+ipcMain.handle("getNameOfHabit", async (event: any, args: any) => {
+  console.log(args.id);
+  const habitName = await db.getHabit(args.id);
+  return habitName;
+});
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
