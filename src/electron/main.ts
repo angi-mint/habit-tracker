@@ -1,8 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('node:path');
+import {app, BrowserWindow, ipcMain} from 'electron';
+import path from 'node:path';
 //database import
-import db from '../database/database';
-import { Habit } from '../database/database';
+import db, {Habit} from '../database/database';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -43,11 +42,11 @@ const createWindow = () => {
 //---------------------
 console.log("über ipcMain wird eine Nachricht empfangen");
 
-ipcMain.on("message-test", (event: any, args: any) => {
+ipcMain.on("message-test", (_event: any, args: any) => {
   console.log(args);
 });
 
-ipcMain.handle("promise-msg", async (event: any, args: any) => {
+ipcMain.handle("promise-msg", async (_event: any, args: any) => {
   console.log(args);
 
   const cpuUsage = process.cpuUsage();
@@ -58,17 +57,15 @@ ipcMain.handle("promise-msg", async (event: any, args: any) => {
 
 
 // Handle for getting habit name
-ipcMain.handle("getNameOfHabit", async (event: any, args: any) => {
+ipcMain.handle("getNameOfHabit", async (_event: any, args: any) => {
   console.log(args.id);
-  const habitName = await db.getHabit(args.id);
-  return habitName;
+  return await db.getHabit(args.id);
 });
 
 // Handle for sending habit object
-ipcMain.handle("sendHabitObject", async (event: any, habit: Habit) => {
+ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
   console.log(habit);
-  const sendHabit = await db.addHabit(habit);
-  return sendHabit;
+  return await db.addHabit(habit);
 });
 
 
