@@ -22,12 +22,12 @@ const data = [
     </div>
 
     <div class="habits-weekly habits-wrapper">
-        <h2> Diese Woche</h2>
+        <h2>Diese Woche</h2>
         <DailyTracker v-for="habit in data[1]" :id="habit.id" :name="habit.name" :icon="habit.icon" :color="habit.color" :frequency="habit.frequency" :entries="habit.entries" :interval="habit.entries + '/' + habit.frequency"></DailyTracker>
     </div>
 
     <div class="habits-monthly habits-wrapper">
-        <h2> Diesen Monat</h2>
+        <h2>Diesen Monat</h2>
         <DailyTracker v-for="habit in data[2]" :id="habit.id" :name="habit.name" :icon="habit.icon" :color="habit.color" :frequency="habit.frequency" :entries="habit.entries" :interval="habit.entries + '/' + habit.frequency"></DailyTracker>
     </div>
 
