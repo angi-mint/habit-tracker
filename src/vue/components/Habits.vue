@@ -2,6 +2,7 @@
 import Tabs from "./tabs/Tabs.vue";
 import Tab from "./tabs/Tab.vue";
 import {Ref, ref} from "vue";
+import DailyOverview from "./calendar/DailyOverview.vue";
 
 const states: Ref<{ [key: string]: boolean }> = ref({
     today: true,
@@ -25,7 +26,9 @@ function changeStates(tab: string) {
             <button @click="changeStates('summary')" :class="{ 'tab-active': states.summary }" class="tab-selector">Übersicht</button>
         </template>
         <template #content>
-            <Tab v-if="states.today">Today Content</Tab>
+            <Tab v-if="states.today">
+                <DailyOverview></DailyOverview>
+            </Tab>
             <Tab v-if="states.weekly">Weekly Content</Tab>
             <Tab v-if="states.summary">Summary Content</Tab>
         </template>
