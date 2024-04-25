@@ -189,12 +189,6 @@ button {
 
 /* progress circle */
 
-.tracker-progress {
-    margin: 10px auto;
-    max-width: 40px;
-    max-height: 250px;
-}
-
 .tracker-circle {
     fill: none;
     stroke-width: 4;
