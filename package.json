@@ -17,7 +17,6 @@
   "dependencies": {
     "@vue/cli-service": "^5.0.8",
     "electron-squirrel-startup": "^1.0.0",
-    "sequelize": "^6.37.2",
     "sqlite3": "^5.1.7",
     "vue": "^3.4.21",
     "vue-class-component": "^8.0.0-0"
