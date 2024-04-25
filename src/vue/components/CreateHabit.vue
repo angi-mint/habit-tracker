@@ -64,8 +64,7 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
     const interval = [
         { pk: 1, value: "täglich" },
         { pk: 2, value: "wöchentlich" },
-        { pk: 3, value: "zweiwöchentlich" },
-        { pk: 4, value: "monatlich" },
+        { pk: 3, value: "monatlich" },
     ];
     return interval;
 });
