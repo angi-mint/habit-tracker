@@ -4,7 +4,8 @@ const HabitTrack = defineProps({
     id: Number,
     color: String,
     frequency: Number,
-    entries: Number
+    entries: Number,
+    size: String
 });
 
 const percentage = (HabitTrack.entries! / HabitTrack.frequency!) * 100;
@@ -30,6 +31,12 @@ async function trackHabit() {
 </template>
 
 <style scoped>
+
+.tracker-progress {
+    cursor: pointer;
+    max-width: v-bind('HabitTrack.size');
+}
+
 .tracker-circle {
     stroke: v-bind('HabitTrack.color');
 }
