@@ -113,6 +113,7 @@ input[type="submit"] {
 }
 
 button {
+    cursor: pointer;
     border-radius: 5px; 
     border: 1px solid var(--color-menu); 
     padding: var(--spacing-1);
@@ -184,4 +185,25 @@ button {
 
 .tab-content {
     margin-top: 10px;
+}
+
+/* progress circle */
+
+.tracker-progress {
+    margin: 10px auto;
+    max-width: 40px;
+    max-height: 250px;
+}
+
+.tracker-circle {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
 }
