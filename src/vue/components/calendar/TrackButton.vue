@@ -2,7 +2,6 @@
 
 const HabitTrack = defineProps({
     id: Number,
-    name: String,
     color: String,
     frequency: Number,
     entries: Number
@@ -37,5 +36,4 @@ async function trackHabit() {
 .tracker-svg {
     color: v-bind('HabitTrack.color');
 }
-
 </style>
