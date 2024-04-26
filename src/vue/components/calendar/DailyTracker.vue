@@ -23,7 +23,7 @@ const iconSize = 40;
             <h3 class="habit-name">{{ HabitProps.name }}</h3>
             <p class="habit-text">{{ HabitProps.interval }}</p>
         </div>
-        <TrackButton :id="HabitProps.id" :color="HabitProps.color" :frequency="HabitProps.frequency" :entries="HabitProps.entries" :size="iconSize + 'px'"></TrackButton>
+        <TrackButton :id="HabitProps.id" :color="HabitProps.color" :frequency="HabitProps.frequency" :entries="HabitProps.entries" :size="iconSize"></TrackButton>
     </div>
 </template>
 
