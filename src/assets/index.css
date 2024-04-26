@@ -12,6 +12,7 @@
     --spacing-2: 10px;
     --spacing-3: 15px;
     --spacing-4: 20px;
+    --spacing-5: 30px;
 
     --font-1: 16px;
 }
@@ -168,7 +169,7 @@ button {
 
 /* Ab hier wird die Normalansicht gestylt*/
 
- .tab-selector {
+.tab-selector {
     margin-right: 5px;
     background-color: var(--color-background);
     color: var(--color-font);
@@ -210,27 +211,9 @@ button {
 }
 
 /* Abstand der Überschirft zu den Habits */
-.habits-daily h2 {
-    margin-bottom: var(--spacing-3);
-    margin-top: 30px;
+.habits-wrapper h2 {
+    margin: var(--spacing-4) 0 var(--spacing-3) 0;
 }
-
-.habits-weekly h2 {
-    margin-bottom: var(--spacing-3);
-    margin-top: 30px;
-}
-
-.habits-monthly h2 {
-    margin-bottom: var(--spacing-3);
-    margin-top: 30px;
-}
-
-.habits-finished h2 {
-    margin-bottom: var(--spacing-3);
-    margin-top: 30px;
-}
-
-
 
 .habit-wrapper {
     display: flex;
@@ -245,21 +228,20 @@ button {
     margin-right: var(--spacing-2);
     border-radius: var(--spacing-4); 
     padding: var(--spacing-1);
-    background-color: var(--color-back);
     outline: 3px solid var(--color-menu);
     color: var(--color-background);
-  }
-  
-  .habit-name {
-    flex: 1; 
-    margin: 0 var(--spacing-4) 0 var(--spacing-3); 
+}
+
+.habit-name {
+    flex: 1;
+    margin: 0 var(--spacing-4) 0 var(--spacing-3);
     color: var(--color-font);
     border-radius: var(--spacing-4);
-  }
-  
-  .habit-text {
-    margin: 0 10px 0 0; 
+}
+
+.habit-text {
+    margin: 0 10px 0 0;
     color: var(--color-font);
     background-color: var(--color-background);
     border-radius: var(--spacing-4);
-  }
+}
