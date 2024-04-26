@@ -37,7 +37,7 @@
     margin-left: 20px;
 }
 
-/* Hier beginnt der Teil indem das Pop-up Fenster für das anlegen eines Habit gestylt wird */
+/* Pop-up Fenster für das anlegen eines Habit */
 
 .modal {
     position: fixed;
@@ -201,3 +201,61 @@ button {
         stroke-dasharray: 0 100;
     }
 }
+
+
+/* Tägliche Ansicht */
+
+/* Abstand der Überschirft zu den Habits */
+.habits-daily h2 {
+    margin-bottom: var(--spacing-3);
+    margin-top: 30px;
+}
+
+.habits-weekly h2 {
+    margin-bottom: var(--spacing-3);
+    margin-top: 30px;
+}
+
+.habits-monthly h2 {
+    margin-bottom: var(--spacing-3);
+    margin-top: 30px;
+}
+
+.habits-finished h2 {
+    margin-bottom: var(--spacing-3);
+    margin-top: 30px;
+}
+
+
+
+.habit-wrapper {
+    display: flex;
+    padding: 5px;
+}
+
+.habit-info {
+    display: flex; 
+    align-items: center; 
+    width: 300px; /*  festen Breite damit alle gleich lang sind */
+    margin-left: var(--spacing-2);
+    margin-right: var(--spacing-2);
+    border-radius: var(--spacing-4); 
+    padding: var(--spacing-1);
+    background-color: var(--color-menu);
+    color: var(--color-background);
+  }
+  
+  .habit-name {
+    flex: 1; 
+    margin: 0 var(--spacing-4) 0 var(--spacing-3); 
+    color: var(--color-background);
+    background-color: #EB7B7B;
+    border-radius: var(--spacing-1);
+  }
+  
+  .habit-text {
+    margin: 0 10px 0 0; 
+    color: var(--color-background);
+    background-color: #EB7B7B;
+    border-radius: 5px;
+  }
