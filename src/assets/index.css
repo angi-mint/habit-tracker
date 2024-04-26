@@ -205,6 +205,10 @@ button {
 
 /* Tägliche Ansicht */
 
+.tab-content {
+    margin-left: var(--spacing-3);
+}
+
 /* Abstand der Überschirft zu den Habits */
 .habits-daily h2 {
     margin-bottom: var(--spacing-3);
@@ -241,21 +245,21 @@ button {
     margin-right: var(--spacing-2);
     border-radius: var(--spacing-4); 
     padding: var(--spacing-1);
-    background-color: var(--color-menu);
+    background-color: var(--color-back);
+    outline: 3px solid var(--color-menu);
     color: var(--color-background);
   }
   
   .habit-name {
     flex: 1; 
     margin: 0 var(--spacing-4) 0 var(--spacing-3); 
-    color: var(--color-background);
-    background-color: #EB7B7B;
-    border-radius: var(--spacing-1);
+    color: var(--color-font);
+    border-radius: var(--spacing-4);
   }
   
   .habit-text {
     margin: 0 10px 0 0; 
-    color: var(--color-background);
-    background-color: #EB7B7B;
-    border-radius: 5px;
+    color: var(--color-font);
+    background-color: var(--color-background);
+    border-radius: var(--spacing-4);
   }
