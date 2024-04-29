@@ -68,11 +68,24 @@ ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
   return await db.addHabit(habit);
 });
 
+// Handle for getting daily habits
+ipcMain.handle("getDailyHabits", async (_event: any) => {
+  return await db.showDailyHabits();
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+
+
+  // Test showDailyHabits
+  db.showDailyHabits().then((result) => {
+    console.log(result);
+  }).catch((error) => {
+    console.error("Error fetching habits: ", error);
+  });
+
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the

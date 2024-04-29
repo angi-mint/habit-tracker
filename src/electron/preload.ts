@@ -15,6 +15,7 @@ const API = {
 
     sendHabitName: (args: any) => ipcRenderer.invoke("getNameOfHabit", args),
     sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
+    getDailyHabits: () => ipcRenderer.invoke("getDailyHabits"),
 };
 
 contextBridge.exposeInMainWorld('api', API);
