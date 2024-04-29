@@ -1,9 +1,30 @@
 <script setup lang="ts">
+const currentDate = new Date();
+const currentMonth = currentDate.getMonth();
+
+function getMonthString(month: number) {
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+    return months[month];
+}
 
 </script>
 
 <template>
-<h1>month</h1>
+
+
 </template>
 
 <style scoped>
