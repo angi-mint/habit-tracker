@@ -80,6 +80,12 @@ ipcMain.handle("getDailyHabits", async (_event: any) => {
   return await db.showDailyHabits();
 });
 
+// Handle for addRecord
+ipcMain.handle("addRecord", async (_event: any, id: any) => {
+  console.log(id);
+  return await db.addRecord(id);
+});
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
