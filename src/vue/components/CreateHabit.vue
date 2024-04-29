@@ -72,7 +72,7 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
 </script>
 
 <template>
-    <button class="btn-habit" @click="open = true">Neues Habit</button>
+    <button class="btn-habit" @click="open = true">+</button>
     <Teleport to="body">
         <div v-if="open" class="modal">
             <div class="modal-content">
