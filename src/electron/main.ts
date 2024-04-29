@@ -1,7 +1,9 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import path from 'node:path';
+
 //database import
-import db, {Habit} from '../database/database';
+import db from '../database/database';
+import {Habit} from '../database/interface';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
