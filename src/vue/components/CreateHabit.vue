@@ -90,13 +90,10 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                     <LabelForm>
                         <template #form-label><p>Kategorie</p></template>
                         <template #input>
-                            <select class="form-input" v-if="categories.length > 0" v-model="habitData.category">
-                                <option disabled value=""> Wähle eine Kategorie</option>
-                                <option v-for="items in categories" :value="items.pk">
-                                    {{ items.value }}
-                                </option>
-                            </select>
-                            <p v-else>Es gibt keine Kategorien</p>
+                            <input class="form-input" list="categories" v-model="habitData.category">
+                            <datalist id="categories">
+                                <option v-for="items in categories" :value="items.value"></option>
+                            </datalist>
                         </template>
                     </LabelForm>
 
