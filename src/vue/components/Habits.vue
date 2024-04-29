@@ -3,7 +3,6 @@ import Tabs from "./tabs/Tabs.vue";
 import Tab from "./tabs/Tab.vue";
 import {Ref, ref} from "vue";
 import DailyOverview from "./calendar/DailyOverview.vue";
-import MonthlyOverview from "./calendar/MonthlyOverview.vue";
 
 const states: Ref<{ [key: string]: boolean }> = ref({
     today: true,
@@ -32,7 +31,6 @@ function changeStates(tab: string) {
             </Tab>
             <Tab v-if="states.weekly">Weekly Content</Tab>
             <Tab v-if="states.monthly">
-                <MonthlyOverview></MonthlyOverview>
             </Tab>
         </template>
     </Tabs>
