@@ -1,7 +1,5 @@
 <script setup lang="ts">
 
-import MonthlyTracker from "./MonthlyTracker.vue";
-
 const currentDate = new Date();
 function getMonth(month?: number): Array<string|number>{
     if (!month) month = currentDate.getMonth();
@@ -18,7 +16,6 @@ function getMonth(month?: number): Array<string|number>{
 
 <template>
     <h2> {{ getMonth()[0]}}: {{currentDate.toLocaleDateString('sv')}} </h2>
-    <MonthlyTracker></MonthlyTracker>
 </template>
 
 <style scoped>
