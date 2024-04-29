@@ -8,14 +8,14 @@ const open = ref(false);
 
 interface HabitProps {
     name: string,
-    icon?: number,
-    color?: number,
-    category?: number,
+    icon: number,
+    color: number,
+    category: string,
     frequency: number,
     interval: number,
     timeperiod: number,
-    startDate?: Date,
-    endDate?: Date
+    startDate: Date,
+    endDate: Date
 }
 const habitData = ref({
     name: '',
@@ -30,7 +30,6 @@ const habitData = ref({
 })
 
 const onSubmit = async () => {
-    //const serializableHabitData = JSON.parse(JSON.stringify(habitData.value));
     const newHabitId = await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
     console.log(newHabitId);
 }

@@ -2,7 +2,7 @@ interface Habit {
     name: string;
     icon: number;
     color: number;
-    category: number;
+    category: string;
     frequency: number;
     interval: number;
     timeperiod: boolean;
