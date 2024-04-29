@@ -1,16 +1,19 @@
 <script setup lang="ts">
-const currentDate = new Date();
-const currentMonth = currentDate.getMonth();
+function getMonth(month?: number): Array<string|number>{
+    if (!month) month = new Date().getMonth();
 
-function getMonthString(month: number) {
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December",];
-    return months[month];
+    const monthInfo = [];
+    const monthList = ["Januar", "Februar", "März", "April", "Mai", "Juni", "July", "August", "September", "Oktober", "November", "Dezember"];
+    const daysInMonth = new Date(currentDate.getFullYear(), month + 1, 0).getDate();
+
+    monthInfo.push(monthList[month], daysInMonth);
+    return monthInfo;
 }
 
 </script>
 
 <template>
-<h2> {{ getMonthString(currentMonth)}}</h2>
+    <h2> {{ getMonth()[0]}} </h2>
 </template>
 
 <style scoped>
