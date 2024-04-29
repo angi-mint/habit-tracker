@@ -101,7 +101,7 @@ interface HabitState {
 //Tägliche Habits anzeigen
 async function showDailyHabits() {
   const db = openDb();
-  return new Promise<{ daily: HabitState[], done: HabitState[] }>((resolve, reject) => {
+  return new Promise<{ daily: HabitState[], weekly: HabitState[], monthly: HabitState[], done: HabitState[] }>((resolve, reject) => {
 
     const date = new Date();
     const year = date.getFullYear();
@@ -109,15 +109,20 @@ async function showDailyHabits() {
     const day = ("0" + date.getDate()).slice(-2);
     const formattedDate = `${year}-${month}-${day}`;
 
+    const weekDates = getWeekDates();
+
     db.all('SELECT habit.id, habit.name, icon.name as icon, color.name as color, habit.frequency, habit.interval FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id', (err, habits: HabitState[]) => {
       if (err) {
         reject(err);
       } else {
         const daily: HabitState[] = [];
+        const weekly: HabitState[] = [];
+        const monthly: HabitState[] = [];
         const done: HabitState[] = [];
 
         const promises = habits.map((HabitState) => {
           return new Promise<void>((resolve, reject) => {
+
             if (HabitState.interval === 1) { // Check if interval = 1 (daily)
               db.get('SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date = ?', [HabitState.id, formattedDate], (err, row) => {
                 if (err) {
@@ -132,14 +137,36 @@ async function showDailyHabits() {
                   resolve();
                 }
               });
-            } else {
+            } 
+            
+            else if (HabitState.interval === 2) { // Check if interval = 2 (weekly)
+              
+              const placeholders = weekDates.map(() => '?').join(', ');
+              const sql = `SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date IN (${placeholders})`;
+              db.get(sql, [HabitState.id, ...weekDates], (err, row) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  HabitState.entries = row.count;
+                  if (HabitState.frequency === row.count) { // Check if frequency = entries
+                    done.push(HabitState);
+                  } else {
+                    weekly.push(HabitState);
+                  }
+                  resolve();
+                }
+              });
+
+            }
+            
+            else {
               resolve();
             }
           });
         });
 
         Promise.all(promises)
-          .then(() => resolve({ daily, done }))
+          .then(() => resolve({ daily, weekly, monthly, done }))
           .catch(reject);
       }
     });
