@@ -42,11 +42,24 @@ function addRecord(id: number): Promise<void> {
   });
 }
 
+function getCategoryList() {
+  const db = openDb();
+  return new Promise((resolve, reject) => {
+    db.all('SELECT id, name FROM category', (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 export interface Habit {
   name: string;
-  icon?: number;
-  color?: number;
-  category?: number;
+  icon: number;
+  color: number;
+  category: number;
   frequency: number;
   interval: number;
   timeperiod: boolean;
@@ -62,7 +75,7 @@ function addHabit(habit: Habit): Promise<number> {
 
     if (habit.timeperiod) {
       sql =
-        "INSERT INTO habit (name, icon, color, category, frequency, interval, timeperiod, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO habit (name, icon_id, color_id, category_id, frequency, interval, timeperiod, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
       params = [
         habit.name,
         habit.icon,
@@ -76,7 +89,7 @@ function addHabit(habit: Habit): Promise<number> {
       ];
     } else {
       sql =
-        "INSERT INTO habit (name, icon, color, category, frequency, interval, timeperiod) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO habit (name, icon_id, color_id, category_id, interval, timeperiod) VALUES (?, ?, ?, ?, ?, ?, ?)";
       params = [
         habit.name,
         habit.icon,
@@ -252,5 +265,6 @@ export default {
   addHabit,
   showDailyHabits,
   getWeekDates,
-  addRecord
+  addRecord,
+  getCategoryList,
 };

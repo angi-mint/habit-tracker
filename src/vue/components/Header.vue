@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import CreateHabit from "./CreateHabit.vue";
-import TestDatabase from "./TestDatabase.vue";
 </script>
 
 <template>

@@ -27,34 +27,7 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
-
-  // For TestDatabase.vue
-  //---------------------
-  let count = 0;
-  setInterval(() => {
-    mainWindow.webContents.send("count", count++);
-  }, 1000);
-  //---------------------
 };
-
-
-// For TestDatabase.vue
-//---------------------
-console.log("über ipcMain wird eine Nachricht empfangen");
-
-ipcMain.on("message-test", (_event: any, args: any) => {
-  console.log(args);
-});
-
-ipcMain.handle("promise-msg", async (_event: any, args: any) => {
-  console.log(args);
-
-  const cpuUsage = process.cpuUsage();
-  console.log(cpuUsage);
-  return cpuUsage;
-});
-//---------------------
-
 
 // Handle for getting habit name
 ipcMain.handle("getNameOfHabit", async (_event: any, args: any) => {
