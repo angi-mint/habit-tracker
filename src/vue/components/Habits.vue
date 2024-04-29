@@ -23,8 +23,8 @@ function changeStates(tab: string) {
     <Tabs>
         <template #selector>
             <button @click="changeStates('today')" :class="{ 'tab-active': states.today }" class="tab-selector">Heute</button>
-            <button @click="changeStates('weekly')" :class="{ 'tab-active': states.weekly }" class="tab-selector">Wöchentlich</button>
-            <button @click="changeStates('monthly')" :class="{ 'tab-active': states.monthly }" class="tab-selector">Übersicht</button>
+            <button @click="changeStates('weekly')" :class="{ 'tab-active': states.weekly }" class="tab-selector">Woche</button>
+            <button @click="changeStates('monthly')" :class="{ 'tab-active': states.monthly }" class="tab-selector">Monat</button>
         </template>
         <template #content>
             <Tab v-if="states.today">
