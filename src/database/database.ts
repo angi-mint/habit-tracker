@@ -24,6 +24,24 @@ function getHabit(id: number): Promise<string | null> {
   });
 }
 
+function addRecord(id: number): Promise<void> {
+  const db = openDb();
+  const date = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+  return new Promise((resolve, reject) => {
+    db.run(
+      "INSERT INTO record (habit_id, date) VALUES (?, ?)",
+      [id, date],
+      (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
+}
+
 export interface Habit {
   name: string;
   icon?: number;
@@ -197,7 +215,7 @@ async function showDailyHabits() {
                 const currentYear = new Date().getFullYear();
 
                 db.get(
-                  'SELECT COUNT(*) as count FROM records WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?',
+                  'SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?',
                   [HabitState.id, currentMonth, currentYear],
                   (err, row) => {
                     if (err) {
@@ -262,7 +280,7 @@ async function showWeeklyHabits(): Promise<HabitState[][]> {
       if (habit.interval === 1) {
         const row = await new Promise<{ count: number }>((resolve, reject) => {
           db.get(
-            "SELECT COUNT(*) as count FROM records WHERE habit_id = ? AND date = ?",
+            "SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date = ?",
             [habit.id, formattedDate],
             (err, row) => {
               if (err) {
@@ -327,7 +345,7 @@ async function showMonthlyHabits(): Promise<HabitState[][]> {
       if (habit.interval === 1) {
         const row = await new Promise<{ count: number }>((resolve, reject) => {
           db.get(
-            "SELECT COUNT(*) as count FROM records WHERE habit_id = ? AND date = ?",
+            "SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date = ?",
             [habit.id, formattedDate],
             (err, row) => {
               if (err) {
@@ -359,21 +377,3 @@ export default {
   getWeekDates,
   addRecord
 };
-
-function addRecord(id: number): Promise<void> {
-  const db = openDb();
-  const date = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
-  return new Promise((resolve, reject) => {
-    db.run(
-      "INSERT INTO record (habit_id, date) VALUES (?, ?)",
-      [id, date],
-      (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      }
-    );
-  });
-}

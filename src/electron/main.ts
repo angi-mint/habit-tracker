@@ -81,8 +81,7 @@ ipcMain.handle("getDailyHabits", async (_event: any) => {
 });
 
 // Handle for addRecord
-ipcMain.handle("addRecord", async (_event: any, id: any) => {
-  console.log(id);
+ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
   return await db.addRecord(id);
 });
 
