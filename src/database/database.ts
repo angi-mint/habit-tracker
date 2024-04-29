@@ -86,123 +86,48 @@ function getWeekDates(): string[] {
   return weekDates;
 }
 
-
-export default {
-  getHabit,
-  addHabit,
-  showDailyHabits,
-  getWeekDates,
-};
-
-
-
-/*
-//Schleife die habits durchgeht und in einem string mit zwei listen zurück gibt
-function showDailyHabitss {
- 
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero based
-  const day = ("0" + date.getDate()).slice(-2);
-  const formattedDate = `${year}-${month}-${day}`;
-  console.log(formattedDate);
-
-  // erstes Habit aus tabelle habit holen
-
-/*
-  if () { //prüfen ob interval = 1 (täglich) ist 
-
-    if () { //prüfen ob frequency = entries ist
-
-      //Habit in ersten Liste speichern
-
-    }else if () { //prüfen ob frequency > entries ist
-
-      //Habit in zweiten Liste speichern
-
-    }
-
-
-
-  }else if () { //prüfen ob interval = 2 (wöchentlich) ist 
-
-    //Datums der woche generieren
-
-    //Einträge anhand der Datums aus der tabelle record holen
-
-    if () { //prüfen ob frequency = entries ist
-
-      //Habit in ersten Liste speichern
-
-    }else if () { //prüfen ob frequency > entries ist
-
-      //Habit in zweiten Liste speichern
-
-    }
-
-  }else if () { //prüfen ob interval = 3 (monatlich) ist
-
-    //Monat aus datum holen
-
-    //Einträge anhand des Monats aus der tabelle record holen
-
-    if () { //prüfen ob frequency = entries ist
-
-      //Habit in ersten Liste speichern
-    
-    }else if () { //prüfen ob frequency > entries ist
-    
-      //Habit in zweiten Liste speichern
-    
-    }
-
-  }
-}
-
-*/
-
 interface HabitState {
   id: number;
   name: string;
-  icon: string;      // muss noch
-  color: string;     // geändert werden
+  icon: string;
+  color: string;
   frequency: number;
   entries: number;
   interval: number;
-  iconName: string;  // muss noch 
-  colorName: string; // geändert werden
 }
 
 
+
+//Tägliche Habits anzeigen
 async function showDailyHabits() {
   const db = openDb();
-  return new Promise<{ list1: HabitState[], list2: HabitState[] }>((resolve, reject) => {
+  return new Promise<{ daily: HabitState[], done: HabitState[] }>((resolve, reject) => {
 
     const date = new Date();
     const year = date.getFullYear();
-    const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero based
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
     const day = ("0" + date.getDate()).slice(-2);
     const formattedDate = `${year}-${month}-${day}`;
 
-    db.all('SELECT habit.*, icon.name as iconName, color.name as colorName FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id', (err, habits: HabitState[]) => {
+    db.all('SELECT habit.id, habit.name, icon.name as icon, color.name as color, habit.frequency, habit.interval FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id', (err, habits: HabitState[]) => {
       if (err) {
         reject(err);
       } else {
-        const list1: HabitState[] = [];
-        const list2: HabitState[] = [];
+        const daily: HabitState[] = [];
+        const done: HabitState[] = [];
 
         const promises = habits.map((HabitState) => {
           return new Promise<void>((resolve, reject) => {
             if (HabitState.interval === 1) { // Check if interval = 1 (daily)
-              db.get('SELECT COUNT(*) as count FROM records WHERE habit_id = ? AND date = ?', [HabitState.id, formattedDate], (err, row) => {
+              db.get('SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date = ?', [HabitState.id, formattedDate], (err, row) => {
                 if (err) {
                   reject(err);
                 } else {
                   HabitState.entries = row.count;
                   if (HabitState.frequency === row.count) { // Check if frequency = entries
-                    list1.push(HabitState);
+                    done.push(HabitState);
                   } else {
-                    list2.push(HabitState);
+                    daily.push(HabitState);
                   }
                   resolve();
                 }
@@ -214,7 +139,7 @@ async function showDailyHabits() {
         });
 
         Promise.all(promises)
-          .then(() => resolve({ list1, list2 }))
+          .then(() => resolve({ daily, done }))
           .catch(reject);
       }
     });
@@ -333,5 +258,9 @@ async function showMonthlyHabits(): Promise<HabitState[][]> {
   return monthHabits;
 }
 
-
-
+export default {
+  getHabit,
+  addHabit,
+  showDailyHabits,
+  getWeekDates,
+};
