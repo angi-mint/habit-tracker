@@ -53,7 +53,7 @@ function addHabit(habit: Habit): Promise<number> {
       params = [habit.name, habit.icon, habit.color, habit.category, habit.frequency, habit.interval, habit.timeperiod];
     }
 
-    db.run(sql, params, function(err) {
+    db.run(sql, params, function (err) {
       if (err) {
         reject(err);
       } else {
@@ -137,10 +137,10 @@ async function showDailyHabits() {
                   resolve();
                 }
               });
-            } 
-            
+            }
+
             else if (HabitState.interval === 2) { // Check if interval = 2 (weekly)
-              
+
               const placeholders = weekDates.map(() => '?').join(', ');
               const sql = `SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date IN (${placeholders})`;
               db.get(sql, [HabitState.id, ...weekDates], (err, row) => {
@@ -158,7 +158,28 @@ async function showDailyHabits() {
               });
 
             }
-            
+
+            else if (HabitState.interval === 3) { // Check if interval = 3 (monthly)
+
+              const currentMonth = new Date().getMonth() + 1; // Months are zero-based
+              const currentYear = new Date().getFullYear();
+
+              db.get('SELECT COUNT(*) as count FROM records WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?', [HabitState.id, currentMonth, currentYear], (err, row) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  HabitState.entries = row.count;
+                  if (HabitState.frequency === row.count) { // Check if frequency = entries
+                    done.push(HabitState);
+                  } else {
+                    monthly.push(HabitState);
+                  }
+                  resolve();
+                }
+              });
+
+            }
+
             else {
               resolve();
             }
