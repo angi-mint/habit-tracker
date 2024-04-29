@@ -25,11 +25,24 @@ function getHabit(id: number): Promise<string | null> {
   });
 }
 
+function getCategoryList() {
+  const db = openDb();
+  return new Promise((resolve, reject) => {
+    db.all('SELECT id, name FROM category', (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 export interface Habit {
   name: string,
-  icon?: number,
-  color?: number,
-  category?: number,
+  icon: number,
+  color: number,
+  category: number,
   frequency: number,
   interval: number,
   timeperiod: boolean,
@@ -45,11 +58,11 @@ function addHabit(habit: Habit): Promise<number> {
     let params: object = [];
 
     if (habit.timeperiod) {
-      sql = 'INSERT INTO habit (name, icon, color, category, frequency, interval, timeperiod, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      sql = 'INSERT INTO habit (name, icon_id, color_id, category_id, frequency, interval, timeperiod, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
       params = [habit.name, habit.icon, habit.color, habit.category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate];
     }
     else {
-      sql = 'INSERT INTO habit (name, icon, color, category, frequency, interval, timeperiod) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      sql = 'INSERT INTO habit (name, icon_id, color_id, category_id, frequency, interval, timeperiod) VALUES (?, ?, ?, ?, ?, ?, ?)';
       params = [habit.name, habit.icon, habit.color, habit.category, habit.frequency, habit.interval, habit.timeperiod];
     }
 
@@ -164,7 +177,7 @@ async function showDailyHabits() {
               const currentMonth = new Date().getMonth() + 1; // Months are zero-based
               const currentYear = new Date().getFullYear();
 
-              db.get('SELECT COUNT(*) as count FROM records WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?', [HabitState.id, currentMonth, currentYear], (err, row) => {
+              db.get('SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?', [HabitState.id, currentMonth, currentYear], (err, row) => {
                 if (err) {
                   reject(err);
                 } else {
@@ -308,6 +321,7 @@ async function showMonthlyHabits(): Promise<HabitState[][]> {
 
 export default {
   getHabit,
+  getCategoryList,
   addHabit,
   showDailyHabits,
   getWeekDates,

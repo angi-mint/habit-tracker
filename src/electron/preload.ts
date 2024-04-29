@@ -14,6 +14,7 @@ const API = {
 
 
     sendHabitName: (args: any) => ipcRenderer.invoke("getNameOfHabit", args),
+    getCategoryList: () => ipcRenderer.invoke("getCategoryList"),
     sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
     getDailyHabits: () => ipcRenderer.invoke("getDailyHabits"),
 };

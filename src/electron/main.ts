@@ -62,6 +62,13 @@ ipcMain.handle("getNameOfHabit", async (_event: any, args: any) => {
   return await db.getHabit(args.id);
 });
 
+// Handle for getting category list
+ipcMain.handle("getCategoryList", async (_event: any) => {
+  const categoryList = await db.getCategoryList();
+  console.log(categoryList);
+  return categoryList;
+});
+
 // Handle for sending habit object
 ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
   console.log(habit);
