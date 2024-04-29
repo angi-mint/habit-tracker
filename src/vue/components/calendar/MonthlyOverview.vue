@@ -1,6 +1,8 @@
 <script setup lang="ts">
+
+const currentDate = new Date();
 function getMonth(month?: number): Array<string|number>{
-    if (!month) month = new Date().getMonth();
+    if (!month) month = currentDate.getMonth();
 
     const monthInfo = [];
     const monthList = ["Januar", "Februar", "März", "April", "Mai", "Juni", "July", "August", "September", "Oktober", "November", "Dezember"];
@@ -13,7 +15,7 @@ function getMonth(month?: number): Array<string|number>{
 </script>
 
 <template>
-    <h2> {{ getMonth()[0]}} </h2>
+    <h2> {{ getMonth()[0]}}: {{currentDate.toLocaleDateString('sv')}} </h2>
 </template>
 
 <style scoped>
