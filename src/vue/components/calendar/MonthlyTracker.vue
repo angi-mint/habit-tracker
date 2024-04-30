@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Icon from "./Icon.vue";
 import {PropType} from "vue";
 import {DateInfo} from "./MonthlyOverview.vue";
+import Icon from "./Icon.vue";
 import TrackButton from "./TrackButton.vue";
 
 const HabitMonthly = defineProps({
@@ -11,7 +11,7 @@ const HabitMonthly = defineProps({
     color: String,
     frequency: Number,
     interval: String,
-    dates: Array,
+    dates: Array as PropType<Array<string>>,
     dateInfo: Object as PropType<DateInfo>,
 });
 
@@ -25,6 +25,12 @@ function monthInfo(): { totalDays: number, weeks: number, firstWeekStart: number
     };
 }
 
+function getFirstWeekday(): number {
+    const firstDay = new Date(HabitMonthly.dateInfo!.year, HabitMonthly.dateInfo!.month, 1);
+    const day = firstDay.getDay();
+    return day === 0 ? 6 : day - 1;
+}
+
 function prepareArray(arr: Array<string>): Array<number> {
     const resultArr: Array<number> = new Array(HabitMonthly.dateInfo!.daysInMonth).fill(0);
     const newArr = arr.map((date) => Number(date.split("-")[2]));
@@ -35,15 +41,9 @@ function prepareArray(arr: Array<string>): Array<number> {
     return resultArr;
 }
 
-function getFirstWeekday(): number {
-    const firstDay = new Date(HabitMonthly.dateInfo!.year, HabitMonthly.dateInfo!.month, 1);
-    const day = firstDay.getDay();
-    return day === 0 ? 6 : day - 1;
-}
-
 const iconSize = 40;
 const datesArray = [...new Array(monthInfo().firstWeekStart).fill(-1),
-                    ...prepareArray(HabitMonthly.dates as Array<string>),
+                    ...prepareArray(HabitMonthly.dates!),
                     ...new Array(7 - monthInfo().daysInLastWeek).fill(-1)];
 </script>
 
@@ -51,9 +51,7 @@ const datesArray = [...new Array(monthInfo().firstWeekStart).fill(-1),
     <div class="monthly-habit">
         <Icon :id="HabitMonthly.icon" :color="HabitMonthly.color" :size="iconSize"></Icon>
         <div class="monthly-wrapper">
-            <div class="monthly-info">
-                <h3 class="habit-name"> {{ HabitMonthly.name }} </h3>
-            </div>
+            <h3 class="habit-name">{{ HabitMonthly.name }}</h3>
             <div class="monthly-view">
                 <div class="monthly-week" v-for="(week, index) in monthInfo().weeks" :key="index">
                     <div v-for="n in 7" :key="n" class="monthly-day">
