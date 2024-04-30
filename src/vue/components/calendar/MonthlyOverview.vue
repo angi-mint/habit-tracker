@@ -10,19 +10,16 @@ const exampleData = [{id: 1, name: "Drink Water", icon: "water", color: "blue", 
 export interface DateInfo {
     year: number,
     month: number,
-    monthName: string,
     daysInMonth: number
 }
 
 function dateInfo(month?: number): DateInfo {
     if (!month) month = currentDate.getMonth();
-    const monthList = ["Januar", "Februar", "März", "April", "Mai", "Juni", "July", "August", "September", "Oktober", "November", "Dezember"];
     const year = currentDate.getFullYear();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     return {
         year: year,
         month: month,
-        monthName: monthList[month],
         daysInMonth: daysInMonth
     };
 }
@@ -30,7 +27,7 @@ function dateInfo(month?: number): DateInfo {
 </script>
 
 <template>
-    <h2> {{ dateInfo().monthName }}</h2>
+    <h2> {{ currentDate.toLocaleDateString('de-DE', {month: "long"}) }}</h2>
     <MonthlyTracker
             v-for="habit in exampleData"
             :id="habit.id"
