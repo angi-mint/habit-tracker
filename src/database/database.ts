@@ -42,12 +42,8 @@ async function addHabit(habit: Habit): Promise<number> {
     const categoryID = habit.category === undefined ? 5 : await getOrAddCategory(habit.category);
 
     return new Promise((resolve, reject) => {
-        let sql: string;
-        let params: Array<string | number | boolean>;
-        if (habit.timeperiod) {
-            sql =
-                "INSERT INTO habit (name, frequency, interval, timeperiod, startDate, endDate, category_id, color_id, icon_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            params = [
+        const params: Array<string | number | boolean> = habit.timeperiod
+            ? [
                 habit.name,
                 habit.frequency,
                 habit.interval,
@@ -57,11 +53,8 @@ async function addHabit(habit: Habit): Promise<number> {
                 categoryID,
                 habit.color,
                 habit.icon
-            ];
-        } else {
-            sql =
-                "INSERT INTO habit (name, frequency, interval, timeperiod, category_id, color_id, icon_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            params = [
+            ]
+            : [
                 habit.name,
                 habit.frequency,
                 habit.interval,
@@ -70,7 +63,12 @@ async function addHabit(habit: Habit): Promise<number> {
                 habit.color,
                 habit.icon
             ];
-        }
+
+        const sql: string = habit.timeperiod
+            ? `INSERT INTO habit (name, frequency, interval, timeperiod, startDate, endDate, category_id, color_id, icon_id)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            : `INSERT INTO habit (name, frequency, interval, timeperiod, category_id, color_id, icon_id)
+               VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         db.run(sql, params, function (err) {
             if (err) {
