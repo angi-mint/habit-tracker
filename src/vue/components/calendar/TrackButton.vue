@@ -4,11 +4,9 @@ const HabitTrack = defineProps({
     id: Number,
     color: String,
     percentage: Number,
-    size: Number
+    size: Number,
+    disabled: Boolean
 });
-
-const size = HabitTrack.size + "px";
-
 
 async function trackHabit() {
     //await window.api.sendTrackHabit(HabitTrack.id);
@@ -17,7 +15,7 @@ async function trackHabit() {
 </script>
 
 <template>
-    <div @click="trackHabit">
+    <button @click="trackHabit" :disabled="HabitTrack.disabled">
         <svg v-if="HabitTrack.percentage !== 100 && HabitTrack.percentage !== 0" :width="HabitTrack.size" :height="HabitTrack.size" viewBox="0 0 36 36" class="tracker-progress">
             <path class="tracker-circle" :stroke-dasharray="`${HabitTrack.percentage}, 100`" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
         </svg>
@@ -27,15 +25,18 @@ async function trackHabit() {
         <svg v-else class="tracker-svg tracker-progress" xmlns="http://www.w3.org/2000/svg" :width="HabitTrack.size" :height="HabitTrack.size" fill="currentColor" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
         </svg>
-    </div>
+    </button>
 </template>
 
 <style scoped>
 
-.tracker-progress {
+button:hover {
     cursor: pointer;
 }
 
+button:disabled {
+    cursor: not-allowed;
+}
 .tracker-circle {
     stroke: v-bind('HabitTrack.color');
 }
