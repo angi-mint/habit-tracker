@@ -6,29 +6,20 @@ import {computed, Ref, ref} from "vue";
 
 const open = ref(false);
 
-interface HabitProps {
-    name: string,
-    icon?: number,
-    color?: number,
-    category?: number,
-    frequency: number,
-    interval: number,
-    timeperiod: number,
-    startDate?: Date,
-    endDate?: Date
-}
 const habitData = ref({
     name: '',
     icon: '',
+    color: 1,
     category: '',
     interval: '',
     frequency: 1,
-    range: false,
+    timeperiod: false,
     startDate: '',
     endDate: '',
 })
-const onSubmit = () => {
-    console.log(habitData.value)
+
+const onSubmit = async () => {
+    await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
     open.value = false;
 }
 
@@ -58,13 +49,11 @@ const icons: Ref<Array<DatabaseList>> = computed(() => {
 });
 
 const intervals: Ref<Array<DatabaseList>> = computed(() => {
-    const interval = [
+    return [
         { pk: 1, value: "täglich" },
         { pk: 2, value: "wöchentlich" },
-        { pk: 3, value: "zweiwöchentlich" },
-        { pk: 4, value: "monatlich" },
+        { pk: 3, value: "monatlich"}
     ];
-    return interval;
 });
 
 </script>
@@ -88,13 +77,10 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                     <LabelForm>
                         <template #form-label><p>Kategorie</p></template>
                         <template #input>
-                            <select class="form-input" v-if="categories.length > 0" v-model="habitData.category">
-                                <option disabled value=""> Wähle eine Kategorie</option>
-                                <option v-for="items in categories" :value="items.pk">
-                                    {{ items.value }}
-                                </option>
-                            </select>
-                            <p v-else>Es gibt keine Kategorien</p>
+                            <input class="form-input" list="categories" v-model="habitData.category">
+                            <datalist id="categories">
+                                <option v-for="items in categories" :value="items.value"></option>
+                            </datalist>
                         </template>
                     </LabelForm>
 
@@ -130,14 +116,14 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                     <LabelForm>
                         <template #form-label><p>Zeitraum</p>
                             <label class="toggler-wrapper">
-                                <input type="checkbox" v-model="habitData.range">
+                                <input type="checkbox" v-model="habitData.timeperiod">
                                 <div class="toggler-slider">
                                     <div class="toggler-knob"></div>
                                 </div>
                             </label>
                         </template>
                         <template #input>
-                            <div v-if="habitData.range" class="form-input">
+                            <div v-if="habitData.timeperiod" class="form-input">
                                 <input class="form-input" type="date" v-model="habitData.startDate" required>
                                 <span> - </span>
                                 <input class="form-input" type="date" v-model="habitData.endDate" required>

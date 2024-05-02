@@ -93,3 +93,6 @@ out/
 
 # IntelliJ
 .idea
+
+# Database
+src/database/habitdb.db
