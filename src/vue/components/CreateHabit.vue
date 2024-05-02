@@ -48,12 +48,11 @@ const icons: Ref<Array<DatabaseList>> = computed(() => {
 });
 
 const intervals: Ref<Array<DatabaseList>> = computed(() => {
-    const interval = [
+    return [
         { pk: 1, value: "täglich" },
         { pk: 2, value: "wöchentlich" },
-        { pk: 3, value: "monatlich" },
+        { pk: 3, value: "monatlich"}
     ];
-    return interval;
 });
 
 </script>
