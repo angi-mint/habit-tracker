@@ -1,5 +1,9 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, ipcMain} from 'electron';
 import path from 'node:path';
+
+//database import
+import db from '../database/database';
+import {Habit} from '../database/interface';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -26,6 +30,12 @@ const createWindow = () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 };
+
+// Handle for sending habit object
+ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
+  console.log(habit);
+  return await db.addHabit(habit);
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

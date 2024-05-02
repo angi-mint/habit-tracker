@@ -6,30 +6,21 @@ import {computed, Ref, ref} from "vue";
 
 const open = ref(false);
 
-interface HabitProps {
-    name: string,
-    icon?: number,
-    color?: number,
-    category?: number,
-    frequency: number,
-    interval: number,
-    timeperiod: number,
-    startDate?: Date,
-    endDate?: Date
-}
 const habitData = ref({
     name: '',
     icon: '',
+    color: 1,
     category: '',
     interval: '',
     frequency: 1,
-    range: false,
+    timeperiod: false,
     startDate: '',
     endDate: '',
 })
-const onSubmit = () => {
-    console.log(habitData.value)
-    open.value = false;
+
+const onSubmit = async () => {
+    const newHabitId = await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    console.log(newHabitId);
 }
 
 interface DatabaseList {
