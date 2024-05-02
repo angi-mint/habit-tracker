@@ -31,7 +31,6 @@ function prepareArray(arr: Array<string>): Array<number>{
 
 const iconSize = 40;
 const datesArray = prepareArray(HabitWeekly.dates!);
-const today = new Date().getDay() || 7;
 </script>
 
 <template>
