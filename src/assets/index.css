@@ -12,6 +12,7 @@
     --spacing-2: 10px;
     --spacing-3: 15px;
     --spacing-4: 20px;
+    --spacing-5: 30px;
 
     --font-1: 16px;
 }
@@ -37,7 +38,7 @@
     margin-left: 20px;
 }
 
-/* Hier beginnt der Teil indem das Pop-up Fenster für das anlegen eines Habit gestylt wird */
+/* Pop-up Fenster für das anlegen eines Habit */
 
 .modal {
     position: fixed;
@@ -112,7 +113,8 @@ input[type="submit"] {
     color: var(--color-background);
 }
 
-button {
+.btn {
+    cursor: pointer;
     border-radius: 5px; 
     border: 1px solid var(--color-menu); 
     padding: var(--spacing-1);
@@ -167,7 +169,7 @@ button {
 
 /* Ab hier wird die Normalansicht gestylt*/
 
- .tab-selector {
+.tab-selector {
     margin-right: 5px;
     background-color: var(--color-background);
     color: var(--color-font);
@@ -184,4 +186,76 @@ button {
 
 .tab-content {
     margin-top: 10px;
+}
+
+/* progress circle */
+
+.tracker-circle {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+
+/* Tägliche Ansicht */
+
+.tab-content {
+    margin-left: var(--spacing-3);
+}
+
+/* Abstand der Überschirft zu den Habits */
+.habits-wrapper h2 {
+    margin: var(--spacing-4) 0 var(--spacing-3) 0;
+}
+
+.habit-wrapper {
+    display: flex;
+    padding: 5px;
+}
+
+.habit-info {
+    display: flex; 
+    align-items: center; 
+    width: 300px; /*  festen Breite damit alle gleich lang sind */
+    margin-left: var(--spacing-2);
+    margin-right: var(--spacing-2);
+    border-radius: var(--spacing-4); 
+    padding: var(--spacing-1);
+    outline: 3px solid var(--color-menu);
+    color: var(--color-background);
+}
+
+.habit-name {
+    flex: 1;
+    margin: 0 var(--spacing-4) 0 var(--spacing-3);
+    color: var(--color-font);
+    border-radius: var(--spacing-4);
+}
+
+.habit-text {
+    margin: 0 10px 0 0;
+    color: var(--color-font);
+    background-color: var(--color-background);
+    border-radius: var(--spacing-4);
+}
+
+.monthly-week {
+    display: flex;
+}
+
+.btn-track {
+    border: none;
+    margin: 0;
+    padding: 0
+}
+
+.btn-track:disabled {
+    cursor: not-allowed;
 }
