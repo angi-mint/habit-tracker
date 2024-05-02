@@ -16,7 +16,7 @@ function getOrAddCategory(categoryName: string): Promise<number> {
     const db = openDb();
     return new Promise((resolve, reject) => {
         // First, try to find the category
-        db.get('SELECT id FROM category WHERE name = ?', [categoryName], (err, row) => {
+        db.get('SELECT id FROM category WHERE name = ?', [categoryName], (err, row: {id: number}) => {
             if (err) {
                 reject(err);
             } else if (row) {
