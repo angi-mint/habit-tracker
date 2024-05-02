@@ -53,7 +53,7 @@ const today = new Date().getDate() + monthInfo().firstWeekStart;
     <div class="monthly-habit">
         <Icon :id="HabitMonthly.icon" :color="HabitMonthly.color" :size="iconSize"></Icon>
         <div class="monthly-wrapper">
-            <h3 class="habit-name">{{ HabitMonthly.name }}</h3>
+            <h3 class="monthly-name">{{ HabitMonthly.name }}</h3>
             <div class="monthly-view">
                 <div class="monthly-week" v-for="(week, index) in monthInfo().weeks" :key="index">
                     <div v-for="n in 7" :key="n" class="monthly-day">
