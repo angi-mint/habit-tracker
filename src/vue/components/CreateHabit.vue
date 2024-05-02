@@ -2,7 +2,7 @@
 
 import HabitIcon from "./icons/HabitIcon.vue";
 import LabelForm from "./form/LabelForm.vue";
-import {computed, Ref, ref} from "vue";
+import {computed, onMounted, Ref, ref} from "vue";
 
 const open = ref(false);
 
@@ -20,29 +20,32 @@ const habitData = ref({
 
 const onSubmit = async () => {
     await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    await fetchCategoryList();
     open.value = false;
 }
 
 interface DatabaseList {
-    pk: number;
-    value: string;
+    id: number;
+    name: string;
 }
 
-const categories: Ref<Array<DatabaseList>> = computed(() => {
-    const category = [
-        { pk: 1, value: "Sport" },
-        { pk: 2, value: "Health" }
-    ];
+const categories = ref<Array<DatabaseList>>([]);
 
-    return category;
-});
+const fetchCategoryList = async () => {
+    categories.value = (await window.api.getCategoryList()).map((category: DatabaseList) => ({
+        id: category.id,
+        name: category.name
+    }));
+};
+
+onMounted(async () => await fetchCategoryList());
 
 const icons: Ref<Array<DatabaseList>> = computed(() => {
     const icon = [
-        { pk: 1, value: "heart" },
-        { pk: 2, value: "pill" },
-        { pk: 3, value: "book" },
-        { pk: 4, value: "glass" },
+        { id: 1, name: "heart" },
+        { id: 2, name: "pill" },
+        { id: 3, name: "book" },
+        { id: 4, name: "glass" },
     ];
 
     return icon;
@@ -50,9 +53,9 @@ const icons: Ref<Array<DatabaseList>> = computed(() => {
 
 const intervals: Ref<Array<DatabaseList>> = computed(() => {
     return [
-        { pk: 1, value: "täglich" },
-        { pk: 2, value: "wöchentlich" },
-        { pk: 3, value: "monatlich"}
+        { id: 1, name: "täglich" },
+        { id: 2, name: "wöchentlich" },
+        { id: 3, name: "monatlich"}
     ];
 });
 
@@ -79,7 +82,7 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                         <template #input>
                             <input class="form-input" list="categories" v-model="habitData.category">
                             <datalist id="categories">
-                                <option v-for="items in categories" :value="items.value"></option>
+                                <option v-for="items in categories" :value="items.name"></option>
                             </datalist>
                         </template>
                     </LabelForm>
@@ -88,8 +91,8 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                         <template #form-label><p>Icon</p></template>
                         <template #input>
                             <label v-for="items in icons">
-                                <input type="radio" v-model="habitData.icon" :value=items.pk />
-                                <HabitIcon :id=items.value />
+                                <input type="radio" v-model="habitData.icon" :value=items.id />
+                                <HabitIcon :id=items.name />
                             </label>
                         </template>
                     </LabelForm>
@@ -99,8 +102,8 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                         <template #input>
                             <select class="form-input" v-model="habitData.interval" required>
                                 <option disabled value="">Wähle ein Intervall</option>
-                                <option v-for="items in intervals" :value="items.pk">
-                                    {{ items.value }}
+                                <option v-for="items in intervals" :value="items.id">
+                                    {{ items.name }}
                                 </option>
                             </select>
                         </template>

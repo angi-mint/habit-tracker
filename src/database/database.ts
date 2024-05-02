@@ -12,6 +12,19 @@ function openDb() {
     return db;
 }
 
+function getCategoryList() {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.all('SELECT id, name FROM category', (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
 function getOrAddCategory(categoryName: string): Promise<number> {
     const db = openDb();
     return new Promise((resolve, reject) => {
@@ -82,5 +95,6 @@ async function addHabit(habit: Habit): Promise<number> {
 
 export default {
     openDb,
+    getCategoryList,
     addHabit,
 };

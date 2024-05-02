@@ -31,6 +31,11 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
 };
 
+// Handle for getting category list
+ipcMain.handle("getCategoryList", async (_event: any) => {
+  return await db.getCategoryList();
+});
+
 // Handle for sending habit object
 ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
     return await db.addHabit(habit);
