@@ -19,8 +19,7 @@ const habitData = ref({
 })
 
 const onSubmit = async () => {
-    const newHabitId = await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
-    console.log(newHabitId);
+    await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
 }
 
 interface DatabaseList {
