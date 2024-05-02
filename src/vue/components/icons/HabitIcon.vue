@@ -33,7 +33,8 @@ const icons: { [key: string]: string; } = {
     <svg xmlns="http://www.w3.org/2000/svg"
          :width="props.size"
          :height="props.size"
-         :fill="props.color">
+         :fill="props.color"
+         viewBox="0 0 16 16">
         <path v-if="props.id in icons" :d="icons[props.id]"/>
         <path v-else :d="icons['notfound']"/>
     </svg>

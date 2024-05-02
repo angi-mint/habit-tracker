@@ -12,6 +12,7 @@
     --spacing-2: 10px;
     --spacing-3: 15px;
     --spacing-4: 20px;
+    --spacing-5: 30px;
 
     --font-1: 16px;
 }
@@ -27,9 +28,10 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: var(--spacing-4);
+  border-radius: 50px;
 }
 
 #app {
@@ -37,7 +39,7 @@
     margin-left: 20px;
 }
 
-/* Hier beginnt der Teil indem das Pop-up Fenster für das anlegen eines Habit gestylt wird */
+/* Pop-up Fenster für das anlegen eines Habit */
 
 .modal {
     position: fixed;
@@ -59,7 +61,7 @@
     position: absolute;
     background-color: var(--color-background);
     border-radius: var(--border-radius);
-
+    width: 250px;
     padding: var(--spacing-4);
 }
 
@@ -113,6 +115,14 @@ input[type="submit"] {
 }
 
 button {
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.btn {
+    cursor: pointer;
     border-radius: 5px; 
     border: 1px solid var(--color-menu); 
     padding: var(--spacing-1);
@@ -167,11 +177,12 @@ button {
 
 /* Ab hier wird die Normalansicht gestylt*/
 
- .tab-selector {
-    margin-right: 5px;
+.tab-selector {
+    padding: var(--spacing-3);
     background-color: var(--color-background);
     color: var(--color-font);
     border: 0;
+    font-size: var(--spacing-4);
 }
 
 .tab-active {
@@ -184,4 +195,136 @@ button {
 
 .tab-content {
     margin-top: 10px;
+}
+
+/* progress circle */
+
+.tracker-circle {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+
+/* Tägliche Ansicht */
+
+.tab-content {
+    margin-left: var(--spacing-3);
+}
+
+/* Abstand der Überschrift zu den Habits */
+.habits-wrapper h2 {
+    margin: var(--spacing-4) 0 var(--spacing-3) 0;
+}
+
+.habit-wrapper {
+    display: flex;
+    padding: 5px;
+}
+
+.habit-info {
+    display: flex; 
+    align-items: center; 
+    width: 300px; /*  festen Breite damit alle gleich lang sind */
+    margin-left: var(--spacing-2);
+    margin-right: var(--spacing-2);
+    border-radius: var(--spacing-4); 
+    padding: var(--spacing-1);
+    outline: 3px solid var(--color-menu);
+    color: var(--color-background);
+}
+
+.habit-name {
+    flex: 1;
+    margin: 0 var(--spacing-4) 0 var(--spacing-3);
+    color: var(--color-font);
+    border-radius: var(--spacing-4);
+}
+
+.habit-text {
+    margin: 0 10px 0 0;
+    color: var(--color-font);
+    background-color: var(--color-background);
+    border-radius: var(--spacing-4);
+}
+
+.monthly-week {
+    display: flex;
+}
+
+.btn-track {
+    border: none;
+    margin: 0;
+    padding: 0
+}
+
+.btn-track:disabled {
+    cursor: not-allowed;
+}
+
+/* Monatsansicht */
+
+.monthly-wrapper {
+    border-radius: var(--spacing-3);
+    width: 335px;
+    height: 270px;
+    margin-left: var(--spacing-2);
+}
+
+.monthly-name {
+    padding: var(--spacing-1);
+    border-radius: var(--spacing-3);
+    margin: 0;
+    color: var(--color-background);
+}
+
+.monthly-view {
+    padding: var(--spacing-3);
+}
+
+.monthly-habit {
+    padding: var(--spacing-2);
+    display: flex;
+}
+
+.monthly-day {
+    margin-right: var(--spacing-1);
+}
+
+/* Wochenansicht */
+
+.weekly-name {
+    padding: var(--spacing-1);
+    margin: 0;
+    color: var(--color-background);
+    border-radius: var(--spacing-2);
+}
+
+.weekly-habit {
+    padding: var(--spacing-2);
+    display: flex;
+}
+
+.weekly-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--spacing-3);
+    margin-left: var(--spacing-2);
+}
+
+.weekly-view {
+    padding: var(--spacing-3);
+    border-radius: var(--spacing-3);
+}
+
+.weekly-overview {
+    display: flex;
+    border-radius: var(--spacing-4);
 }
