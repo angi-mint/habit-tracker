@@ -31,6 +31,7 @@ function prepareArray(arr: Array<string>): Array<number>{
 
 const iconSize = 40;
 const datesArray = prepareArray(HabitWeekly.dates!);
+const today = new Date().getDay() || 7;
 </script>
 
 <template>
@@ -48,5 +49,12 @@ const datesArray = prepareArray(HabitWeekly.dates!);
 </template>
 
 <style scoped>
+.weekly-name {
+    background-color: v-bind('HabitWeekly.color');
+}
+.weekly-wrapper {
+    border: 3px solid v-bind('HabitWeekly.color');
+
+}
 
 </style>
