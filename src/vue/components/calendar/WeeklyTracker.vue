@@ -39,7 +39,7 @@ const datesArray = prepareArray(HabitWeekly.dates!);
         <div class="weekly-wrapper">
             <h3 class="weekly-name">{{ HabitWeekly.name }}</h3>
             <div class="weekly-view" v-for="(day, index) in datesArray" :key="index">
-                <TrackButton :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize""></TrackButton>
+                <TrackButton :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize"></TrackButton>
             </div>
         </div>
     </div>
