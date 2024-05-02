@@ -2,7 +2,7 @@
 
 import HabitIcon from "./icons/HabitIcon.vue";
 import LabelForm from "./form/LabelForm.vue";
-import {computed, Ref, ref} from "vue";
+import {computed, Ref, ref, onMounted} from "vue";
 
 const open = ref(false);
 
@@ -32,6 +32,7 @@ const habitData = ref({
 const onSubmit = async () => {
     const newHabitId = await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
     console.log(newHabitId);
+    await fetchCategoryList();
 }
 
 interface DatabaseList {
@@ -39,13 +40,23 @@ interface DatabaseList {
     value: string;
 }
 
-const categories: Ref<Array<DatabaseList>> = computed(() => {
-    const category = [
-        { pk: 1, value: "Sport" },
-        { pk: 2, value: "Health" }
-    ];
+interface Category {
+  id: number;
+  name: string;
+}
+const categories = ref<Array<DatabaseList>>([]);
 
-    return category;
+const fetchCategoryList = async () => {
+    const rawCategories = await window.api.getCategoryList();
+    categories.value = rawCategories.map((category: Category) => ({
+        pk: category.id,
+        value: category.name
+    }));
+};
+
+onMounted(async () => {
+  await fetchCategoryList();
+  console.log(categories.value);
 });
 
 const icons: Ref<Array<DatabaseList>> = computed(() => {
