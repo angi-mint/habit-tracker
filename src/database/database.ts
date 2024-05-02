@@ -13,6 +13,24 @@ function openDb() {
     return db;
 }
 
+function addRecord(id: number): Promise<void> {
+    const db = openDb();
+    const date = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+    return new Promise((resolve, reject) => {
+        db.run(
+            "INSERT INTO record (habit_id, date) VALUES (?, ?)",
+            [id, date],
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        );
+    });
+}
+
 function getCategoryList() {
     const db = openDb();
     return new Promise((resolve, reject) => {
@@ -206,6 +224,7 @@ async function showDailyHabits() {
 
 export default {
     openDb,
+    addRecord,
     getCategoryList,
     addHabit,
     showDailyHabits,
