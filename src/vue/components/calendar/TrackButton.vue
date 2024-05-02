@@ -1,5 +1,6 @@
 <script setup lang="ts">
 
+
 const HabitTrack = defineProps({
     id: Number,
     color: String,
@@ -11,7 +12,8 @@ const size = HabitTrack.size + "px";
 
 
 async function trackHabit() {
-    //await window.api.sendTrackHabit(HabitTrack.id);
+    await window.api.sendTrackHabit(HabitTrack.id);
+    console.log('Record added successfully');
 }
 
 </script>
