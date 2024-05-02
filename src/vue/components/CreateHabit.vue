@@ -121,14 +121,14 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                     <LabelForm>
                         <template #form-label><p>Zeitraum</p>
                             <label class="toggler-wrapper">
-                                <input type="checkbox" v-model="habitData.range">
+                                <input type="checkbox" v-model="habitData.timeperiod">
                                 <div class="toggler-slider">
                                     <div class="toggler-knob"></div>
                                 </div>
                             </label>
                         </template>
                         <template #input>
-                            <div v-if="habitData.range" class="form-input">
+                            <div v-if="habitData.timeperiod" class="form-input">
                                 <input class="form-input" type="date" v-model="habitData.startDate" required>
                                 <span> - </span>
                                 <input class="form-input" type="date" v-model="habitData.endDate" required>
