@@ -113,6 +113,12 @@ input[type="submit"] {
     color: var(--color-background);
 }
 
+button {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
 .btn {
     cursor: pointer;
     border-radius: 5px; 
