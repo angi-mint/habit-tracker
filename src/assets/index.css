@@ -113,7 +113,7 @@ input[type="submit"] {
     color: var(--color-background);
 }
 
-button {
+.btn {
     cursor: pointer;
     border-radius: 5px; 
     border: 1px solid var(--color-menu); 
@@ -244,4 +244,18 @@ button {
     color: var(--color-font);
     background-color: var(--color-background);
     border-radius: var(--spacing-4);
+}
+
+.monthly-week {
+    display: flex;
+}
+
+.btn-track {
+    border: none;
+    margin: 0;
+    padding: 0
+}
+
+.btn-track:disabled {
+    cursor: not-allowed;
 }
