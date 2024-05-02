@@ -67,5 +67,12 @@ const today = new Date().getDate() + monthInfo().firstWeekStart;
 </template>
 
 <style scoped>
+.monthly-wrapper, .monthly-name {
+    outline: 3px solid v-bind('HabitMonthly.color');
+}
+
+.monthly-name {
+    background-color: v-bind('HabitMonthly.color');
+}
 
 </style>

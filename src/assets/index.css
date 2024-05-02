@@ -115,6 +115,7 @@ input[type="submit"] {
 }
 
 button {
+    cursor: pointer;
     border: none;
     padding: 0;
     margin: 0;
@@ -218,7 +219,7 @@ button {
     margin-left: var(--spacing-3);
 }
 
-/* Abstand der Überschirft zu den Habits */
+/* Abstand der Überschrift zu den Habits */
 .habits-wrapper h2 {
     margin: var(--spacing-4) 0 var(--spacing-3) 0;
 }
@@ -271,7 +272,6 @@ button {
 /* Monatsansicht */
 
 .monthly-wrapper {
-    outline: 3px solid var(--color-font);
     border-radius: var(--spacing-3);
     width: 335px;
     height: 270px;
@@ -280,11 +280,9 @@ button {
 
 .monthly-name {
     padding: var(--spacing-1);
-    outline: 3px solid var(--color-font);
     border-radius: var(--spacing-3);
-    margin: 0px;
+    margin: 0;
     color: var(--color-background);
-    background-color: var(--color-font);
 }
 
 .monthly-view {
