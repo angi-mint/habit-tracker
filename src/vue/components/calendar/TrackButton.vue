@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
 
+import {ref} from "vue";
+
 const HabitTrack = defineProps({
     id: Number,
     color: String,
@@ -10,17 +12,18 @@ const HabitTrack = defineProps({
 
 const size = HabitTrack.size + "px";
 
+const reloader = ref(0);
 
 async function trackHabit() {
-    await window.api.sendTrackHabit(HabitTrack.id);
-    console.log('Record added successfully');
+    await window.api.sendTrackHabit(<number>HabitTrack.id);
+    reloader.value += 1;
 }
 
 </script>
 
 <template>
     <div @click="trackHabit">
-        <svg v-if="HabitTrack.percentage !== 100 && HabitTrack.percentage !== 0" :width="HabitTrack.size" :height="HabitTrack.size" viewBox="0 0 36 36" class="tracker-progress">
+        <svg v-if="HabitTrack.percentage !== 100 && HabitTrack.percentage !== 0" :width="HabitTrack.size" :height="HabitTrack.size" viewBox="0 0 36 36" class="tracker-progress" :key="reloader">
             <path class="tracker-circle" :stroke-dasharray="`${HabitTrack.percentage}, 100`" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
         </svg>
         <svg v-else-if="HabitTrack.percentage === 100" class="tracker-svg" xmlns="http://www.w3.org/2000/svg" :width="HabitTrack.size" :height="HabitTrack.size" fill="currentColor" viewBox="0 0 16 16">
