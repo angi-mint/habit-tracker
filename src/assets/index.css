@@ -297,3 +297,36 @@ button {
 .monthly-day {
     margin-right: var(--spacing-1);
 }
+
+/* Wochenansicht */
+
+.weekly-name {
+    padding: var(--spacing-1);
+    margin: 0;
+    background-color: #EB7B7B;
+    color: var(--color-background);
+    border-radius: var(--spacing-2);
+}
+
+.weekly-habit {
+    padding: var(--spacing-2);
+    display: flex;
+}
+
+.weekly-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--spacing-3);
+    border: 3px solid var(--color-menu);
+    margin-left: var(--spacing-2);
+}
+
+.weekly-view {
+    padding: var(--spacing-3);
+    border-radius: var(--spacing-3);
+}
+
+.weekly-overview {
+    display: flex;
+    border-radius: var(--spacing-4);
+}

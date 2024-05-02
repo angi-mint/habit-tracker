@@ -39,8 +39,10 @@ const today = new Date().getDay() || 7;
         <Icon :id="HabitWeekly.icon" :color="HabitWeekly.color" :size="iconSize"></Icon>
         <div class="weekly-wrapper">
             <h3 class="weekly-name">{{ HabitWeekly.name }}</h3>
-            <div class="weekly-view" v-for="(day, index) in datesArray" :key="index">
-                <TrackButton :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize" :disabled="index + 1 !== today"></TrackButton>
+            <div class="weekly-overview">
+                <div class="weekly-view" v-for="(day, index) in datesArray" :key="index">
+                    <TrackButton :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize" :disabled="index + 1 !== today"></TrackButton>
+                </div>
             </div>
         </div>
     </div>
