@@ -28,9 +28,10 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: var(--spacing-4);
+  border-radius: 50px;
 }
 
 #app {
@@ -60,7 +61,7 @@
     position: absolute;
     background-color: var(--color-background);
     border-radius: var(--border-radius);
-
+    width: 250px;
     padding: var(--spacing-4);
 }
 
@@ -176,10 +177,11 @@ button {
 /* Ab hier wird die Normalansicht gestylt*/
 
 .tab-selector {
-    margin-right: 5px;
+    padding: var(--spacing-3);
     background-color: var(--color-background);
     color: var(--color-font);
     border: 0;
+    font-size: var(--spacing-4);
 }
 
 .tab-active {
@@ -266,3 +268,34 @@ button {
     cursor: not-allowed;
 }
 
+/* Monatsansicht */
+
+.monthly-wrapper {
+    outline: 3px solid var(--color-font);
+    border-radius: var(--spacing-3);
+    width: 335px;
+    height: 270px;
+    margin-left: var(--spacing-2);
+}
+
+.monthly-name {
+    padding: var(--spacing-1);
+    outline: 3px solid var(--color-font);
+    border-radius: var(--spacing-3);
+    margin: 0px;
+    color: var(--color-background);
+    background-color: var(--color-font);
+}
+
+.monthly-view {
+    padding: var(--spacing-3);
+}
+
+.monthly-habit {
+    padding: var(--spacing-2);
+    display: flex;
+}
+
+.monthly-day {
+    margin-right: var(--spacing-1);
+}
