@@ -70,12 +70,12 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
 </script>
 
 <template>
-    <button class="btn-habit" @click="open = true">+</button>
+    <button class="btn-habit btn" @click="open = true">+</button>
     <Teleport to="body">
         <div v-if="open" class="modal">
             <div class="modal-content">
                 <h3>Neues Habit erstellen</h3>
-                <button @click="open = false" class="btn-exit">x</button>
+                <button @click="open = false" class="btn-exit btn">x</button>
                 <form @submit.prevent="onSubmit">
 
                     <LabelForm required>
