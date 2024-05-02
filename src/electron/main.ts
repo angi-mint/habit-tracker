@@ -44,8 +44,13 @@ ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
 // Handle for getting daily habits
 ipcMain.handle("getDailyHabits", async (_event: any) => {
     return await db.showDailyHabits();
-  });
+});
   
+  // Handle for addRecord
+ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
+    return await db.addRecord(id);
+});
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
