@@ -2,6 +2,7 @@ import sqlite3 from "sqlite3";
 import { Habit, HabitState } from "./interface";
 import { getWeekDates } from "./utils";
 
+
 function openDb() {
     const db = new sqlite3.Database("./src/database/habitdb.db", (err) => {
         if (err) {
@@ -209,4 +210,5 @@ export default {
     getCategoryList,
     addHabit,
     showDailyHabits,
+
 };

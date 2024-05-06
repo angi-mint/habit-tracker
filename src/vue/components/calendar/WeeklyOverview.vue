@@ -18,7 +18,7 @@ const options = new Intl.DateTimeFormat('sv', {day: "2-digit", month: "2-digit",
 
 // get actual data from database, replace line 21 with line 20
 //const weekData = await window.api.getHabits(options.format(weekInfo().firstDayOfWeek), options.format(weekInfo().lastDayOfWeek));
-const weekData = [{id: 1, name: "Drink Water", icon: "glass", color: "blue", frequency: 3, interval: "Daily", dates: ["2024-04-29", "2024-04-29", "2024-04-29", "2024-04-30", "2024-04-30", "2024-04-30", "2024-05-01", "2024-05-02", "2024-05-02", "2024-05-03"]}, {id: 2, name: "Go for a walk", icon: "book", color: "blue", frequency: 2, interval: "Daily", dates: ["2024-04-29", "2024-04-29", "2024-04-30", "2024-04-30", "2024-05-01", "2024-05-02", "2024-05-02", "2024-05-03"]},]
+const weekData = [{id: 1, name: "Drink Water", icon: "glass", color: "#983f3f", frequency: 3, interval: "Daily", dates: ["2024-04-29", "2024-04-29", "2024-04-29", "2024-04-30", "2024-04-30", "2024-04-30", "2024-05-01", "2024-05-02", "2024-05-02", "2024-05-03"]}, {id: 2, name: "Go for a walk", icon: "book", color: "#cc6464", frequency: 2, interval: "Daily", dates: ["2024-04-29", "2024-04-29", "2024-04-30", "2024-04-30", "2024-05-01", "2024-05-02", "2024-05-02", "2024-05-03"]},]
 
 </script>
 

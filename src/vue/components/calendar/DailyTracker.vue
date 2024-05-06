@@ -24,7 +24,7 @@ const iconSize = 40;
             <h3 class="habit-name">{{ HabitProps.name }}</h3>
             <p class="habit-text">{{ HabitProps.interval }}</p>
         </div>
-        <TrackButton :id="HabitProps.id" :color="HabitProps.color" :percentage="percentage" :size="iconSize"></TrackButton>
+        <TrackButton :id="HabitProps.id" :color="HabitProps.color" :percentage="percentage" :size="iconSize" :disabled="percentage === 100"></TrackButton>
     </div>
 </template>
 

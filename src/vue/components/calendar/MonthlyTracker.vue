@@ -45,18 +45,20 @@ const iconSize = 40;
 const datesArray = [...new Array(monthInfo().firstWeekStart).fill(-1),
                     ...prepareArray(HabitMonthly.dates!),
                     ...new Array(7 - monthInfo().daysInLastWeek).fill(-1)];
+const today = new Date().getDate() + monthInfo().firstWeekStart;
+
 </script>
 
 <template>
     <div class="monthly-habit">
         <Icon :id="HabitMonthly.icon" :color="HabitMonthly.color" :size="iconSize"></Icon>
         <div class="monthly-wrapper">
-            <h3 class="habit-name">{{ HabitMonthly.name }}</h3>
+            <h3 class="monthly-name">{{ HabitMonthly.name }}</h3>
             <div class="monthly-view">
                 <div class="monthly-week" v-for="(week, index) in monthInfo().weeks" :key="index">
                     <div v-for="n in 7" :key="n" class="monthly-day">
                         <svg v-if="datesArray[(n + 7 * index) - 1] === -1" :width="iconSize" :height="iconSize" viewBox="0 0 16 16"></svg>
-                        <TrackButton v-else :id="HabitMonthly.id" :color="HabitMonthly.color" :percentage="datesArray[(n + 7 * index) - 1]" :size="iconSize"></TrackButton>
+                        <TrackButton v-else :id="HabitMonthly.id" :color="HabitMonthly.color" :percentage="datesArray[(n + 7 * index) - 1]" :size="iconSize" :disabled="(n + 7 * index) !== today"></TrackButton>
                     </div>
                 </div>
             </div>
@@ -65,5 +67,12 @@ const datesArray = [...new Array(monthInfo().firstWeekStart).fill(-1),
 </template>
 
 <style scoped>
+.monthly-wrapper, .monthly-name {
+    outline: 3px solid v-bind('HabitMonthly.color');
+}
+
+.monthly-name {
+    background-color: v-bind('HabitMonthly.color');
+}
 
 </style>
