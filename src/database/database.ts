@@ -1,5 +1,7 @@
 import sqlite3 from "sqlite3";
-import { Habit } from "./interface";
+import { Habit, HabitState } from "./interface";
+import { getWeekDates } from "./utils";
+
 
 function openDb() {
     const db = new sqlite3.Database("./src/database/habitdb.db", (err) => {
@@ -93,8 +95,120 @@ async function addHabit(habit: Habit): Promise<number> {
     });
 }
 
+//Tägliche Habits anzeigen
+async function showDailyHabits() {
+    const db = openDb();
+    return new Promise<{
+        daily: HabitState[];
+        weekly: HabitState[];
+        monthly: HabitState[];
+        done: HabitState[];
+    }>((resolve, reject) => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = ("0" + (date.getMonth() + 1)).slice(-2);
+        const day = ("0" + date.getDate()).slice(-2);
+        const formattedDate = `${year}-${month}-${day}`;
+
+        const weekDates = getWeekDates();
+
+        db.all(
+            "SELECT habit.id, habit.name, icon.name as icon, color.name as color, habit.frequency, habit.interval FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id",
+            (err, habits: HabitState[]) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    const daily: HabitState[] = [];
+                    const weekly: HabitState[] = [];
+                    const monthly: HabitState[] = [];
+                    const done: HabitState[] = [];
+
+                    const promises = habits.map((HabitState) => {
+                        return new Promise<void>((resolve, reject) => {
+                            if (HabitState.interval === 1) {
+                                // Check if interval = 1 (daily)
+                                db.get(
+                                    "SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date = ?",
+                                    [HabitState.id, formattedDate],
+                                    (err, row) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            HabitState.entries = row.count;
+                                            if (HabitState.frequency === row.count) {
+                                                // Check if frequency = entries
+                                                done.push(HabitState);
+                                            } else {
+                                                daily.push(HabitState);
+                                            }
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            } else if (HabitState.interval === 2) {
+                                // Check if interval = 2 (weekly)
+
+                                const placeholders = weekDates.map(() => "?").join(", ");
+                                const sql = `SELECT COUNT(*) as count
+                                             FROM record
+                                             WHERE habit_id = ? AND date IN (${placeholders})`;
+                                db.get(sql, [HabitState.id, ...weekDates], (err, row) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        HabitState.entries = row.count;
+                                        if (HabitState.frequency === row.count) {
+                                            // Check if frequency = entries
+                                            done.push(HabitState);
+                                        } else {
+                                            weekly.push(HabitState);
+                                        }
+                                        resolve();
+                                    }
+                                });
+                            } else if (HabitState.interval === 3) {
+                                // Check if interval = 3 (monthly)
+
+                                const currentMonth = new Date().getMonth() + 1; // Months are zero-based
+                                const currentYear = new Date().getFullYear();
+
+                                db.get(
+                                    'SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?',
+                                    [HabitState.id, currentMonth, currentYear],
+                                    (err, row) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            HabitState.entries = row.count;
+                                            if (HabitState.frequency === row.count) {
+                                                // Check if frequency = entries
+                                                done.push(HabitState);
+                                            } else {
+                                                monthly.push(HabitState);
+                                            }
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            } else {
+                                resolve();
+                            }
+                        });
+                    });
+
+                    Promise.all(promises)
+                        .then(() => resolve({daily, weekly, monthly, done}))
+                        .catch(reject);
+                }
+            }
+        );
+    });
+}
+
 export default {
     openDb,
     getCategoryList,
     addHabit,
+    showDailyHabits,
+
 };
