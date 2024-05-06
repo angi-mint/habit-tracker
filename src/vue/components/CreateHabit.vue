@@ -6,7 +6,13 @@ import {computed, onMounted, Ref, ref} from "vue";
 
 const open = ref(false);
 
-const habitData = ref({
+const Props = defineProps({
+    id: Number,
+    fixed: Boolean,
+    submit: String
+});
+
+const defaultHabitData = ({
     name: '',
     icon: '',
     color: 1,
@@ -16,13 +22,9 @@ const habitData = ref({
     timeperiod: false,
     startDate: '',
     endDate: '',
-})
+});
 
-const onSubmit = async () => {
-    await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
-    await fetchCategoryList();
-    open.value = false;
-}
+const habitData = ref(defaultHabitData);
 
 interface DatabaseList {
     id: number;
@@ -32,55 +34,49 @@ interface DatabaseList {
 const categories = ref<Array<DatabaseList>>([]);
 const colors = ref<Array<DatabaseList>>([]);
 
-const fetchCategoryList = async () => {
+const fetchList = async () => {
+    colors.value = (await window.api.getColorList()).map((color: DatabaseList) => ({
+        id: color.id,
+        name: color.name
+    }));
+
     categories.value = (await window.api.getCategoryList()).map((category: DatabaseList) => ({
         id: category.id,
         name: category.name
     }));
 };
 
-const fetchColorList = async () => {
-    colors.value = (await window.api.getColorList()).map((color: DatabaseList) => ({
-        id: color.id,
-        name: color.name
-    }));
-};
-
-onMounted(async () => {
-    await fetchCategoryList();
-    await fetchColorList();
-});
-
 const icons: Ref<Array<DatabaseList>> = computed(() => {
-    const icon = [
-        { id: 1, name: "heart" },
-        { id: 2, name: "pill" },
-        { id: 3, name: "book" },
-        { id: 4, name: "glass" },
-    ];
-
-    return icon;
+    return [{id: 1, name: "heart"}, {id: 2, name: "pill"}, {id: 3, name: "book"}, {id: 4, name: "glass"},];
 });
 
 const intervals: Ref<Array<DatabaseList>> = computed(() => {
-    return [
-        { id: 1, name: "täglich" },
-        { id: 2, name: "wöchentlich" },
-        { id: 3, name: "monatlich"}
-    ];
+    return [{ id: 1, name: "täglich" }, { id: 2, name: "wöchentlich" }, { id: 3, name: "monatlich"}];
 });
+
+onMounted(async () => {
+    await fetchList();
+});
+
+const onSubmit = async () => {
+    await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    await fetchList();
+    habitData.value = defaultHabitData;
+    open.value = false;
+}
 
 </script>
 
 <template>
-    <button class="btn-habit btn" @click="open = true">+</button>
+    <button :class="{'btn-habit btn': Props.fixed}" @click="open = true">
+        <slot name="btn-content"></slot>
+    </button>
     <Teleport to="body">
         <div v-if="open" class="modal">
             <div class="modal-content">
-                <h3>Neues Habit erstellen</h3>
+                <slot name="title"></slot>
                 <button @click="open = false" class="btn-exit btn">x</button>
                 <form @submit.prevent="onSubmit">
-
                     <LabelForm required>
                         <template #form-label><p>Name</p></template>
                         <template #input>
@@ -156,7 +152,7 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                             </div>
                         </template>
                     </LabelForm>
-                    <input type="submit">
+                    <input type="submit" :value="Props.submit">
                 </form>
             </div>
         </div>
