@@ -31,6 +31,10 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
 };
 
+ipcMain.handle("getColorList", async (_event: any) => {
+    return await db.getColorList();
+});
+
 // Handle for getting category list
 ipcMain.handle("getCategoryList", async (_event: any) => {
   return await db.getCategoryList();

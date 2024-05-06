@@ -14,6 +14,19 @@ function openDb() {
     return db;
 }
 
+function getColorList() {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.all('SELECT id, name FROM color', (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
 function getCategoryList() {
     const db = openDb();
     return new Promise((resolve, reject) => {
@@ -207,6 +220,7 @@ async function showDailyHabits() {
 
 export default {
     openDb,
+    getColorList,
     getCategoryList,
     addHabit,
     showDailyHabits,

@@ -30,6 +30,7 @@ interface DatabaseList {
 }
 
 const categories = ref<Array<DatabaseList>>([]);
+const colors = ref<Array<DatabaseList>>([]);
 
 const fetchCategoryList = async () => {
     categories.value = (await window.api.getCategoryList()).map((category: DatabaseList) => ({
@@ -38,7 +39,17 @@ const fetchCategoryList = async () => {
     }));
 };
 
-onMounted(async () => await fetchCategoryList());
+const fetchColorList = async () => {
+    colors.value = (await window.api.getColorList()).map((color: DatabaseList) => ({
+        id: color.id,
+        name: color.name
+    }));
+};
+
+onMounted(async () => {
+    await fetchCategoryList();
+    await fetchColorList();
+});
 
 const icons: Ref<Array<DatabaseList>> = computed(() => {
     const icon = [
@@ -84,6 +95,18 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                             <datalist id="categories">
                                 <option v-for="items in categories" :value="items.name"></option>
                             </datalist>
+                        </template>
+                    </LabelForm>
+
+                    <LabelForm>
+                        <template #form-label><p>Farbe</p></template>
+                        <template #input>
+                            <label v-for="items in colors">
+                                <input type="radio" v-model="habitData.color" :value="items.id">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" :fill="items.name" viewBox="0 0 16 16">
+                                    <circle cx="8" cy="8" r="8"/>
+                                </svg>
+                            </label>
                         </template>
                     </LabelForm>
 
