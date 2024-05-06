@@ -4,6 +4,7 @@
 import {contextBridge, ipcRenderer} from 'electron';
 
 const API = {
+    getColorList: () => ipcRenderer.invoke("getColorList"),
     getCategoryList: () => ipcRenderer.invoke("getCategoryList"),
     sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
 };
