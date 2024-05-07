@@ -31,20 +31,30 @@ function prepareArray(arr: Array<string>): Array<number>{
 
 const iconSize = 40;
 const datesArray = prepareArray(HabitWeekly.dates!);
+const today = new Date().getDay() || 7;
 </script>
 
 <template>
     <div class="weekly-habit">
         <Icon :id="HabitWeekly.icon" :color="HabitWeekly.color" :size="iconSize"></Icon>
         <div class="weekly-wrapper">
-            <h3 class="habit-name">{{ HabitWeekly.name }}</h3>
-            <div class="weekly-view" v-for="(day, index) in datesArray" :key="index">
-                <TrackButton :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize"></TrackButton>
+            <h3 class="weekly-name">{{ HabitWeekly.name }}</h3>
+            <div class="weekly-overview">
+                <div class="weekly-view" v-for="(day, index) in datesArray" :key="index">
+                    <TrackButton :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize" :disabled="index + 1 !== today"></TrackButton>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+.weekly-name {
+    background-color: v-bind('HabitWeekly.color');
+}
+.weekly-wrapper {
+    border: 3px solid v-bind('HabitWeekly.color');
+
+}
 
 </style>

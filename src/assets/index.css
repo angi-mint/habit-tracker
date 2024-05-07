@@ -28,9 +28,10 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: var(--spacing-4);
+  border-radius: 50px;
 }
 
 #app {
@@ -60,7 +61,7 @@
     position: absolute;
     background-color: var(--color-background);
     border-radius: var(--border-radius);
-
+    width: 250px;
     padding: var(--spacing-4);
 }
 
@@ -111,6 +112,13 @@ input[type="submit"] {
 
     background-color: var(--color-menu);
     color: var(--color-background);
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    margin: 0;
 }
 
 .btn {
@@ -170,10 +178,11 @@ input[type="submit"] {
 /* Ab hier wird die Normalansicht gestylt*/
 
 .tab-selector {
-    margin-right: 5px;
+    padding: var(--spacing-3);
     background-color: var(--color-background);
     color: var(--color-font);
     border: 0;
+    font-size: var(--spacing-4);
 }
 
 .tab-active {
@@ -210,7 +219,7 @@ input[type="submit"] {
     margin-left: var(--spacing-3);
 }
 
-/* Abstand der Überschirft zu den Habits */
+/* Abstand der Überschrift zu den Habits */
 .habits-wrapper h2 {
     margin: var(--spacing-4) 0 var(--spacing-3) 0;
 }
@@ -258,4 +267,64 @@ input[type="submit"] {
 
 .btn-track:disabled {
     cursor: not-allowed;
+}
+
+/* Monatsansicht */
+
+.monthly-wrapper {
+    border-radius: var(--spacing-3);
+    width: 335px;
+    height: 270px;
+    margin-left: var(--spacing-2);
+}
+
+.monthly-name {
+    padding: var(--spacing-1);
+    border-radius: var(--spacing-3);
+    margin: 0;
+    color: var(--color-background);
+}
+
+.monthly-view {
+    padding: var(--spacing-3);
+}
+
+.monthly-habit {
+    padding: var(--spacing-2);
+    display: flex;
+}
+
+.monthly-day {
+    margin-right: var(--spacing-1);
+}
+
+/* Wochenansicht */
+
+.weekly-name {
+    padding: var(--spacing-1);
+    margin: 0;
+    color: var(--color-background);
+    border-radius: var(--spacing-2);
+}
+
+.weekly-habit {
+    padding: var(--spacing-2);
+    display: flex;
+}
+
+.weekly-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--spacing-3);
+    margin-left: var(--spacing-2);
+}
+
+.weekly-view {
+    padding: var(--spacing-3);
+    border-radius: var(--spacing-3);
+}
+
+.weekly-overview {
+    display: flex;
+    border-radius: var(--spacing-4);
 }

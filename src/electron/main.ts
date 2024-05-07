@@ -31,6 +31,10 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
 };
 
+ipcMain.handle("getColorList", async (_event: any) => {
+    return await db.getColorList();
+});
+
 // Handle for getting category list
 ipcMain.handle("getCategoryList", async (_event: any) => {
   return await db.getCategoryList();
@@ -45,7 +49,7 @@ ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
 ipcMain.handle("getDailyHabits", async (_event: any) => {
     return await db.showDailyHabits();
 });
-  
+
   // Handle for addRecord
 ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
     return await db.addRecord(id);
