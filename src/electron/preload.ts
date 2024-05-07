@@ -8,6 +8,7 @@ const API = {
     getCategoryList: () => ipcRenderer.invoke("getCategoryList"),
     sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
     getDailyHabits: () => ipcRenderer.invoke("getDailyHabits"),
+    sendTrackHabit: (id: number) => ipcRenderer.invoke("sendTrackHabit", id),
 };
 
 contextBridge.exposeInMainWorld('api', API);

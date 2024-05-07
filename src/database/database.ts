@@ -2,7 +2,6 @@ import sqlite3 from "sqlite3";
 import { Habit, HabitState } from "./interface";
 import { getWeekDates } from "./utils";
 
-
 function openDb() {
     const db = new sqlite3.Database("./src/database/habitdb.db", (err) => {
         if (err) {
@@ -12,6 +11,24 @@ function openDb() {
         }
     });
     return db;
+}
+
+function addRecord(id: number): Promise<void> {
+    const db = openDb();
+    const date = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+    return new Promise((resolve, reject) => {
+        db.run(
+            "INSERT INTO record (habit_id, date) VALUES (?, ?)",
+            [id, date],
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        );
+    });
 }
 
 function getColorList() {
@@ -143,7 +160,7 @@ async function showDailyHabits() {
                                 db.get(
                                     "SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date = ?",
                                     [HabitState.id, formattedDate],
-                                    (err, row) => {
+                                    (err, row: {count: number}) => {
                                         if (err) {
                                             reject(err);
                                         } else {
@@ -165,7 +182,7 @@ async function showDailyHabits() {
                                 const sql = `SELECT COUNT(*) as count
                                              FROM record
                                              WHERE habit_id = ? AND date IN (${placeholders})`;
-                                db.get(sql, [HabitState.id, ...weekDates], (err, row) => {
+                                db.get(sql, [HabitState.id, ...weekDates], (err, row: {count: number}) => {
                                     if (err) {
                                         reject(err);
                                     } else {
@@ -188,7 +205,7 @@ async function showDailyHabits() {
                                 db.get(
                                     'SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?',
                                     [HabitState.id, currentMonth, currentYear],
-                                    (err, row) => {
+                                    (err, row: {count: number}) => {
                                         if (err) {
                                             reject(err);
                                         } else {
@@ -220,9 +237,9 @@ async function showDailyHabits() {
 
 export default {
     openDb,
+    addRecord,
     getColorList,
     getCategoryList,
     addHabit,
     showDailyHabits,
-
 };
