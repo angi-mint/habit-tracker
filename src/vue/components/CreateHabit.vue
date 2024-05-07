@@ -2,29 +2,32 @@
 
 import HabitIcon from "./icons/HabitIcon.vue";
 import LabelForm from "./form/LabelForm.vue";
-import {computed, onMounted, Ref, ref} from "vue";
+import {computed, onMounted, PropType, Ref, ref} from "vue";
+import {Habit} from "./calendar/DailyOverview.vue";
 
 const open = ref(false);
 
 const Props = defineProps({
     id: Number,
     fixed: Boolean,
-    submit: String
+    submit: String,
+    habitData: Object as PropType<Habit>
 });
 
-const defaultHabitData = ({
+const defaultHabitData: Habit = {
+    id: -1,
     name: '',
     icon: '',
     color: 1,
     category: '',
-    interval: '',
     frequency: 1,
+    entries: 0,
+    interval: '',
     timeperiod: false,
     startDate: '',
     endDate: '',
-});
-
-const habitData = ref(defaultHabitData);
+};
+const habitData = (Props.id === -1) ? ref(defaultHabitData) : ref(Props.habitData as Habit);
 
 interface DatabaseList {
     id: number;
@@ -59,7 +62,10 @@ onMounted(async () => {
 });
 
 const onSubmit = async () => {
+    //if (!Props.fixed)
     await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    // else await window.api.updateHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+
     await fetchList();
     habitData.value = defaultHabitData;
     open.value = false;
@@ -98,7 +104,7 @@ const onSubmit = async () => {
                         <template #form-label><p>Farbe</p></template>
                         <template #input>
                             <label v-for="items in colors">
-                                <input type="radio" v-model="habitData.color" :value="items.id">
+                                <input type="radio" v-model="habitData.color" :value="items.id" :checked="Props.habitData?.color === items.name">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" :fill="items.name" viewBox="0 0 16 16">
                                     <circle cx="8" cy="8" r="8"/>
                                 </svg>
@@ -110,7 +116,7 @@ const onSubmit = async () => {
                         <template #form-label><p>Icon</p></template>
                         <template #input>
                             <label v-for="items in icons">
-                                <input type="radio" v-model="habitData.icon" :value=items.id />
+                                <input type="radio" v-model="habitData.icon" :value=items.id :checked="Props.habitData?.icon === items.name">
                                 <HabitIcon :id=items.name />
                             </label>
                         </template>
