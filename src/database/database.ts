@@ -160,7 +160,7 @@ async function showDailyHabits() {
                                 db.get(
                                     "SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date = ?",
                                     [HabitState.id, formattedDate],
-                                    (err, row) => {
+                                    (err, row: {count: number}) => {
                                         if (err) {
                                             reject(err);
                                         } else {
@@ -182,7 +182,7 @@ async function showDailyHabits() {
                                 const sql = `SELECT COUNT(*) as count
                                              FROM record
                                              WHERE habit_id = ? AND date IN (${placeholders})`;
-                                db.get(sql, [HabitState.id, ...weekDates], (err, row) => {
+                                db.get(sql, [HabitState.id, ...weekDates], (err, row: {count: number}) => {
                                     if (err) {
                                         reject(err);
                                     } else {
@@ -205,7 +205,7 @@ async function showDailyHabits() {
                                 db.get(
                                     'SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?',
                                     [HabitState.id, currentMonth, currentYear],
-                                    (err, row) => {
+                                    (err, row: {count: number}) => {
                                         if (err) {
                                             reject(err);
                                         } else {
