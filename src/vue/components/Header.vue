@@ -4,7 +4,7 @@ import CreateHabit from "./CreateHabit.vue";
 
 <template>
     <h1>Willkommen zurück!</h1>
-    <CreateHabit fixed="true" submit="Erstellen">
+    <CreateHabit :fixed="true" submit="Erstellen" :id="-1">
         <template #btn-content>+
         </template>
         <template #title>
