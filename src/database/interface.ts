@@ -18,6 +18,9 @@ interface HabitState {
     frequency: number;
     entries: number;
     interval: number;
+    timeperiod: boolean;
+    startDate: string;
+    endDate: string;
 }
 
 export type { Habit, HabitState };
