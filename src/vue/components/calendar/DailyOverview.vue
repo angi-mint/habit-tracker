@@ -2,13 +2,18 @@
 import { onMounted, ref, reactive } from "vue";
 import DailyTracker from "./DailyTracker.vue";
 
-interface Habit {
-  id: number;
-  name: string;
-  icon: string;
-  color: string;
-  frequency: number;
-  entries: number;
+export interface Habit {
+    id: number;
+    name: string;
+    icon: string;
+    color: string;
+    category: string;
+    frequency: number;
+    entries: number;
+    interval: number;
+    timeperiod: boolean;
+    startDate: string;
+    endDate: string;
 }
 
 interface HabitData {
