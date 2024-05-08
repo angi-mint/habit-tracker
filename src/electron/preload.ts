@@ -9,6 +9,7 @@ const API = {
     sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
     getDailyHabits: () => ipcRenderer.invoke("getDailyHabits"),
     sendTrackHabit: (id: number) => ipcRenderer.invoke("sendTrackHabit", id),
+    saveICalCredentials: (url: string, username: string, password: string) => ipcRenderer.invoke("saveICalCredentials", url, username, password),
 };
 
 contextBridge.exposeInMainWorld('api', API);

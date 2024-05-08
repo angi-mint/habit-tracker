@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { Habit, HabitState } from "./interface";
+import {Habit, HabitState, iCalCredentials} from "./interface";
 import { getWeekDates } from "./utils";
 
 function openDb() {
@@ -7,7 +7,7 @@ function openDb() {
         if (err) {
             console.error(err.message);
         } else {
-            console.log("Connected to the database.");
+            // console.log("Connected to the database.");
         }
     });
     return db;
@@ -235,6 +235,47 @@ async function showDailyHabits() {
     });
 }
 
+async function saveICalCredentials(cred: iCalCredentials) {
+    const db = openDb();
+    // check if there already is an entry with id 1, if yes update else create a new entry
+    return new Promise<void>((resolve, reject) => {
+        db.get('SELECT id FROM ical WHERE id = 1', (err, row) => {
+            if (err) {
+                reject(err);
+            } else if (row) {
+                db.run('UPDATE ical SET url = ?, username = ?, password = ? WHERE id = 1', [cred.url, cred.username, cred.password], (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            } else {
+                db.run("INSERT INTO ical (url, username, password, id) VALUES (?, ?, ?, 1)", [cred.url, cred.username, cred.password], (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+async function getICalCredentials(): Promise<iCalCredentials> {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.get('SELECT url, username, password FROM ical WHERE id = 1', (err, row: iCalCredentials) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
 export default {
     openDb,
     addRecord,
@@ -242,4 +283,5 @@ export default {
     getCategoryList,
     addHabit,
     showDailyHabits,
+    saveICalCredentials, getICalCredentials
 };

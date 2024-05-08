@@ -20,4 +20,10 @@ interface HabitState {
     interval: number;
 }
 
-export type { Habit, HabitState };
+interface iCalCredentials {
+    url: string;
+    username: string;
+    password: string;
+}
+
+export type { Habit, HabitState, iCalCredentials };
