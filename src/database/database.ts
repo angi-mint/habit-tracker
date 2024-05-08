@@ -263,6 +263,19 @@ async function saveICalCredentials(cred: iCalCredentials) {
     });
 }
 
+async function getICalCredentials() {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.get('SELECT url, username, password FROM ical WHERE id = 1', (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
 export default {
     openDb,
     addRecord,
@@ -270,5 +283,5 @@ export default {
     getCategoryList,
     addHabit,
     showDailyHabits,
-    saveICalCredentials
+    saveICalCredentials, getICalCredentials
 };
