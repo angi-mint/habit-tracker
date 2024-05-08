@@ -87,33 +87,24 @@ async function addHabit(habit: Habit): Promise<number> {
     const categoryID = habit.category === undefined ? 5 : await getOrAddCategory(habit.category);
 
     return new Promise((resolve, reject) => {
-        const params: Array<string | number | boolean> = habit.timeperiod
-            ? [
-                habit.name,
-                habit.frequency,
-                habit.interval,
-                habit.timeperiod,
-                habit.startDate,
-                habit.endDate,
-                categoryID,
-                habit.color,
-                habit.icon
-            ]
-            : [
-                habit.name,
-                habit.frequency,
-                habit.interval,
-                habit.timeperiod,
-                categoryID,
-                habit.color,
-                habit.icon
-            ];
+        const params: Array<string | number | boolean | null> = [
+            habit.name,
+            habit.frequency,
+            habit.interval,
+            habit.timeperiod,
+            (habit.timeperiod) ? habit.startDate : null,
+            (habit.timeperiod) ? habit.endDate : null,
+            habit.calendar,
+            (habit.calendar) ? habit.startTime : null,
+            (habit.calendar) ? habit.endTime : null,
+            habit.todo,
+            categoryID,
+            habit.color,
+            habit.icon
+        ];
 
-        const sql: string = habit.timeperiod
-            ? `INSERT INTO habit (name, frequency, interval, timeperiod, startDate, endDate, category_id, color_id, icon_id)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-            : `INSERT INTO habit (name, frequency, interval, timeperiod, category_id, color_id, icon_id)
-               VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        const sql: string = `INSERT INTO habit (name, frequency, interval, timeperiod, startDate, endDate, calendar, startTime, endTime, todo, category_id, color_id, icon_id)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
         db.run(sql, params, function (err) {
             if (err) {
