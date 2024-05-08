@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { Habit, HabitState } from "./interface";
+import {Habit, HabitState, iCalCredentials} from "./interface";
 import { getWeekDates } from "./utils";
 
 function openDb() {
@@ -235,20 +235,31 @@ async function showDailyHabits() {
     });
 }
 
-async function saveICalCredentials(url: string, username: string, password: string) {
+async function saveICalCredentials(cred: iCalCredentials) {
     const db = openDb();
+    // check if there already is an entry with id 1, if yes update else create a new entry
     return new Promise<void>((resolve, reject) => {
-        db.run(
-            "INSERT INTO ical (url, username, password) VALUES (?, ?, ?)",
-            [url, username, password],
-            (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
+        db.get('SELECT id FROM ical WHERE id = 1', (err, row) => {
+            if (err) {
+                reject(err);
+            } else if (row) {
+                db.run('UPDATE ical SET url = ?, username = ?, password = ? WHERE id = 1', [cred.url, cred.username, cred.password], (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            } else {
+                db.run("INSERT INTO ical (url, username, password, id) VALUES (?, ?, ?, 1)", [cred.url, cred.username, cred.password], (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
             }
-        );
+        });
     });
 }
 
