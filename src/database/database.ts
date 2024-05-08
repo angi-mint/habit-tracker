@@ -7,7 +7,7 @@ function openDb() {
         if (err) {
             console.error(err.message);
         } else {
-            console.log("Connected to the database.");
+            // console.log("Connected to the database.");
         }
     });
     return db;
@@ -263,10 +263,10 @@ async function saveICalCredentials(cred: iCalCredentials) {
     });
 }
 
-async function getICalCredentials() {
+async function getICalCredentials(): Promise<iCalCredentials> {
     const db = openDb();
     return new Promise((resolve, reject) => {
-        db.get('SELECT url, username, password FROM ical WHERE id = 1', (err, row) => {
+        db.get('SELECT url, username, password FROM ical WHERE id = 1', (err, row: iCalCredentials) => {
             if (err) {
                 reject(err);
             } else {

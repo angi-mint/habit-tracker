@@ -1,9 +1,10 @@
-import {app, BrowserWindow, ipcMain} from 'electron';
+import {app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 
 //database import
 import db from '../database/database';
 import {Habit} from '../database/interface';
+import {fetchHabits} from "./ical";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -56,7 +57,7 @@ ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
 });
 
 ipcMain.handle("saveICalCredentials", async (_: any, url: string, username: string, password: string) => {
-    return await db.saveICalCredentials(url, username, password);
+    return await db.saveICalCredentials({url: url, username: username, password: password});
 });
 
 // This method will be called when Electron has finished
@@ -72,6 +73,7 @@ app.whenReady().then(() => {
             createWindow();
         }
     });
+    void fetchHabits();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
