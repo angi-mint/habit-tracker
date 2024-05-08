@@ -6,7 +6,13 @@ import Settings from "./Settings.vue";
 <template>
     <h1>Willkommen zurück!</h1>
     <div class="header-actions">
-        <CreateHabit />
+        <CreateHabit :fixed="true" submit="Erstellen" :id="-1">
+            <template #btn-content>+
+            </template>
+            <template #title>
+                <h3>Neues Habit erstellen</h3>
+            </template>
+        </CreateHabit>
         <Settings />
     </div>
 </template>
