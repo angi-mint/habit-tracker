@@ -1,17 +1,34 @@
 import sqlite3 from "sqlite3";
-import { Habit, HabitState } from "./interface";
+import {Habit, HabitState, iCalCredentials} from "./interface";
 import { getWeekDates } from "./utils";
-
 
 function openDb() {
     const db = new sqlite3.Database("./src/database/habitdb.db", (err) => {
         if (err) {
             console.error(err.message);
         } else {
-            console.log("Connected to the database.");
+            // console.log("Connected to the database.");
         }
     });
     return db;
+}
+
+function addRecord(id: number): Promise<void> {
+    const db = openDb();
+    const date = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+    return new Promise((resolve, reject) => {
+        db.run(
+            "INSERT INTO record (habit_id, date) VALUES (?, ?)",
+            [id, date],
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        );
+    });
 }
 
 function getColorList() {
@@ -143,7 +160,7 @@ async function showDailyHabits() {
                                 db.get(
                                     "SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND date = ?",
                                     [HabitState.id, formattedDate],
-                                    (err, row) => {
+                                    (err, row: {count: number}) => {
                                         if (err) {
                                             reject(err);
                                         } else {
@@ -165,7 +182,7 @@ async function showDailyHabits() {
                                 const sql = `SELECT COUNT(*) as count
                                              FROM record
                                              WHERE habit_id = ? AND date IN (${placeholders})`;
-                                db.get(sql, [HabitState.id, ...weekDates], (err, row) => {
+                                db.get(sql, [HabitState.id, ...weekDates], (err, row: {count: number}) => {
                                     if (err) {
                                         reject(err);
                                     } else {
@@ -188,7 +205,7 @@ async function showDailyHabits() {
                                 db.get(
                                     'SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?',
                                     [HabitState.id, currentMonth, currentYear],
-                                    (err, row) => {
+                                    (err, row: {count: number}) => {
                                         if (err) {
                                             reject(err);
                                         } else {
@@ -218,11 +235,53 @@ async function showDailyHabits() {
     });
 }
 
+async function saveICalCredentials(cred: iCalCredentials) {
+    const db = openDb();
+    // check if there already is an entry with id 1, if yes update else create a new entry
+    return new Promise<void>((resolve, reject) => {
+        db.get('SELECT id FROM ical WHERE id = 1', (err, row) => {
+            if (err) {
+                reject(err);
+            } else if (row) {
+                db.run('UPDATE ical SET url = ?, username = ?, password = ? WHERE id = 1', [cred.url, cred.username, cred.password], (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            } else {
+                db.run("INSERT INTO ical (url, username, password, id) VALUES (?, ?, ?, 1)", [cred.url, cred.username, cred.password], (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+async function getICalCredentials(): Promise<iCalCredentials> {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.get('SELECT url, username, password FROM ical WHERE id = 1', (err, row: iCalCredentials) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
 export default {
     openDb,
+    addRecord,
     getColorList,
     getCategoryList,
     addHabit,
     showDailyHabits,
-
+    saveICalCredentials, getICalCredentials
 };

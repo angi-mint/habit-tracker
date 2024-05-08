@@ -1,9 +1,10 @@
-import {app, BrowserWindow, ipcMain} from 'electron';
+import {app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 
 //database import
 import db from '../database/database';
 import {Habit} from '../database/interface';
+import {fetchHabits} from "./ical";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -22,9 +23,9 @@ const createWindow = () => {
 
     // and load the index.html of the app.
     if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-        mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+        void mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
     } else {
-        mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+        void mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
     }
 
     // Open the DevTools.
@@ -48,7 +49,16 @@ ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
 // Handle for getting daily habits
 ipcMain.handle("getDailyHabits", async (_event: any) => {
     return await db.showDailyHabits();
-  });
+});
+
+  // Handle for addRecord
+ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
+    return await db.addRecord(id);
+});
+
+ipcMain.handle("saveICalCredentials", async (_: any, url: string, username: string, password: string) => {
+    return await db.saveICalCredentials({url: url, username: username, password: password});
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -63,6 +73,7 @@ app.whenReady().then(() => {
             createWindow();
         }
     });
+    void fetchHabits();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
