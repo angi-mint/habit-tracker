@@ -235,6 +235,23 @@ async function showDailyHabits() {
     });
 }
 
+async function saveICalCredentials(url: string, username: string, password: string) {
+    const db = openDb();
+    return new Promise<void>((resolve, reject) => {
+        db.run(
+            "INSERT INTO ical (url, username, password) VALUES (?, ?, ?)",
+            [url, username, password],
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        );
+    });
+}
+
 export default {
     openDb,
     addRecord,
@@ -242,4 +259,5 @@ export default {
     getCategoryList,
     addHabit,
     showDailyHabits,
+    saveICalCredentials
 };

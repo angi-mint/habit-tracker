@@ -55,6 +55,10 @@ ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
     return await db.addRecord(id);
 });
 
+ipcMain.handle("saveICalCredentials", async (_: any, url: string, username: string, password: string) => {
+    return await db.saveICalCredentials(url, username, password);
+});
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
