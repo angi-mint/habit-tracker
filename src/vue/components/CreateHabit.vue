@@ -144,7 +144,7 @@ const onSubmit = async () => {
                     <LabelForm>
                         <template #form-label><p>Zeitraum</p>
                             <label class="toggler-wrapper">
-                                <input type="checkbox" v-model="habitData.timeperiod">
+                                <input type="checkbox" v-model="habitData.timeperiod" v-bind:true-value="1">
                                 <div class="toggler-slider">
                                     <div class="toggler-knob"></div>
                                 </div>
