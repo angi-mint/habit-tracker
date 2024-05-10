@@ -26,6 +26,10 @@ const defaultHabitData: Habit = {
     timeperiod: false,
     startDate: '',
     endDate: '',
+    calendar: false,
+    startTime: '',
+    endTime: '',
+    todo: false,
 };
 const habitData = (Props.id === -1) ? ref(defaultHabitData) : ref(Props.habitData as Habit);
 
@@ -143,12 +147,7 @@ const onSubmit = async () => {
 
                     <LabelForm>
                         <template #form-label><p>Zeitraum</p>
-                            <label class="toggler-wrapper">
                                 <input type="checkbox" v-model="habitData.timeperiod" v-bind:true-value="1">
-                                <div class="toggler-slider">
-                                    <div class="toggler-knob"></div>
-                                </div>
-                            </label>
                         </template>
                         <template #input>
                             <div v-if="habitData.timeperiod" class="form-input">
@@ -158,6 +157,27 @@ const onSubmit = async () => {
                             </div>
                         </template>
                     </LabelForm>
+
+                    <LabelForm>
+                        <template #form-label><p>Im Kalendar anzeigen</p>
+                            <input type="checkbox" v-model="habitData.calendar" v-bind:true-value="1">
+                        </template>
+                        <template #input>
+                            <div v-if="habitData.calendar" class="form-input">
+                                <p>Uhrzeit festlegen:</p>
+                                <input class="form-input" type="time" v-model="habitData.startTime" required>
+                                <span> - </span>
+                                <input class="form-input" type="time" v-model="habitData.endTime" required>
+                            </div>
+                        </template>
+                    </LabelForm>
+
+                    <LabelForm>
+                        <template #form-label><p>Als ToDo anzeigen</p>
+                            <input type="checkbox" v-model="habitData.todo" v-bind:true-value="1">
+                        </template>
+                    </LabelForm>
+
                     <input type="submit" :value="Props.submit">
                 </form>
             </div>
