@@ -25,6 +25,10 @@ interface HabitState {
     timeperiod: boolean;
     startDate: string;
     endDate: string;
+    calendar: boolean,
+    startTime: string;
+    endTime: string;
+    todo: boolean;
 }
 
 interface iCalCredentials {
