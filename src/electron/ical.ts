@@ -3,6 +3,8 @@ import db from "../database/database";
 async function fetchHabits() {
     const { net } = require('electron');
     const creds = await db.getICalCredentials();
+    if (!creds) return;
+
     const request = net.request(creds.url);
     request.setHeader('Authorization', 'Basic ' + Buffer.from(creds.username + ':' + creds.password).toString('base64'));
 
