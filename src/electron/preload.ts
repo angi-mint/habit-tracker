@@ -2,6 +2,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
 import {contextBridge, ipcRenderer} from 'electron';
+import {iCalCredentials} from "@/database/interface";
 
 const API = {
     getColorList: () => ipcRenderer.invoke("getColorList"),
@@ -9,7 +10,7 @@ const API = {
     sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
     getDailyHabits: () => ipcRenderer.invoke("getDailyHabits"),
     sendTrackHabit: (id: number) => ipcRenderer.invoke("sendTrackHabit", id),
-    saveICalCredentials: (url: string, username: string, password: string) => ipcRenderer.invoke("saveICalCredentials", url, username, password),
+    saveICalCredentials: (iCalCredentials: object) => ipcRenderer.invoke("saveICalCredentials", iCalCredentials),
 };
 
 contextBridge.exposeInMainWorld('api', API);

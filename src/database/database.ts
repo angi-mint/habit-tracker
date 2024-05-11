@@ -242,7 +242,7 @@ async function saveICalCredentials(cred: iCalCredentials) {
                     }
                 });
             } else {
-                db.run("INSERT INTO ical (url, username, password, id) VALUES (?, ?, ?, 1)", [cred.url, cred.username, cred.password], (err) => {
+                db.run("INSERT INTO ical (id, url, username, password) VALUES (1, ?, ?, ?)", [cred.url, cred.username, cred.password], (err) => {
                     if (err) {
                         reject(err);
                     } else {

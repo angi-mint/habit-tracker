@@ -3,7 +3,7 @@ import path from 'node:path';
 
 //database import
 import db from '../database/database';
-import {Habit} from '../database/interface';
+import {Habit, iCalCredentials} from '../database/interface';
 import {fetchHabits} from "./ical";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -56,8 +56,8 @@ ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
     return await db.addRecord(id);
 });
 
-ipcMain.handle("saveICalCredentials", async (_: any, url: string, username: string, password: string) => {
-    return await db.saveICalCredentials({url: url, username: username, password: password});
+ipcMain.handle("saveICalCredentials", async (_: any, creds: iCalCredentials) => {
+    return await db.saveICalCredentials(creds);
 });
 
 // This method will be called when Electron has finished
