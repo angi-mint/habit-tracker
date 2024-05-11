@@ -87,33 +87,24 @@ async function addHabit(habit: Habit): Promise<number> {
     const categoryID = habit.category === undefined ? 5 : await getOrAddCategory(habit.category);
 
     return new Promise((resolve, reject) => {
-        const params: Array<string | number | boolean> = habit.timeperiod
-            ? [
-                habit.name,
-                habit.frequency,
-                habit.interval,
-                habit.timeperiod,
-                habit.startDate,
-                habit.endDate,
-                categoryID,
-                habit.color,
-                habit.icon
-            ]
-            : [
-                habit.name,
-                habit.frequency,
-                habit.interval,
-                habit.timeperiod,
-                categoryID,
-                habit.color,
-                habit.icon
-            ];
+        const params: Array<string | number | boolean | null> = [
+            habit.name,
+            habit.frequency,
+            habit.interval,
+            habit.timeperiod,
+            (habit.timeperiod) ? habit.startDate : null,
+            (habit.timeperiod) ? habit.endDate : null,
+            habit.calendar,
+            (habit.calendar) ? habit.startTime : null,
+            (habit.calendar) ? habit.endTime : null,
+            habit.todo,
+            categoryID,
+            habit.color,
+            habit.icon
+        ];
 
-        const sql: string = habit.timeperiod
-            ? `INSERT INTO habit (name, frequency, interval, timeperiod, startDate, endDate, category_id, color_id, icon_id)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-            : `INSERT INTO habit (name, frequency, interval, timeperiod, category_id, color_id, icon_id)
-               VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        const sql: string = `INSERT INTO habit (name, frequency, interval, timeperiod, startDate, endDate, calendar, startTime, endTime, todo, category_id, color_id, icon_id)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
         db.run(sql, params, function (err) {
             if (err) {
@@ -143,7 +134,7 @@ async function showDailyHabits() {
         const weekDates = getWeekDates();
 
         db.all(
-            "SELECT habit.id, habit.name, icon.name as icon, color.name as color, category.name as category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id JOIN category ON category.id = habit.category_id",
+            "SELECT habit.id, habit.name, icon.name as icon, color.name as color, category.name as category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate, habit.calendar, habit.startTime, habit.endTime, habit.todo FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id JOIN category ON category.id = habit.category_id",
             (err, habits: HabitState[]) => {
                 if (err) {
                     reject(err);
@@ -251,7 +242,7 @@ async function saveICalCredentials(cred: iCalCredentials) {
                     }
                 });
             } else {
-                db.run("INSERT INTO ical (url, username, password, id) VALUES (?, ?, ?, 1)", [cred.url, cred.username, cred.password], (err) => {
+                db.run("INSERT INTO ical (id, url, username, password) VALUES (1, ?, ?, ?)", [cred.url, cred.username, cred.password], (err) => {
                     if (err) {
                         reject(err);
                     } else {
