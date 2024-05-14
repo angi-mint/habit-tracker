@@ -3,8 +3,14 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
 module.exports = {
   packagerConfig: {
-    asar: true,
-    icon: 'src/electron/images/icon'
+    asar: {
+      unpack: "{**/src/database/**/*,**/node_modules/sqlite3/**/*}"
+    },
+    icon: 'src/electron/images/icon',
+    //extraResources: ['src/database/habitdb.db'],
+    files: [
+      '**/src/database/**/*',
+    ],
   },
   rebuildConfig: {},
   makers: [

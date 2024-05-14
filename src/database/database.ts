@@ -1,13 +1,30 @@
+import { app } from "electron";
+import path from "path";
+import log from "electron-log";
+import fs from "fs-extra";
 import sqlite3 from "sqlite3";
 import {Habit, HabitState, iCalCredentials} from "./interface";
 import { getWeekDates } from "./utils";
 
 function openDb() {
-    const db = new sqlite3.Database("./src/database/habitdb.db", (err) => {
+    const userDataPath = app.getPath("userData");
+    const dbFileName = "habitdb.db";
+    const unpackedPath = app.isPackaged
+        ? path.join(process.resourcesPath, 'app.asar.unpacked', 'database', dbFileName)
+        : path.join(__dirname, '../../src/database', dbFileName);
+    const dbPath = path.join(userDataPath, dbFileName);
+
+    if (!fs.existsSync(dbPath)) {
+        fs.copySync(unpackedPath, dbPath);
+    }
+
+    log.info(`Opening database at ${dbPath}`);
+
+    const db = new sqlite3.Database(dbPath, (err) => {
         if (err) {
-            console.error(err.message);
+            log.error(`Failed to open database: ${err.message}`);
         } else {
-            // console.log("Connected to the database.");
+            log.info("Connected to the database.");
         }
     });
     return db;
