@@ -2,27 +2,36 @@
 
 import HabitIcon from "./icons/HabitIcon.vue";
 import LabelForm from "./form/LabelForm.vue";
-import {computed, onMounted, Ref, ref} from "vue";
+import {computed, onMounted, PropType, Ref, ref} from "vue";
+import {Habit} from "./calendar/DailyOverview.vue";
 
 const open = ref(false);
 
-const habitData = ref({
+const Props = defineProps({
+    id: Number,
+    fixed: Boolean,
+    submit: String,
+    habitData: Object as PropType<Habit>
+});
+
+const defaultHabitData: Habit = {
+    id: -1,
     name: '',
     icon: '',
     color: 1,
     category: '',
-    interval: '',
     frequency: 1,
+    entries: 0,
+    interval: '',
     timeperiod: false,
     startDate: '',
     endDate: '',
-})
-
-const onSubmit = async () => {
-    await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
-    await fetchCategoryList();
-    open.value = false;
-}
+    calendar: false,
+    startTime: '',
+    endTime: '',
+    todo: false,
+};
+const habitData = (Props.id === -1) ? ref(defaultHabitData) : ref(Props.habitData as Habit);
 
 interface DatabaseList {
     id: number;
@@ -32,55 +41,52 @@ interface DatabaseList {
 const categories = ref<Array<DatabaseList>>([]);
 const colors = ref<Array<DatabaseList>>([]);
 
-const fetchCategoryList = async () => {
+const fetchList = async () => {
+    colors.value = (await window.api.getColorList()).map((color: DatabaseList) => ({
+        id: color.id,
+        name: color.name
+    }));
+
     categories.value = (await window.api.getCategoryList()).map((category: DatabaseList) => ({
         id: category.id,
         name: category.name
     }));
 };
 
-const fetchColorList = async () => {
-    colors.value = (await window.api.getColorList()).map((color: DatabaseList) => ({
-        id: color.id,
-        name: color.name
-    }));
-};
-
-onMounted(async () => {
-    await fetchCategoryList();
-    await fetchColorList();
-});
-
 const icons: Ref<Array<DatabaseList>> = computed(() => {
-    const icon = [
-        { id: 1, name: "heart" },
-        { id: 2, name: "pill" },
-        { id: 3, name: "book" },
-        { id: 4, name: "glass" },
-    ];
-
-    return icon;
+    return [{id: 1, name: "heart"}, {id: 2, name: "pill"}, {id: 3, name: "book"}, {id: 4, name: "glass"},];
 });
 
 const intervals: Ref<Array<DatabaseList>> = computed(() => {
-    return [
-        { id: 1, name: "täglich" },
-        { id: 2, name: "wöchentlich" },
-        { id: 3, name: "monatlich"}
-    ];
+    return [{ id: 1, name: "täglich" }, { id: 2, name: "wöchentlich" }, { id: 3, name: "monatlich"}];
 });
+
+onMounted(async () => {
+    await fetchList();
+});
+
+const onSubmit = async () => {
+    //if (!Props.fixed)
+    await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    // else await window.api.updateHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+
+    await fetchList();
+    habitData.value = defaultHabitData;
+    open.value = false;
+}
 
 </script>
 
 <template>
-    <button class="btn-habit btn" @click="open = true">+</button>
+    <button :class="{'btn-habit btn': Props.fixed}" @click="open = true">
+        <slot name="btn-content"></slot>
+    </button>
     <Teleport to="body">
         <div v-if="open" class="modal">
             <div class="modal-content">
-                <h3>Neues Habit erstellen</h3>
+                <slot name="title"></slot>
                 <button @click="open = false" class="btn-exit btn">x</button>
                 <form @submit.prevent="onSubmit">
-
                     <LabelForm required>
                         <template #form-label><p>Name</p></template>
                         <template #input>
@@ -102,7 +108,7 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                         <template #form-label><p>Farbe</p></template>
                         <template #input>
                             <label v-for="items in colors">
-                                <input type="radio" v-model="habitData.color" :value="items.id">
+                                <input type="radio" v-model="habitData.color" :value="items.id" :checked="Props.habitData?.color === items.name">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" :fill="items.name" viewBox="0 0 16 16">
                                     <circle cx="8" cy="8" r="8"/>
                                 </svg>
@@ -114,7 +120,7 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                         <template #form-label><p>Icon</p></template>
                         <template #input>
                             <label v-for="items in icons">
-                                <input type="radio" v-model="habitData.icon" :value=items.id />
+                                <input type="radio" v-model="habitData.icon" :value=items.id :checked="Props.habitData?.icon === items.name">
                                 <HabitIcon :id=items.name />
                             </label>
                         </template>
@@ -141,12 +147,7 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
 
                     <LabelForm>
                         <template #form-label><p>Zeitraum</p>
-                            <label class="toggler-wrapper">
-                                <input type="checkbox" v-model="habitData.timeperiod">
-                                <div class="toggler-slider">
-                                    <div class="toggler-knob"></div>
-                                </div>
-                            </label>
+                                <input type="checkbox" v-model="habitData.timeperiod" v-bind:true-value="1">
                         </template>
                         <template #input>
                             <div v-if="habitData.timeperiod" class="form-input">
@@ -156,7 +157,28 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                             </div>
                         </template>
                     </LabelForm>
-                    <input type="submit">
+
+                    <LabelForm>
+                        <template #form-label><p>Im Kalendar anzeigen</p>
+                            <input type="checkbox" v-model="habitData.calendar" v-bind:true-value="1">
+                        </template>
+                        <template #input>
+                            <div v-if="habitData.calendar" class="form-input">
+                                <p>Uhrzeit festlegen:</p>
+                                <input class="form-input" type="time" v-model="habitData.startTime" required>
+                                <span> - </span>
+                                <input class="form-input" type="time" v-model="habitData.endTime" required>
+                            </div>
+                        </template>
+                    </LabelForm>
+
+                    <LabelForm>
+                        <template #form-label><p>Als ToDo anzeigen</p>
+                            <input type="checkbox" v-model="habitData.todo" v-bind:true-value="1">
+                        </template>
+                    </LabelForm>
+
+                    <input type="submit" :value="Props.submit">
                 </form>
             </div>
         </div>

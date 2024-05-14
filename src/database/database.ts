@@ -3,7 +3,7 @@ import path from "path";
 import log from "electron-log";
 import fs from "fs-extra";
 import sqlite3 from "sqlite3";
-import { Habit, HabitState } from "./interface";
+import {Habit, HabitState, iCalCredentials} from "./interface";
 import { getWeekDates } from "./utils";
 
 function openDb() {
@@ -104,33 +104,24 @@ async function addHabit(habit: Habit): Promise<number> {
     const categoryID = habit.category === undefined ? 5 : await getOrAddCategory(habit.category);
 
     return new Promise((resolve, reject) => {
-        const params: Array<string | number | boolean> = habit.timeperiod
-            ? [
-                habit.name,
-                habit.frequency,
-                habit.interval,
-                habit.timeperiod,
-                habit.startDate,
-                habit.endDate,
-                categoryID,
-                habit.color,
-                habit.icon
-            ]
-            : [
-                habit.name,
-                habit.frequency,
-                habit.interval,
-                habit.timeperiod,
-                categoryID,
-                habit.color,
-                habit.icon
-            ];
+        const params: Array<string | number | boolean | null> = [
+            habit.name,
+            habit.frequency,
+            habit.interval,
+            habit.timeperiod,
+            (habit.timeperiod) ? habit.startDate : null,
+            (habit.timeperiod) ? habit.endDate : null,
+            habit.calendar,
+            (habit.calendar) ? habit.startTime : null,
+            (habit.calendar) ? habit.endTime : null,
+            habit.todo,
+            categoryID,
+            habit.color,
+            habit.icon
+        ];
 
-        const sql: string = habit.timeperiod
-            ? `INSERT INTO habit (name, frequency, interval, timeperiod, startDate, endDate, category_id, color_id, icon_id)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-            : `INSERT INTO habit (name, frequency, interval, timeperiod, category_id, color_id, icon_id)
-               VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        const sql: string = `INSERT INTO habit (name, frequency, interval, timeperiod, startDate, endDate, calendar, startTime, endTime, todo, category_id, color_id, icon_id)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
         db.run(sql, params, function (err) {
             if (err) {
@@ -160,7 +151,7 @@ async function showDailyHabits() {
         const weekDates = getWeekDates();
 
         db.all(
-            "SELECT habit.id, habit.name, icon.name as icon, color.name as color, habit.frequency, habit.interval FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id",
+            "SELECT habit.id, habit.name, icon.name as icon, color.name as color, category.name as category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate, habit.calendar, habit.startTime, habit.endTime, habit.todo FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id JOIN category ON category.id = habit.category_id",
             (err, habits: HabitState[]) => {
                 if (err) {
                     reject(err);
@@ -252,6 +243,47 @@ async function showDailyHabits() {
     });
 }
 
+async function saveICalCredentials(cred: iCalCredentials) {
+    const db = openDb();
+    // check if there already is an entry with id 1, if yes update else create a new entry
+    return new Promise<void>((resolve, reject) => {
+        db.get('SELECT id FROM ical WHERE id = 1', (err, row) => {
+            if (err) {
+                reject(err);
+            } else if (row) {
+                db.run('UPDATE ical SET url = ?, username = ?, password = ? WHERE id = 1', [cred.url, cred.username, cred.password], (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            } else {
+                db.run("INSERT INTO ical (id, url, username, password) VALUES (1, ?, ?, ?)", [cred.url, cred.username, cred.password], (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+async function getICalCredentials(): Promise<iCalCredentials> {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.get('SELECT url, username, password FROM ical WHERE id = 1', (err, row: iCalCredentials) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
 export default {
     openDb,
     addRecord,
@@ -259,4 +291,5 @@ export default {
     getCategoryList,
     addHabit,
     showDailyHabits,
+    saveICalCredentials, getICalCredentials
 };

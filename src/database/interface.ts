@@ -8,6 +8,10 @@ interface Habit {
     timeperiod: boolean;
     startDate: string;
     endDate: string;
+    calendar: boolean,
+    startTime: string;
+    endTime: string;
+    todo: boolean;
 }
 
 interface HabitState {
@@ -18,6 +22,19 @@ interface HabitState {
     frequency: number;
     entries: number;
     interval: number;
+    timeperiod: boolean;
+    startDate: string;
+    endDate: string;
+    calendar: boolean,
+    startTime: string;
+    endTime: string;
+    todo: boolean;
 }
 
-export type { Habit, HabitState };
+interface iCalCredentials {
+    url: string;
+    username: string;
+    password: string;
+}
+
+export type { Habit, HabitState, iCalCredentials };
