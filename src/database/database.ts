@@ -1,14 +1,22 @@
 import { app } from "electron";
 import path from "path";
 import log from "electron-log";
+import fs from "fs-extra";
 import sqlite3 from "sqlite3";
 import { Habit, HabitState } from "./interface";
 import { getWeekDates } from "./utils";
 
 function openDb() {
-    const dbPath = app.isPackaged
-    ? path.join(process.resourcesPath, 'app.asar.unpacked', 'src', 'database', 'habitdb.db')
-    : path.join(__dirname, '../../src/database/habitdb.db');
+    const userDataPath = app.getPath("userData");
+    const dbFileName = "habitdb.db";
+    const unpackedPath = app.isPackaged
+        ? path.join(process.resourcesPath, 'app.asar.unpacked', 'database', dbFileName)
+        : path.join(__dirname, '../../src/database', dbFileName);
+    const dbPath = path.join(userDataPath, dbFileName);
+
+    if (!fs.existsSync(dbPath)) {
+        fs.copySync(unpackedPath, dbPath);
+    }
 
     log.info(`Opening database at ${dbPath}`);
 
