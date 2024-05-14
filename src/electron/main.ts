@@ -51,6 +51,11 @@ ipcMain.handle("getDailyHabits", async (_event: any) => {
     return await db.showDailyHabits();
 });
 
+// Handle for getting weekly habits
+ipcMain.handle("getWeeklyHabits", async (_event: any) => {
+    return await db.showWeeklyHabits();
+});
+
   // Handle for addRecord
 ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
     return await db.addRecord(id);

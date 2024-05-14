@@ -9,6 +9,7 @@ const API = {
     getCategoryList: () => ipcRenderer.invoke("getCategoryList"),
     sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
     getDailyHabits: () => ipcRenderer.invoke("getDailyHabits"),
+    getWeeklyHabits: () => ipcRenderer.invoke("getWeeklyHabits"),
     sendTrackHabit: (id: number) => ipcRenderer.invoke("sendTrackHabit", id),
     saveICalCredentials: (iCalCredentials: object) => ipcRenderer.invoke("saveICalCredentials", iCalCredentials),
 };
