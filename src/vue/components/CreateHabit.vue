@@ -66,9 +66,9 @@ onMounted(async () => {
 });
 
 const onSubmit = async () => {
-    //if (!Props.fixed)
+    if (Props.fixed)
     await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
-    // else await window.api.updateHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    else await window.api.updateHabitObject(JSON.parse(JSON.stringify(habitData.value)));
 
     await fetchList();
     habitData.value = defaultHabitData;
