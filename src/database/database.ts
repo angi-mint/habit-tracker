@@ -127,7 +127,7 @@ function getOrAddCategory(categoryName: string): Promise<number> {
 
 async function addHabit(habit: Habit): Promise<number> {
     const db = openDb();
-    const categoryID = habit.category === undefined ? 5 : await getOrAddCategory(habit.category);
+    const categoryID = habit.category === undefined ? 1 : await getOrAddCategory(habit.category);
 
     return new Promise((resolve, reject) => {
         const params: Array<string | number | boolean | null> = [
@@ -161,7 +161,7 @@ async function addHabit(habit: Habit): Promise<number> {
 
 async function updateHabit(habit: Habit): Promise<void> {
     const db = openDb();
-    const categoryID = habit.category === undefined ? 5 : await getOrAddCategory(habit.category);
+    const categoryID = habit.category === undefined ? 1 : await getOrAddCategory(habit.category);
 
     const colorID = typeof habit.color === 'string' ? await getColorId(habit.color) : habit.color;
     const iconID = typeof habit.icon === 'string' ? await getIconId(habit.icon) : habit.icon;
