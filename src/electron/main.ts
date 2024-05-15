@@ -32,6 +32,7 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
 };
 
+// Handle for getting color list
 ipcMain.handle("getColorList", async (_event: any) => {
     return await db.getColorList();
 });
@@ -46,16 +47,22 @@ ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
     return await db.addHabit(habit);
 });
 
+// Handle for updating habit object
+ipcMain.handle("updateHabitObject", async (_event: any, habit: Habit) => {
+    return await db.updateHabit(habit);
+});
+
 // Handle for getting daily habits
 ipcMain.handle("getDailyHabits", async (_event: any) => {
     return await db.showDailyHabits();
 });
 
-  // Handle for addRecord
+// Handle for addRecord
 ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
     return await db.addRecord(id);
 });
 
+// Handle for saving iCal credentials
 ipcMain.handle("saveICalCredentials", async (_: any, creds: iCalCredentials) => {
     return await db.saveICalCredentials(creds);
 });
