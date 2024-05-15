@@ -16,11 +16,11 @@ const iconSize = 40;
 
 const reloader = ref(0);
 
-const emit = defineEmits(['reload']);
+const emit = defineEmits(['reloadDailyTracker']);
 
 const handleHabitTracked = (id: number) => {
     reloader.value += 1;
-    emit('reload');
+    emit('reloadDailyTracker');
 };
 
 </script>
