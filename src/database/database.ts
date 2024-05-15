@@ -366,6 +366,6 @@ export default {
     getCategoryList,
     addHabit,
     showDailyHabits, getAllHabits,
-    saveICalCredentials, getICalCredentials
+    saveICalCredentials, getICalCredentials,
     updateHabit,
 };
