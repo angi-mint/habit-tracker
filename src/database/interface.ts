@@ -13,7 +13,6 @@ interface Habit {
     startTime: string;
     endTime: string;
     todo: boolean;
-    id: number;
 }
 
 interface HabitState {
