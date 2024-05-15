@@ -347,14 +347,25 @@ async function getICalCredentials(): Promise<iCalCredentials> {
     });
 }
 
+async function getAllHabits(): Promise<Array<Habit>> {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.all('SELECT * FROM habit', (err, rows: Array<Habit>) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
 export default {
     openDb,
     addRecord,
     getColorList,
     getCategoryList,
     addHabit,
+    showDailyHabits, getAllHabits,
+    saveICalCredentials, getICalCredentials
     updateHabit,
-    showDailyHabits,
-    saveICalCredentials, 
-    getICalCredentials
 };
