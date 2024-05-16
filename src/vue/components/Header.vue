@@ -5,6 +5,7 @@ import {Ref, ref} from "vue";
 import Tabs from "./tabs/Tabs.vue";
 import Tab from "./tabs/Tab.vue";
 import Body from "./Body.vue";
+import HabitChartOverview from "./chart/HabitChartOverview.vue";
 
 const states: Ref<{ [key: string]: boolean }> = ref({
     home: true,
@@ -41,6 +42,8 @@ function changeStates(tab: string) {
                 <Body></Body>
             </Tab>
             <Tab v-if="states.statistics">
+                <h1>Statistics</h1>
+                <HabitChartOverview></HabitChartOverview>
             </Tab>
         </template>
     </Tabs>
