@@ -49,7 +49,7 @@ const handleHabitTracked = () => {
             <h3 class="weekly-name">{{ HabitWeekly.name }}</h3>
             <div class="weekly-overview">
                 <div class="weekly-view" v-for="(day, index) in datesArray" :key="index">
-                    <TrackButton @reload="handleHabitTracked()" :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize" :disabled="index + 1 !== today" :key="reloader"></TrackButton>
+                    <TrackButton @reload="handleHabitTracked()" :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize" :disabled="(index + 1 !== today || day === 100)" :key="reloader"></TrackButton>
                 </div>
             </div>
         </div>

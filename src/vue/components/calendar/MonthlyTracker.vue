@@ -65,7 +65,7 @@ const handleHabitTracked = () => {
                 <div class="monthly-week" v-for="(week, index) in monthInfo().weeks" :key="index">
                     <div v-for="n in 7" :key="n" class="monthly-day">
                         <svg v-if="datesArray[(n + 7 * index) - 1] === -1" :width="iconSize" :height="iconSize" viewBox="0 0 16 16"></svg>
-                        <TrackButton @reload="handleHabitTracked()" v-else :id="HabitMonthly.id" :color="HabitMonthly.color" :percentage="datesArray[(n + 7 * index) - 1]" :size="iconSize" :disabled="(n + 7 * index) !== today" :key="reloader"></TrackButton>
+                        <TrackButton @reload="handleHabitTracked()" v-else :id="HabitMonthly.id" :color="HabitMonthly.color" :percentage="datesArray[(n + 7 * index) - 1]" :size="iconSize" :disabled="((n + 7 * index) !== today) || (datesArray[(n + 7 * index) - 1] === 100)" :key="reloader"></TrackButton>
                     </div>
                 </div>
             </div>
