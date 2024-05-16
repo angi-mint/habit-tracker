@@ -2,24 +2,29 @@
 import {BarChart} from 'vue-chart-3';
 import {PropType} from "vue";
 import {Chart, registerables} from "chart.js";
+import {Habit} from "../calendar/DailyOverview.vue";
 
 Chart.register(...registerables);
 
 const DataProps = defineProps({
-    interval: String,
-    labels: Array as PropType<Array<string>>,
-    data: Array as PropType<Array<number>>,
-    colors: Array as PropType<Array<string>>,
+    habit: Object as PropType<Habit>,
 });
+function prepareArr(arr: Array<string>) {
 
-const HabitData = {
-    labels: DataProps.labels,
-    datasets: [{
-        label: '% der Erreichten Habits',
-        data: DataProps.data,
-        backgroundColor: DataProps.colors,
-    }]
 }
+
+function createLabels() {
+
+}
+
+// const HabitData = {
+//     labels: DataProps.labels,
+//     datasets: [{
+//         label: '% der Erreichten Habits',
+//         data: DataProps.data,
+//         backgroundColor: DataProps.colors,
+//     }]
+// }
 
 </script>
 
