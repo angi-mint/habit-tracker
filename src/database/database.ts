@@ -253,116 +253,6 @@ async function getWeeklyOrMonthlyHabits(startDate: string, endDate: string): Pro
     });
 }
 
-async function showWeeklyHabits() {
-    const db = openDb();
-    return new Promise<{
-        weekly: HabitState[];
-        done: HabitState[];
-    }>((resolve, reject) => {
-        const weekDates = getWeekDates();
-
-        db.all(
-            "SELECT habit.id, habit.name, icon.name as icon, color.name as color, category.name as category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate, habit.calendar, habit.startTime, habit.endTime, habit.todo FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id JOIN category ON category.id = habit.category_id",
-            (err, habits: HabitState[]) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    const weekly: HabitState[] = [];
-                    const done: HabitState[] = [];
-
-                    const promises = habits.map((HabitState) => {
-                        return new Promise<void>((resolve, reject) => {
-                            if (HabitState.interval === 2) {
-                                // Check if interval = 2 (weekly)
-
-                                const placeholders = weekDates.map(() => "?").join(", ");
-                                const sql = `SELECT COUNT(*) as count
-                                             FROM record
-                                             WHERE habit_id = ? AND date IN (${placeholders})`;
-                                db.get(sql, [HabitState.id, ...weekDates], (err, row: {count: number}) => {
-                                    if (err) {
-                                        reject(err);
-                                    } else {
-                                        HabitState.entries = row.count;
-                                        if (HabitState.frequency === row.count) {
-                                            // Check if frequency = entries
-                                            done.push(HabitState);
-                                        } else {
-                                            weekly.push(HabitState);
-                                        }
-                                        resolve();
-                                    }
-                                });
-                            } else {
-                                resolve();
-                            }
-                        });
-                    });
-
-                    Promise.all(promises)
-                        .then(() => resolve({weekly, done}))
-                        .catch(reject);
-                }
-            }
-        );
-    });
-}
-
-async function showMonthlyHabits() {
-    const db = openDb();
-    return new Promise<{
-        monthly: HabitState[];
-        done: HabitState[];
-    }>((resolve, reject) => {
-        const monthDates = getMonthDates();
-
-        db.all(
-            "SELECT habit.id, habit.name, icon.name as icon, color.name as color, category.name as category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate, habit.calendar, habit.startTime, habit.endTime, habit.todo FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id JOIN category ON category.id = habit.category_id",
-            (err, habits: HabitState[]) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    const monthly: HabitState[] = [];
-                    const done: HabitState[] = [];
-
-                    const promises = habits.map((HabitState) => {
-                        return new Promise<void>((resolve, reject) => {
-                            if (HabitState.interval === 3) {
-                                // Check if interval = 3 (monthly)
-
-                                const placeholders = monthDates.map(() => "?").join(", ");
-                                const sql = `SELECT COUNT(*) as count
-                                             FROM record
-                                             WHERE habit_id = ? AND date IN (${placeholders})`;
-                                db.get(sql, [HabitState.id, ...monthDates], (err, row: {count: number}) => {
-                                    if (err) {
-                                        reject(err);
-                                    } else {
-                                        HabitState.entries = row.count;
-                                        if (HabitState.frequency === row.count) {
-                                            // Check if frequency = entries
-                                            done.push(HabitState);
-                                        } else {
-                                            monthly.push(HabitState);
-                                        }
-                                        resolve();
-                                    }
-                                });
-                            } else {
-                                resolve();
-                            }
-                        });
-                    });
-
-                    Promise.all(promises)
-                        .then(() => resolve({monthly, done}))
-                        .catch(reject);
-                }
-            }
-        );
-    });
-}
-
 async function saveICalCredentials(cred: iCalCredentials) {
     const db = openDb();
     // check if there already is an entry with id 1, if yes update else create a new entry
@@ -412,7 +302,6 @@ export default {
     addHabit,
     showDailyHabits,
     getWeeklyOrMonthlyHabits,
-    showWeeklyHabits,
-    showMonthlyHabits,
-    saveICalCredentials, getICalCredentials
+    saveICalCredentials, 
+    getICalCredentials
 };

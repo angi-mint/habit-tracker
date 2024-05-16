@@ -58,16 +58,6 @@ ipcMain.handle("getWeeklyOrMonthlyHabits", async (_event: any, startDate: string
     return await db.getWeeklyOrMonthlyHabits(startDate, endDate); // Add the required arguments here
 });
 
-// Handle for getting weekly habits
-ipcMain.handle("getWeeklyHabits", async (_event: any) => {
-    return await db.showWeeklyHabits();
-});
-
-// Handle for getting monthly habits
-ipcMain.handle("getMonthlyHabits", async (_event: any) => {
-    return await db.showMonthlyHabits();
-});
-
   // Handle for addRecord
 ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
     return await db.addRecord(id);
