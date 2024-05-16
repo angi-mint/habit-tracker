@@ -3,7 +3,7 @@ import path from "path";
 import log from "electron-log";
 import fs from "fs-extra";
 import sqlite3 from "sqlite3";
-import {Habit, HabitState, HabitWeMo, Record, iCalCredentials} from "./interface";
+import {Habit, HabitState, HabitWeMo, iCalCredentials, Record} from "./interface";
 import { getWeekDates } from "./utils";
 
 function openDb() {
@@ -45,6 +45,32 @@ function addRecord(id: number): Promise<void> {
                 }
             }
         );
+    });
+}
+
+function getColorId (color: string): Promise<number> {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.get('SELECT id FROM color WHERE name = ?', [color], (err, row: {id: number}) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row.id);
+            }
+        });
+    });
+}
+
+function getIconId (icon: string): Promise<number> {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.get('SELECT id FROM icon WHERE name = ?', [icon], (err, row: {id: number}) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row.id);
+            }
+        });
     });
 }
 
@@ -101,7 +127,7 @@ function getOrAddCategory(categoryName: string): Promise<number> {
 
 async function addHabit(habit: Habit): Promise<number> {
     const db = openDb();
-    const categoryID = habit.category === undefined ? 5 : await getOrAddCategory(habit.category);
+    const categoryID = habit.category === undefined ? 1 : await getOrAddCategory(habit.category);
 
     return new Promise((resolve, reject) => {
         const params: Array<string | number | boolean | null> = [
@@ -128,6 +154,43 @@ async function addHabit(habit: Habit): Promise<number> {
                 reject(err);
             } else {
                 resolve(this.lastID);
+            }
+        });
+    });
+}
+
+async function updateHabit(habit: Habit): Promise<void> {
+    const db = openDb();
+    const categoryID = habit.category === undefined ? 1 : await getOrAddCategory(habit.category);
+
+    const colorID = typeof habit.color === 'string' ? await getColorId(habit.color) : habit.color;
+    const iconID = typeof habit.icon === 'string' ? await getIconId(habit.icon) : habit.icon;
+
+    return new Promise((resolve, reject) => {
+        const params: Array<string | number | boolean | null> = [
+            habit.name,
+            habit.frequency,
+            habit.interval,
+            habit.timeperiod,
+            (habit.timeperiod) ? habit.startDate : null,
+            (habit.timeperiod) ? habit.endDate : null,
+            habit.calendar,
+            (habit.calendar) ? habit.startTime : null,
+            (habit.calendar) ? habit.endTime : null,
+            habit.todo,
+            categoryID,
+            colorID,
+            iconID,
+            habit.id
+        ];
+
+        const sql: string = `UPDATE habit SET name = ?, frequency = ?, interval = ?, timeperiod = ?, startDate = ?, endDate = ?, calendar = ?, startTime = ?, endTime = ?, todo = ?, category_id = ?, color_id = ?, icon_id = ? WHERE id = ?`;
+
+        db.run(sql, params, function (err) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
             }
         });
     });
@@ -311,13 +374,25 @@ async function getICalCredentials(): Promise<iCalCredentials> {
     });
 }
 
+async function getAllHabits(): Promise<Array<Habit>> {
+    const db = openDb();
+    return new Promise((resolve, reject) => {
+        db.all('SELECT * FROM habit', (err, rows: Array<Habit>) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
 export default {
     openDb,
     addRecord,
     getColorList,
     getCategoryList,
-    addHabit,
-    showDailyHabits,
+    addHabit, updateHabit,
+    showDailyHabits, getAllHabits,
     getWeeklyOrMonthlyHabits,
     saveICalCredentials, 
     getICalCredentials

@@ -46,6 +46,11 @@ ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
     return await db.addHabit(habit);
 });
 
+// Handle for updating habit object
+ipcMain.handle("updateHabitObject", async (_event: any, habit: Habit) => {
+    return await db.updateHabit(habit);
+});
+
 // Handle for getting daily habits
 ipcMain.handle("getDailyHabits", async (_event: any) => {
     return await db.showDailyHabits();
