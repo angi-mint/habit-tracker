@@ -28,7 +28,7 @@ const handleHabitTracked = (id: number) => {
 <template>
     <div class="habit-wrapper">
         <Icon :id="HabitProps.habit!.icon" :color="HabitProps.habit!.color" :size="iconSize"></Icon>
-        <CreateHabit @reload-create-habit="handleHabitTracked" :fixed="false" :id="HabitProps.habit!.id" :habit-data="HabitProps.habit">
+        <CreateHabit @reload-create-habit="handleHabitTracked" :fixed="false" :delete="true" :id="HabitProps.habit!.id" :habit-data="HabitProps.habit">
             <template #title>Habit Editieren</template>
             <template #btn-content>
                 <div class="habit-info">
