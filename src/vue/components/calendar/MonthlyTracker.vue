@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {PropType} from "vue";
+import {PropType, ref} from "vue";
 import {DateInfo} from "./MonthlyOverview.vue";
 import Icon from "./Icon.vue";
 import TrackButton from "./TrackButton.vue";
@@ -47,6 +47,13 @@ const datesArray = [...new Array(monthInfo().firstWeekStart).fill(-1),
                     ...new Array(7 - monthInfo().daysInLastWeek).fill(-1)];
 const today = new Date().getDate() + monthInfo().firstWeekStart;
 
+const emit = defineEmits(['reload']);
+const reloader = ref(0);
+
+const handleHabitTracked = () => {
+    reloader.value += 1;
+    emit('reload');
+};
 </script>
 
 <template>
@@ -58,7 +65,7 @@ const today = new Date().getDate() + monthInfo().firstWeekStart;
                 <div class="monthly-week" v-for="(week, index) in monthInfo().weeks" :key="index">
                     <div v-for="n in 7" :key="n" class="monthly-day">
                         <svg v-if="datesArray[(n + 7 * index) - 1] === -1" :width="iconSize" :height="iconSize" viewBox="0 0 16 16"></svg>
-                        <TrackButton v-else :id="HabitMonthly.id" :color="HabitMonthly.color" :percentage="datesArray[(n + 7 * index) - 1]" :size="iconSize" :disabled="(n + 7 * index) !== today"></TrackButton>
+                        <TrackButton @reload="handleHabitTracked()" v-else :id="HabitMonthly.id" :color="HabitMonthly.color" :percentage="datesArray[(n + 7 * index) - 1]" :size="iconSize" :disabled="(n + 7 * index) !== today" :key="reloader"></TrackButton>
                     </div>
                 </div>
             </div>
