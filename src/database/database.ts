@@ -159,6 +159,22 @@ async function addHabit(habit: Habit): Promise<number> {
     });
 }
 
+async function deleteHabit(id: number): Promise<void> {
+    const db = openDb();
+
+    return new Promise((resolve, reject) => {
+        const sql: string = `DELETE FROM habit WHERE id = ?`
+
+        db.run(sql, id, function (err) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
 async function updateHabit(habit: Habit): Promise<void> {
     const db = openDb();
     const categoryID = habit.category === undefined ? 1 : await getOrAddCategory(habit.category);
@@ -365,6 +381,7 @@ export default {
     getColorList,
     getCategoryList,
     addHabit,
+    deleteHabit,
     showDailyHabits, getAllHabits,
     saveICalCredentials, getICalCredentials,
     updateHabit,

@@ -79,7 +79,7 @@ const onSubmit = async () => {
 }
 
 async function deleteHabit() {
-    // await window.api.deleteHabitObject(habitData.value.id);
+    await window.api.deleteHabit(habitData.value.id);
     emit('reloadCreateHabit');
     habitData.value = defaultHabitData;
     open.value = false;
