@@ -51,6 +51,13 @@ ipcMain.handle("getDailyHabits", async (_event: any) => {
     return await db.showDailyHabits();
 });
 
+// Handle for weekly and monthly habits
+ipcMain.handle("getWeeklyOrMonthlyHabits", async (_event: any, startDate: string, endDate:string) => {
+    const data = await db.getWeeklyOrMonthlyHabits(startDate, endDate);
+    console.log(data);
+    return await db.getWeeklyOrMonthlyHabits(startDate, endDate); // Add the required arguments here
+});
+
 // Handle for getting weekly habits
 ipcMain.handle("getWeeklyHabits", async (_event: any) => {
     return await db.showWeeklyHabits();

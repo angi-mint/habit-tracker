@@ -9,6 +9,7 @@ const API = {
     getCategoryList: () => ipcRenderer.invoke("getCategoryList"),
     sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
     getDailyHabits: () => ipcRenderer.invoke("getDailyHabits"),
+    getWeeklyOrMonthlyHabits: (startDate: string, endDate: string) => ipcRenderer.invoke("getWeeklyOrMonthlyHabits", startDate, endDate),
     getWeeklyHabits: () => ipcRenderer.invoke("getWeeklyHabits"),
     getMonthlyHabits: () => ipcRenderer.invoke("getMonthlyHabits"),
     sendTrackHabit: (id: number) => ipcRenderer.invoke("sendTrackHabit", id),
