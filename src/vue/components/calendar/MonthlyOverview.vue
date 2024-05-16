@@ -5,7 +5,7 @@ import {onMounted, ref} from "vue";
 
 const currentDate = new Date();
 
-export interface MonthInfo {
+interface MonthInfo {
     firstDayOfMonth: Date,
     lastDayOfMonth: Date
 }

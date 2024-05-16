@@ -10,7 +10,7 @@ const HabitMonthly = defineProps({
     icon: String,
     color: String,
     frequency: Number,
-    interval: String,
+    interval: Number,
     dates: Array as PropType<Array<string>>,
     dateInfo: Object as PropType<DateInfo>,
 });
