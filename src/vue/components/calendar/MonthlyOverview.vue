@@ -63,7 +63,7 @@ onMounted(async () => {
             :icon="habit.icon"
             :color="habit.color"
             :frequency="habit.frequency"
-            :interval="habit.interval"
+            :interval="(habit.interval === 'Daily') ? 0 : (habit.interval === 'Weekly') ? 1 : 2"
             :dates="habit.dates"
             :dateInfo="dateInfo()"
             :key="reloader">
