@@ -46,6 +46,11 @@ ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
     return await db.addHabit(habit);
 });
 
+// Handle for updating habit object
+ipcMain.handle("updateHabitObject", async (_event: any, habit: Habit) => {
+    return await db.updateHabit(habit);
+});
+
 // Handle for getting daily habits
 ipcMain.handle("getDailyHabits", async (_event: any) => {
     return await db.showDailyHabits();
@@ -53,6 +58,8 @@ ipcMain.handle("getDailyHabits", async (_event: any) => {
 
 // Handle for weekly and monthly habits
 ipcMain.handle("getWeeklyOrMonthlyHabits", async (_event: any, startDate: string, endDate:string) => {
+    const data = await db.getWeeklyOrMonthlyHabits(startDate, endDate);
+    console.log(data);
     return await db.getWeeklyOrMonthlyHabits(startDate, endDate); // Add the required arguments here
 });
 

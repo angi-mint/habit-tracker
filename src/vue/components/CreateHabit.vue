@@ -31,6 +31,7 @@ const defaultHabitData: Habit = {
     endTime: '',
     todo: false,
 };
+
 const habitData = (Props.id === -1) ? ref(defaultHabitData) : ref(Props.habitData as Habit);
 
 interface DatabaseList {
@@ -65,12 +66,13 @@ onMounted(async () => {
     await fetchList();
 });
 
+const emit = defineEmits(['reloadCreateHabit']);
 const onSubmit = async () => {
-    //if (!Props.fixed)
-    await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
-    // else await window.api.updateHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    if (Props.fixed) await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    else await window.api.updateHabitObject(JSON.parse(JSON.stringify(habitData.value)));
 
     await fetchList();
+    emit('reloadCreateHabit');
     habitData.value = defaultHabitData;
     open.value = false;
 }

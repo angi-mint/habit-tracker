@@ -1,4 +1,5 @@
 interface Habit {
+    id: number;
     name: string;
     icon: number;
     color: number;

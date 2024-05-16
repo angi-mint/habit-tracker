@@ -10,7 +10,7 @@ const HabitWeekly = defineProps({
     icon: String,
     color: String,
     frequency: Number,
-    interval: Number,
+    interval: String,
     dates: Array as PropType<Array<string>>,
     weekInfo: Object as PropType<WeekInfo>,
 });
