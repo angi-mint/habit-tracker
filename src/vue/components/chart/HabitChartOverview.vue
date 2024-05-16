@@ -16,7 +16,7 @@ const habitData = await window.api.getWeeklyOrMonthlyHabits(options.format(start
 </script>
 
 <template>
-<HabitBarChart></HabitBarChart>
+<HabitBarChart v-for="habit in habitData" :habit="habit"></HabitBarChart>
 </template>
 
 <style scoped>
