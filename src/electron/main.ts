@@ -32,7 +32,6 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
 };
 
-// Handle for getting color list
 ipcMain.handle("getColorList", async (_event: any) => {
     return await db.getColorList();
 });
@@ -47,27 +46,23 @@ ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
     return await db.addHabit(habit);
 });
 
-// Handle for deleting habit object
-ipcMain.handle("deleteHabit", async (_event: any, id: number) => {
-    return await db.deleteHabit(id);
-});
-
-// Handle for updating habit object
-ipcMain.handle("updateHabitObject", async (_event: any, habit: Habit) => {
-    return await db.updateHabit(habit);
-});
-
 // Handle for getting daily habits
 ipcMain.handle("getDailyHabits", async (_event: any) => {
     return await db.showDailyHabits();
 });
 
-// Handle for addRecord
+// Handle for weekly and monthly habits
+ipcMain.handle("getWeeklyOrMonthlyHabits", async (_event: any, startDate: string, endDate:string) => {
+    const data = await db.getWeeklyOrMonthlyHabits(startDate, endDate);
+    console.log(data);
+    return await db.getWeeklyOrMonthlyHabits(startDate, endDate); // Add the required arguments here
+});
+
+  // Handle for addRecord
 ipcMain.handle("sendTrackHabit", async (_event: any, id: number) => {
     return await db.addRecord(id);
 });
 
-// Handle for saving iCal credentials
 ipcMain.handle("saveICalCredentials", async (_: any, creds: iCalCredentials) => {
     return await db.saveICalCredentials(creds);
 });

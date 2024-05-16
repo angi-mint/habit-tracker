@@ -16,11 +16,11 @@ const iconSize = 40;
 
 const reloader = ref(0);
 
-const emit = defineEmits(['reloadDailyTracker']);
+const emit = defineEmits(['reload']);
 
 const handleHabitTracked = (id: number) => {
     reloader.value += 1;
-    emit('reloadDailyTracker');
+    emit('reload');
 };
 
 </script>
@@ -28,7 +28,7 @@ const handleHabitTracked = (id: number) => {
 <template>
     <div class="habit-wrapper">
         <Icon :id="HabitProps.habit!.icon" :color="HabitProps.habit!.color" :size="iconSize"></Icon>
-        <CreateHabit @reload-create-habit="handleHabitTracked" :fixed="false" :delete="true" :id="HabitProps.habit!.id" :habit-data="HabitProps.habit">
+        <CreateHabit :fixed="false" :id="HabitProps.habit!.id" :habit-data="HabitProps.habit">
             <template #title>Habit Editieren</template>
             <template #btn-content>
                 <div class="habit-info">

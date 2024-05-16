@@ -27,4 +27,26 @@ function getWeekDates(): string[] {
     return weekDates;
 }
 
-export { getWeekDates };
+function getMonthDates(): string[] {
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+    const monthDates: string[] = [];
+    for (let i = 0; i <= endOfMonth.getDate() - startOfMonth.getDate(); i++) {
+        const date = new Date(
+            startOfMonth.getFullYear(),
+            startOfMonth.getMonth(),
+            startOfMonth.getDate() + i
+        );
+        const year = date.getFullYear();
+        const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero based
+        const day = ("0" + date.getDate()).slice(-2);
+        const formattedDate = `${year}-${month}-${day}`;
+        monthDates.push(formattedDate);
+    }
+
+    return monthDates;
+}
+
+export { getWeekDates, getMonthDates};

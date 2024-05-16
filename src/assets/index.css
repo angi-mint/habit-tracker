@@ -114,8 +114,8 @@
     color: var(--color-warning);
 }
 
-input[type="submit"], .btn-delete {
-    cursor: pointer;
+input[type="submit"] {
+    float: right;
     padding: var(--spacing-1);
     margin-top: var(--spacing-1);
 
@@ -124,10 +124,6 @@ input[type="submit"], .btn-delete {
 
     background-color: var(--color-menu);
     color: var(--color-background);
-}
-
-input[type="submit"] {
-    float: right;
 }
 
 button {
