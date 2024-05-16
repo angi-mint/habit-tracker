@@ -58,3 +58,4 @@ async function sync() {
         return console.error('Error syncing habits:', error);
     }
 }
+export { sync };
