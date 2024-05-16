@@ -163,14 +163,19 @@ async function deleteHabit(id: number): Promise<void> {
     const db = openDb();
 
     return new Promise((resolve, reject) => {
-        const sql: string = `DELETE FROM habit WHERE id = ?`
+        db.serialize(() => {
+            db.run(`DELETE FROM record WHERE habit_id = ?`, id, function (err) {
+                if (err) {
+                    return reject(err);
+                }
+            });
 
-        db.run(sql, id, function (err) {
-            if (err) {
-                reject(err);
-            } else {
+            db.run(`DELETE FROM habit WHERE id = ?`, id, function (err) {
+                if (err) {
+                    return reject(err);
+                }
                 resolve();
-            }
+            });
         });
     });
 }
