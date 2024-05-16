@@ -38,9 +38,9 @@ const fetchDailyHabits = async () => {
   data.value = await window.api.getDailyHabits();
 };
 
-const reloadKeys = reactive({});
+const reloadKeys = reactive<Record<number, number>>({});
 
-const handleReload = async (id) => {
+const handleReload = async (id: number) => {
     await fetchDailyHabits();
     reloadKeys[id] = Math.random();
 };
@@ -57,25 +57,25 @@ onMounted(async () => {
 <template>
     <div class="habits-daily habits-wrapper">
         <h2>Heute</h2>
-        <DailyTracker @reload="handleReload(habit.id)" v-for="habit in data.daily" :habit="habit"
+        <DailyTracker @reload-daily-tracker="handleReload(habit.id)" v-for="habit in data.daily" :habit="habit"
                       :interval="habit.entries + '/' + habit.frequency" :key="reloadKeys[habit.id]"></DailyTracker>
     </div>
 
     <div class="habits-weekly habits-wrapper">
         <h2>Diese Woche</h2>
-        <DailyTracker @reload="handleReload(habit.id)" v-for="habit in data.weekly" :habit="habit"
+        <DailyTracker @reload-daily-tracker="handleReload(habit.id)" v-for="habit in data.weekly" :habit="habit"
                       :interval="habit.entries + '/' + habit.frequency" :key="reloadKeys[habit.id]"></DailyTracker>
     </div>
 
     <div class="habits-monthly habits-wrapper">
         <h2>Diesen Monat</h2>
-        <DailyTracker @reload="handleReload(habit.id)" v-for="habit in data.monthly" :habit="habit"
+        <DailyTracker @reload-daily-tracker="handleReload(habit.id)" v-for="habit in data.monthly" :habit="habit"
                       :interval="habit.entries + '/' + habit.frequency" :key="reloadKeys[habit.id]"></DailyTracker>
     </div>
 
     <div class="habits-finished habits-wrapper">
         <h2>Erledigt!</h2>
-        <DailyTracker @reload="handleReload(habit.id)" v-for="habit in data.done" :habit="habit"
+        <DailyTracker @reload-daily-tracker="handleReload(habit.id)" v-for="habit in data.done" :habit="habit"
                       :interval="habit.entries + '/' + habit.frequency" :key="reloadKeys[habit.id]"></DailyTracker>
     </div>
 </template>

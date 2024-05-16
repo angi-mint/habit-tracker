@@ -16,6 +16,7 @@
   "main": ".vite/build/main.js",
   "dependencies": {
     "@vue/cli-service": "^5.0.8",
+    "electron-log": "^5.1.2",
     "electron-squirrel-startup": "^1.0.0",
     "sqlite3": "^5.1.7",
     "vue": "^3.4.21",

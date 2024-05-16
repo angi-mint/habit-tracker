@@ -11,6 +11,7 @@ const Props = defineProps({
     id: Number,
     fixed: Boolean,
     submit: String,
+    delete: Boolean,
     habitData: Object as PropType<Habit>
 });
 
@@ -77,6 +78,13 @@ const onSubmit = async () => {
     open.value = false;
 }
 
+async function deleteHabit() {
+    await window.api.deleteHabit(habitData.value.id);
+    emit('reloadCreateHabit');
+    habitData.value = defaultHabitData;
+    open.value = false;
+}
+
 </script>
 
 <template>
@@ -106,11 +114,11 @@ const onSubmit = async () => {
                         </template>
                     </LabelForm>
 
-                    <LabelForm>
+                    <LabelForm required>
                         <template #form-label><p>Farbe</p></template>
                         <template #input>
                             <label v-for="items in colors">
-                                <input type="radio" v-model="habitData.color" :value="items.id" :checked="Props.habitData?.color === items.name">
+                                <input type="radio" v-model="habitData.color" :value="items.id" :checked="Props.habitData?.color === items.name" name="color" required>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" :fill="items.name" viewBox="0 0 16 16">
                                     <circle cx="8" cy="8" r="8"/>
                                 </svg>
@@ -118,11 +126,11 @@ const onSubmit = async () => {
                         </template>
                     </LabelForm>
 
-                    <LabelForm>
+                    <LabelForm required>
                         <template #form-label><p>Icon</p></template>
                         <template #input>
                             <label v-for="items in icons">
-                                <input type="radio" v-model="habitData.icon" :value=items.id :checked="Props.habitData?.icon === items.name">
+                                <input type="radio" v-model="habitData.icon" :value=items.id :checked="Props.habitData?.icon === items.name" name="icon" required>
                                 <HabitIcon :id=items.name />
                             </label>
                         </template>
@@ -179,7 +187,7 @@ const onSubmit = async () => {
                             <input type="checkbox" v-model="habitData.todo" v-bind:true-value="1">
                         </template>
                     </LabelForm>
-
+                    <button class="btn-delete" v-if="Props.delete" @click="deleteHabit();">Löschen</button>
                     <input type="submit" :value="Props.submit">
                 </form>
             </div>

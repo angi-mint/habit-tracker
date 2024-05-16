@@ -32,6 +32,7 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
 };
 
+// Handle for getting color list
 ipcMain.handle("getColorList", async (_event: any) => {
     return await db.getColorList();
 });
@@ -44,6 +45,11 @@ ipcMain.handle("getCategoryList", async (_event: any) => {
 // Handle for sending habit object
 ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
     return await db.addHabit(habit);
+});
+
+// Handle for deleting habit object
+ipcMain.handle("reloadHabitObject", async (_event: any, habit: Habit) => {
+    return await db.deleteHabit(habit.id);
 });
 
 // Handle for updating habit object
