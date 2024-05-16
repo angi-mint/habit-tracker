@@ -4,7 +4,6 @@ import path from 'node:path';
 //database import
 import db from '../database/database';
 import {Habit, iCalCredentials} from '../database/interface';
-import {fetchHabits} from "./ical";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -80,7 +79,6 @@ app.whenReady().then(() => {
             createWindow();
         }
     });
-    void fetchHabits();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
