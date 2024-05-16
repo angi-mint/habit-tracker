@@ -230,7 +230,7 @@ async function getWeeklyOrMonthlyHabits(startDate: string, endDate: string): Pro
     const db = openDb();
 
     return new Promise<HabitWeMo[]>((resolve, reject) => {
-        db.all(`SELECT habit.id, habit.name, icon.id as icon, color.name as color, category.name as category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate, habit.calendar, habit.startTime, habit.endTime, habit.todo FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id JOIN category ON category.id = habit.category_id`, [], (err: Error, habits: HabitWeMo[]) => {
+        db.all(`SELECT habit.id, habit.name, icon.name as icon, color.name as color, category.name as category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate, habit.calendar, habit.startTime, habit.endTime, habit.todo FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id JOIN category ON category.id = habit.category_id`, [], (err: Error, habits: HabitWeMo[]) => {
             if (err) {
                 reject(err);
             } else {
