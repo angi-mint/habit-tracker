@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {WeekInfo} from "./WeeklyOverview.vue";
-import {PropType} from "vue";
+import {PropType, ref} from "vue";
 import Icon from "./Icon.vue";
 import TrackButton from "./TrackButton.vue";
 
@@ -32,6 +32,14 @@ function prepareArray(arr: Array<string>): Array<number>{
 const iconSize = 40;
 const datesArray = prepareArray(HabitWeekly.dates!);
 const today = new Date().getDay() || 7;
+
+const emit = defineEmits(['reload']);
+const reloader = ref(0);
+
+const handleHabitTracked = () => {
+    reloader.value += 1;
+    emit('reload');
+};
 </script>
 
 <template>
@@ -41,7 +49,7 @@ const today = new Date().getDay() || 7;
             <h3 class="weekly-name">{{ HabitWeekly.name }}</h3>
             <div class="weekly-overview">
                 <div class="weekly-view" v-for="(day, index) in datesArray" :key="index">
-                    <TrackButton :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize" :disabled="index + 1 !== today"></TrackButton>
+                    <TrackButton @reload="handleHabitTracked()" :id="HabitWeekly.id" :color="HabitWeekly.color" :percentage="day" :size="iconSize" :disabled="index + 1 !== today" :key="reloader"></TrackButton>
                 </div>
             </div>
         </div>

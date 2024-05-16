@@ -1,30 +1,13 @@
-import { app } from "electron";
-import path from "path";
-import log from "electron-log";
-import fs from "fs-extra";
 import sqlite3 from "sqlite3";
-import {Habit, HabitState, iCalCredentials} from "./interface";
-import { getWeekDates } from "./utils";
+import {Habit, HabitState, HabitWeMo, Record, iCalCredentials} from "./interface";
+import { getWeekDates, getMonthDates } from "./utils";
 
 function openDb() {
-    const userDataPath = app.getPath("userData");
-    const dbFileName = "habitdb.db";
-    const unpackedPath = app.isPackaged
-        ? path.join(process.resourcesPath, 'app.asar.unpacked', 'database', dbFileName)
-        : path.join(__dirname, '../../src/database', dbFileName);
-    const dbPath = path.join(userDataPath, dbFileName);
-
-    if (!fs.existsSync(dbPath)) {
-        fs.copySync(unpackedPath, dbPath);
-    }
-
-    log.info(`Opening database at ${dbPath}`);
-
-    const db = new sqlite3.Database(dbPath, (err) => {
+    const db = new sqlite3.Database("./src/database/habitdb.db", (err) => {
         if (err) {
-            log.error(`Failed to open database: ${err.message}`);
+            console.error(err.message);
         } else {
-            log.info("Connected to the database.");
+            // console.log("Connected to the database.");
         }
     });
     return db;
@@ -45,32 +28,6 @@ function addRecord(id: number): Promise<void> {
                 }
             }
         );
-    });
-}
-
-function getColorId (color: string): Promise<number> {
-    const db = openDb();
-    return new Promise((resolve, reject) => {
-        db.get('SELECT id FROM color WHERE name = ?', [color], (err, row: {id: number}) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(row.id);
-            }
-        });
-    });
-}
-
-function getIconId (icon: string): Promise<number> {
-    const db = openDb();
-    return new Promise((resolve, reject) => {
-        db.get('SELECT id FROM icon WHERE name = ?', [icon], (err, row: {id: number}) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(row.id);
-            }
-        });
     });
 }
 
@@ -127,7 +84,7 @@ function getOrAddCategory(categoryName: string): Promise<number> {
 
 async function addHabit(habit: Habit): Promise<number> {
     const db = openDb();
-    const categoryID = habit.category === undefined ? 1 : await getOrAddCategory(habit.category);
+    const categoryID = habit.category === undefined ? 5 : await getOrAddCategory(habit.category);
 
     return new Promise((resolve, reject) => {
         const params: Array<string | number | boolean | null> = [
@@ -154,43 +111,6 @@ async function addHabit(habit: Habit): Promise<number> {
                 reject(err);
             } else {
                 resolve(this.lastID);
-            }
-        });
-    });
-}
-
-async function updateHabit(habit: Habit): Promise<void> {
-    const db = openDb();
-    const categoryID = habit.category === undefined ? 1 : await getOrAddCategory(habit.category);
-
-    const colorID = typeof habit.color === 'string' ? await getColorId(habit.color) : habit.color;
-    const iconID = typeof habit.icon === 'string' ? await getIconId(habit.icon) : habit.icon;
-
-    return new Promise((resolve, reject) => {
-        const params: Array<string | number | boolean | null> = [
-            habit.name,
-            habit.frequency,
-            habit.interval,
-            habit.timeperiod,
-            (habit.timeperiod) ? habit.startDate : null,
-            (habit.timeperiod) ? habit.endDate : null,
-            habit.calendar,
-            (habit.calendar) ? habit.startTime : null,
-            (habit.calendar) ? habit.endTime : null,
-            habit.todo,
-            categoryID,
-            colorID,
-            iconID,
-            habit.id
-        ];
-
-        const sql: string = `UPDATE habit SET name = ?, frequency = ?, interval = ?, timeperiod = ?, startDate = ?, endDate = ?, calendar = ?, startTime = ?, endTime = ?, todo = ?, category_id = ?, color_id = ?, icon_id = ? WHERE id = ?`;
-
-        db.run(sql, params, function (err) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
             }
         });
     });
@@ -306,6 +226,33 @@ async function showDailyHabits() {
     });
 }
 
+async function getWeeklyOrMonthlyHabits(startDate: string, endDate: string): Promise<HabitWeMo[]> {
+    const db = openDb();
+
+    return new Promise<HabitWeMo[]>((resolve, reject) => {
+        db.all(`SELECT habit.id, habit.name, icon.name as icon, color.name as color, category.name as category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate, habit.calendar, habit.startTime, habit.endTime, habit.todo FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id JOIN category ON category.id = habit.category_id`, [], (err: Error, habits: HabitWeMo[]) => {
+            if (err) {
+                reject(err);
+            } else {
+                const promises = habits.map((habit: HabitWeMo) => new Promise<HabitWeMo>((resolve, reject) => {
+                    db.all(`SELECT date FROM record WHERE habit_id = ? AND date BETWEEN ? AND ?`, [habit.id, startDate, endDate], (err: Error, records: Record[]) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            habit.dates = records.map((record: Record) => record.date);
+                            resolve(habit);
+                        }
+                    });
+                }));
+
+                Promise.all(promises)
+                    .then(habits => resolve(habits))
+                    .catch(err => reject(err));
+            }
+        });
+    });
+}
+
 async function saveICalCredentials(cred: iCalCredentials) {
     const db = openDb();
     // check if there already is an entry with id 1, if yes update else create a new entry
@@ -347,25 +294,14 @@ async function getICalCredentials(): Promise<iCalCredentials> {
     });
 }
 
-async function getAllHabits(): Promise<Array<Habit>> {
-    const db = openDb();
-    return new Promise((resolve, reject) => {
-        db.all('SELECT * FROM habit', (err, rows: Array<Habit>) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(rows);
-            }
-        });
-    });
-}
 export default {
     openDb,
     addRecord,
     getColorList,
     getCategoryList,
     addHabit,
-    showDailyHabits, getAllHabits,
-    saveICalCredentials, getICalCredentials,
-    updateHabit,
+    showDailyHabits,
+    getWeeklyOrMonthlyHabits,
+    saveICalCredentials, 
+    getICalCredentials
 };

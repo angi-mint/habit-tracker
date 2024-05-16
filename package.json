@@ -19,7 +19,6 @@
     "chart.js": "^3.9.1",
     "electron-log": "^5.1.2",
     "electron-squirrel-startup": "^1.0.0",
-    "ical-generator": "^7.1.0",
     "sqlite3": "^5.1.7",
     "vue": "^3.4.21",
     "vue-chart-3": "^3.1.8",

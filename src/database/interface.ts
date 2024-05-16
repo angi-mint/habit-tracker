@@ -1,5 +1,4 @@
 interface Habit {
-    id: number;
     name: string;
     icon: number;
     color: number;
@@ -13,6 +12,16 @@ interface Habit {
     startTime: string;
     endTime: string;
     todo: boolean;
+}
+
+interface HabitWeMo {
+    id: number;
+    name: string;
+    icon: number;
+    color: string;
+    frequency: number;
+    interval: string;
+    dates: string[];
 }
 
 interface HabitState {
@@ -32,10 +41,14 @@ interface HabitState {
     todo: boolean;
 }
 
+interface Record {
+    date: string;
+}
+
 interface iCalCredentials {
     url: string;
     username: string;
     password: string;
 }
 
-export type { Habit, HabitState, iCalCredentials };
+export type { Habit, HabitState, HabitWeMo, Record, iCalCredentials };
