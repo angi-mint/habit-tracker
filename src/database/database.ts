@@ -3,8 +3,8 @@ import path from "path";
 import log from "electron-log";
 import fs from "fs-extra";
 import sqlite3 from "sqlite3";
-import {Habit, HabitState, iCalCredentials} from "./interface";
-import { getWeekDates } from "./utils";
+import {Habit, HabitState, HabitWeMo, Record, iCalCredentials} from "./interface";
+import { getWeekDates, getMonthDates } from "./utils";
 
 function openDb() {
     const userDataPath = app.getPath("userData");
