@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import {Habit, HabitState, iCalCredentials} from "./interface";
+import {Habit, HabitState, HabitWeMo, Record, iCalCredentials} from "./interface";
 import { getWeekDates, getMonthDates } from "./utils";
 
 function openDb() {
@@ -226,6 +226,33 @@ async function showDailyHabits() {
     });
 }
 
+async function getWeeklyOrMonthlyHabits(startDate: string, endDate: string): Promise<HabitWeMo[]> {
+    const db = openDb();
+
+    return new Promise<HabitWeMo[]>((resolve, reject) => {
+        db.all(`SELECT habit.id, habit.name, icon.id as icon, color.name as color, category.name as category, habit.frequency, habit.interval, habit.timeperiod, habit.startDate, habit.endDate, habit.calendar, habit.startTime, habit.endTime, habit.todo FROM habit JOIN icon ON habit.icon_id = icon.id JOIN color ON habit.color_id = color.id JOIN category ON category.id = habit.category_id`, [], (err: Error, habits: HabitWeMo[]) => {
+            if (err) {
+                reject(err);
+            } else {
+                const promises = habits.map((habit: HabitWeMo) => new Promise<HabitWeMo>((resolve, reject) => {
+                    db.all(`SELECT date FROM record WHERE habit_id = ? AND date BETWEEN ? AND ?`, [habit.id, startDate, endDate], (err: Error, records: Record[]) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            habit.dates = records.map((record: Record) => record.date);
+                            resolve(habit);
+                        }
+                    });
+                }));
+
+                Promise.all(promises)
+                    .then(habits => resolve(habits))
+                    .catch(err => reject(err));
+            }
+        });
+    });
+}
+
 async function showWeeklyHabits() {
     const db = openDb();
     return new Promise<{
@@ -384,6 +411,7 @@ export default {
     getCategoryList,
     addHabit,
     showDailyHabits,
+    getWeeklyOrMonthlyHabits,
     showWeeklyHabits,
     showMonthlyHabits,
     saveICalCredentials, getICalCredentials
