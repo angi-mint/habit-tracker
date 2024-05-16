@@ -1,6 +1,5 @@
 import db from "../database/database";
 import {Habit} from "../database/interface";
-import {ICalCalendar, ICalEventRepeatingFreq} from "ical-generator";
 import * as ICAL from 'ical.js';
 
 async function connectToICal() {
@@ -51,19 +50,26 @@ async function logData() {
     }
 }
 
-function createCalendarEntry(cal: ICalCalendar, habit: Habit) {
-    const event = cal.createEvent({
-        start: new Date(habit.startDate),
-        end: new Date(habit.endDate),
-        summary: habit.name,
-        description: habit.category,
-    });
-    event.repeating({
-        freq: habit.interval === 0 ? ICalEventRepeatingFreq.DAILY : habit.interval === 1 ? ICalEventRepeatingFreq.WEEKLY : ICalEventRepeatingFreq.MONTHLY,
-        count: habit.frequency
-    });
-    event.x('X-HABIT-ID', habit.id.toString());
-    console.log(event);
+function createICalEventString(habit: Habit): string {
+    // Create a new VEVENT component
+    const vevent = new ICAL.Component('vevent');
+
+    // Set UID, SUMMARY, DESCRIPTION, DTSTART, and DTEND properties
+    vevent.addPropertyWithValue('UID', 'HABIT-' + habit.id.toString());
+    vevent.addPropertyWithValue('SUMMARY', habit.name);
+    vevent.addPropertyWithValue('DESCRIPTION', habit.category || '');
+    vevent.addPropertyWithValue('DTSTART', habit.startDate + 'T' + habit.startTime);
+    vevent.addPropertyWithValue('DTEND', habit.endDate + 'T' + habit.endTime);
+    const frequency = habit.interval === 0 ? 'DAILY' : habit.interval === 1 ? 'WEEKLY' : 'MONTHLY';
+
+    if (habit.timeperiod) {
+        const duration = new ICAL.Duration(habit.endDate + 'T' + habit.endTime, habit.startDate + 'T' + habit.startTime);
+        const count = Math.ceil(duration.toDays()) / habit.frequency;
+        vevent.addPropertyWithValue('RRULE', `FREQ=${frequency};COUNT=${count}`);
+    } else {
+        vevent.addPropertyWithValue('RRULE', `FREQ=${frequency};INTERVAL=${habit.frequency}`);
+    }
+    return vevent.toString();
 }
 
 export { fetchHabits, logData }
