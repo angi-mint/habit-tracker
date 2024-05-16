@@ -37,7 +37,7 @@ const handleHabitTracked = (id: number) => {
                 </div>
             </template>
         </CreateHabit>
-        <TrackButton @reload="handleHabitTracked(HabitProps.habit!.id)" :id="HabitProps.habit!.id" :color="HabitProps.habit!.color" :percentage="percentage" :size="iconSize" :disabled="percentage === 100" :key="reloader"></TrackButton>
+        <TrackButton @reload="handleHabitTracked(HabitProps.habit!.id)" :id="HabitProps.habit!.id" :color="HabitProps.habit!.color" :percentage="percentage" :size="iconSize" :disabled="percentage >= 100" :key="reloader"></TrackButton>
     </div>
 </template>
 

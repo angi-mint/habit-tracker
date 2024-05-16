@@ -35,18 +35,18 @@ const getLast4ISOWeekNumbers = (): Array<string> => {
     return weekNumbers;
 };
 function createLabels() {
-    if (DataProps.habit?.interval === 0) {
+    if (DataProps.habit?.interval === 1) {
         return ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
-    } else if (DataProps.habit?.interval === 1) {
+    } else if (DataProps.habit?.interval === 2) {
         return getLast4ISOWeekNumbers();
     }
 }
 
 function prepareArr(arr: Array<string>): Array<number> {
-    const resultArr = (DataProps.habit?.interval === 0) ? new Array(7).fill(0) : new Array(4).fill(0);
+    const resultArr = (DataProps.habit?.interval === 1) ? new Array(7).fill(0) : new Array(4).fill(0);
     const newArr = arr.map((date) => Number(date.split("-")[2]));
 
-    if (DataProps.habit!.interval === 0) {
+    if (DataProps.habit!.interval === 1) {
         const date = new Date(currentDay);
         date.setDate(currentDay.getDate() - (currentDay.getDay() + 7 ));
         resultArr.forEach((_, index) => {
@@ -85,9 +85,8 @@ const HabitData = {
 </script>
 
 <template>
+    <h2>{{DataProps.habit!.name}}</h2>
     <BarChart :chartData="HabitData" />
-    {{HabitData}}
-    {{DataProps.habit}}
 </template>
 
 <style scoped>

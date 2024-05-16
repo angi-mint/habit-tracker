@@ -42,7 +42,7 @@ function changeStates(tab: string) {
                 <Body></Body>
             </Tab>
             <Tab v-if="states.statistics">
-                <h1>Statistics</h1>
+                <h1>Statistiken</h1>
                 <HabitChartOverview></HabitChartOverview>
             </Tab>
         </template>
