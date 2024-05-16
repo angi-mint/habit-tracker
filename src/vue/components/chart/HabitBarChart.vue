@@ -82,11 +82,20 @@ const HabitData = {
     }]
 }
 
+const chartOptions = {
+    scales: {
+        y: {
+            beginAtZero: true,
+            max: 100
+        }
+    }
+};
+
 </script>
 
 <template>
     <h2>{{DataProps.habit!.name}}</h2>
-    <BarChart :chartData="HabitData" />
+    <BarChart :chartData="HabitData" :options="chartOptions"/>
 </template>
 
 <style scoped>
