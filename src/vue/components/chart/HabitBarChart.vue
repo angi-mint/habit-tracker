@@ -17,9 +17,9 @@ const getISOWeekNumber = (date: Date): number => {
     const firstThursday = target.valueOf();
     target.setMonth(0, 1);
     if (target.getDay() !== 4) {
-        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+        target.setMonth(0, 1 + ((4 - target.getDay()) + 6) % 7);
     }
-    return 1 + Math.ceil((firstThursday - target.valueOf()) / (7 * 24 * 60 * 60 * 1000));
+    return 1 + Math.ceil((firstThursday - target.valueOf()) / (6 * 24 * 60 * 60 * 1000));
 };
 
 const getLast4ISOWeekNumbers = (): Array<string> => {
@@ -27,7 +27,7 @@ const getLast4ISOWeekNumbers = (): Array<string> => {
 
     for (let i = 4; i > 0; i--) {
         const date = new Date(currentDay);
-        date.setDate(currentDay.getDate() - (currentDay.getDay() + 7 * (i - 1)));
+        date.setDate(currentDay.getDate() - (currentDay.getDay() + 6 * (i - 1)));
         const weekNumber = getISOWeekNumber(date);
         weekNumbers.push(`KW${weekNumber}`);
     }
@@ -48,7 +48,7 @@ function prepareArr(arr: Array<string>): Array<number> {
 
     if (DataProps.habit!.interval === 1) {
         const date = new Date(currentDay);
-        date.setDate(currentDay.getDate() - (currentDay.getDay() + 7 ));
+        date.setDate(currentDay.getDate() - (currentDay.getDay() + 6 ));
         resultArr.forEach((_, index) => {
             const dayNumber = Number(date.getDate());
             const count = newArr.filter((date) => date === dayNumber).length;
@@ -58,7 +58,7 @@ function prepareArr(arr: Array<string>): Array<number> {
     } else {
         const weekNumbers = getLast4ISOWeekNumbers();
         const day = new Date(currentDay);
-        day.setDate(currentDay.getDate() - (currentDay.getDay() + 7 * 4));
+        day.setDate(currentDay.getDate() - (currentDay.getDay() + 6 * 4));
         weekNumbers.forEach((weekNumber, index) => {
             const count = newArr.filter((date) => {
                 for (let i = 0; i < 7; i++) {
