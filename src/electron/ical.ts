@@ -1,6 +1,7 @@
 import db from "../database/database";
-import {Habit} from "../database/interface";
+// @ts-ignore
 import * as ICAL from 'ical.js';
+import { processHabits } from "./icalComponent";
 
 async function connectToICal() {
     const { net } = require('electron');
@@ -11,6 +12,7 @@ async function connectToICal() {
     request.setHeader('Authorization', 'Basic ' + Buffer.from(creds.username + ':' + creds.password).toString('base64'));
     return request;
 }
+
 async function fetchHabits(): Promise<any> {
     const request = await connectToICal();
     if (!request) return;
@@ -39,37 +41,20 @@ async function fetchHabits(): Promise<any> {
     });
 }
 
-async function logData() {
+// return synced ical data
+async function sync() {
     try {
+        const habits = await db.getAllHabits();
+        if (!habits) return;
+
         const data = await fetchHabits();
-        console.log(data);
-        return data;
+        const ical = !data ? new ICAL.Component(['vcalendar', [], []]) : new ICAL.Component(data);
+
+        // Process habits and update the calendar
+        processHabits(ical, habits);
+
+        return ical;
     } catch (error) {
-        console.error('Error fetching habits:', error);
-        return null;
+        return console.error('Error syncing habits:', error);
     }
 }
-
-function createICalEventString(habit: Habit): string {
-    // Create a new VEVENT component
-    const vevent = new ICAL.Component('vevent');
-
-    // Set UID, SUMMARY, DESCRIPTION, DTSTART, and DTEND properties
-    vevent.addPropertyWithValue('UID', 'HABIT-' + habit.id.toString());
-    vevent.addPropertyWithValue('SUMMARY', habit.name);
-    vevent.addPropertyWithValue('DESCRIPTION', habit.category || '');
-    vevent.addPropertyWithValue('DTSTART', habit.startDate + 'T' + habit.startTime);
-    vevent.addPropertyWithValue('DTEND', habit.endDate + 'T' + habit.endTime);
-    const frequency = habit.interval === 0 ? 'DAILY' : habit.interval === 1 ? 'WEEKLY' : 'MONTHLY';
-
-    if (habit.timeperiod) {
-        const duration = new ICAL.Duration(habit.endDate + 'T' + habit.endTime, habit.startDate + 'T' + habit.startTime);
-        const count = Math.ceil(duration.toDays()) / habit.frequency;
-        vevent.addPropertyWithValue('RRULE', `FREQ=${frequency};COUNT=${count}`);
-    } else {
-        vevent.addPropertyWithValue('RRULE', `FREQ=${frequency};INTERVAL=${habit.frequency}`);
-    }
-    return vevent.toString();
-}
-
-export { fetchHabits, logData }
