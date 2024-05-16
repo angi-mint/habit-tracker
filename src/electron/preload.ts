@@ -8,6 +8,7 @@ const API = {
     getColorList: () => ipcRenderer.invoke("getColorList"),
     getCategoryList: () => ipcRenderer.invoke("getCategoryList"),
     sendHabitObject: (Habit: object) => ipcRenderer.invoke("sendHabitObject", Habit),
+    deleteHabit: (id: number) => ipcRenderer.invoke("deleteHabit", id),
     updateHabitObject: (Habit: object) => ipcRenderer.invoke("updateHabitObject", Habit),
     getDailyHabits: () => ipcRenderer.invoke("getDailyHabits"),
     sendTrackHabit: (id: number) => ipcRenderer.invoke("sendTrackHabit", id),

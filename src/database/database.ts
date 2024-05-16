@@ -159,6 +159,27 @@ async function addHabit(habit: Habit): Promise<number> {
     });
 }
 
+async function deleteHabit(id: number): Promise<void> {
+    const db = openDb();
+
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+            db.run(`DELETE FROM record WHERE habit_id = ?`, id, function (err) {
+                if (err) {
+                    return reject(err);
+                }
+            });
+
+            db.run(`DELETE FROM habit WHERE id = ?`, id, function (err) {
+                if (err) {
+                    return reject(err);
+                }
+                resolve();
+            });
+        });
+    });
+}
+
 async function updateHabit(habit: Habit): Promise<void> {
     const db = openDb();
     const categoryID = habit.category === undefined ? 1 : await getOrAddCategory(habit.category);
@@ -365,6 +386,7 @@ export default {
     getColorList,
     getCategoryList,
     addHabit,
+    deleteHabit,
     showDailyHabits, getAllHabits,
     saveICalCredentials, getICalCredentials,
     updateHabit,

@@ -11,6 +11,7 @@ const Props = defineProps({
     id: Number,
     fixed: Boolean,
     submit: String,
+    delete: Boolean,
     habitData: Object as PropType<Habit>
 });
 
@@ -68,11 +69,17 @@ onMounted(async () => {
 const emit = defineEmits(['reloadCreateHabit']);
 
 const onSubmit = async () => {
-    if (Props.fixed)
-    await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    if (Props.fixed) await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
     else await window.api.updateHabitObject(JSON.parse(JSON.stringify(habitData.value)));
 
     await fetchList();
+    emit('reloadCreateHabit');
+    habitData.value = defaultHabitData;
+    open.value = false;
+}
+
+async function deleteHabit() {
+    await window.api.deleteHabit(habitData.value.id);
     emit('reloadCreateHabit');
     habitData.value = defaultHabitData;
     open.value = false;
@@ -180,7 +187,7 @@ const onSubmit = async () => {
                             <input type="checkbox" v-model="habitData.todo" v-bind:true-value="1">
                         </template>
                     </LabelForm>
-
+                    <button class="btn-delete" v-if="Props.delete" @click="deleteHabit();">Löschen</button>
                     <input type="submit" :value="Props.submit">
                 </form>
             </div>

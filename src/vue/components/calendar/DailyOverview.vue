@@ -75,7 +75,7 @@ onMounted(async () => {
 
     <div class="habits-finished habits-wrapper">
         <h2>Erledigt!</h2>
-        <DailyTracker @reload="handleReload(habit.id)" v-for="habit in data.done" :habit="habit"
+        <DailyTracker @reload-daily-tracker="handleReload(habit.id)" v-for="habit in data.done" :habit="habit"
                       :interval="habit.entries + '/' + habit.frequency" :key="reloadKeys[habit.id]"></DailyTracker>
     </div>
 </template>

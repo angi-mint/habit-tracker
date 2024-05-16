@@ -47,6 +47,11 @@ ipcMain.handle("sendHabitObject", async (_event: any, habit: Habit) => {
     return await db.addHabit(habit);
 });
 
+// Handle for deleting habit object
+ipcMain.handle("deleteHabit", async (_event: any, id: number) => {
+    return await db.deleteHabit(id);
+});
+
 // Handle for updating habit object
 ipcMain.handle("updateHabitObject", async (_event: any, habit: Habit) => {
     return await db.updateHabit(habit);
