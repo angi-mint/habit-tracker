@@ -44,7 +44,7 @@ onMounted(async () => {
 
 <template>
     <div class="plant">
-        <h2>Plant</h2>
+        <h2>Dein Fortschritt</h2>
         <img v-if="calcTotalPercentage() < 21" src="../../../assets/img/1.png">
         <img v-else-if="calcTotalPercentage() < 41" src="../../../assets/img/2.png">
         <img v-else-if="calcTotalPercentage() < 61" src="../../../assets/img/3.png">

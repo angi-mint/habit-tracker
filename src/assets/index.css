@@ -351,3 +351,13 @@ button {
     float: right;
     margin-right: 50px;
 }
+
+/* Pflanze */
+
+.plant-wrapper {
+    position: right;
+}
+
+.plant {
+   text-align: center; 
+}
