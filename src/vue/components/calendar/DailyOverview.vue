@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive } from "vue";
 import DailyTracker from "./DailyTracker.vue";
+import Plant from "./Plant.vue";
 
 export interface Habit {
     id: number;
@@ -20,7 +21,7 @@ export interface Habit {
     todo: boolean;
 }
 
-interface HabitData {
+export interface HabitData {
     daily: Habit[];
     weekly: Habit[];
     monthly: Habit[];
@@ -55,6 +56,9 @@ onMounted(async () => {
 </script>
 
 <template>
+    <div class="plant-wrapper">
+        <Plant></Plant>
+    </div>
     <div class="habits-daily habits-wrapper">
         <h2>Heute</h2>
         <DailyTracker @reload-daily-tracker="handleReload(habit.id)" v-for="habit in data.daily" :habit="habit"
