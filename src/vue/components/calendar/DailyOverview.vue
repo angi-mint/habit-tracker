@@ -40,9 +40,11 @@ const fetchDailyHabits = async () => {
 };
 
 const reloadKeys = reactive<Record<number, number>>({});
+const reloader = ref(0);
 
 const handleReload = async (id: number) => {
     await fetchDailyHabits();
+    reloader.value += 1;
     reloadKeys[id] = Math.random();
 };
 
@@ -56,7 +58,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="plant-wrapper">
+    <div class="plant-wrapper" :key="reloader">
         <Plant></Plant>
     </div>
     <div class="habits-daily habits-wrapper">
