@@ -104,9 +104,11 @@ const interval = DataProps.habit!.interval === 1 ? "am Tag" : (DataProps.habit!.
 </script>
 
 <template>
-    <h2>{{DataProps.habit!.name}} ({{DataProps.habit!.frequency}} {{interval}})</h2>
-    <PieChart v-if="DataProps.habit!.interval === 3" :chartData="HabitData"/>
-    <BarChart v-else :chartData="HabitData" :options="chartOptions"/>
+    <div class="stats">
+        <h2>{{DataProps.habit!.name}} ({{DataProps.habit!.frequency}} {{interval}})</h2>
+        <PieChart v-if="DataProps.habit!.interval === 3" :chartData="HabitData"/>
+        <BarChart v-else :chartData="HabitData" :options="chartOptions"/>
+    </div>
 </template>
 
 <style scoped>

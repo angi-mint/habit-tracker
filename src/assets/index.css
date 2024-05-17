@@ -352,12 +352,31 @@ button {
     margin-right: 50px;
 }
 
-/* Pflanze */
-
-.plant-wrapper {
-    position: right;
-}
-
 .plant {
    text-align: center; 
+}
+
+@media (min-width: 1000px) {
+    .stats-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .stats {
+        width: 45%;
+        margin: 2.5%;
+        box-sizing: border-box;
+    }
+}
+
+@media (min-width: 1500px) {
+    .stats-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .stats {
+        width: 30%;
+        margin: .7%;
+    }
 }

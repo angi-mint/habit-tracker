@@ -22,7 +22,7 @@ onMounted(async () => {
 
 <template>
     <div class="stats-wrapper">
-        <HabitBarChart class="stats" v-for="habit in habitData" :habit="habit"></HabitBarChart>
+        <HabitBarChart v-for="habit in habitData" :habit="habit"></HabitBarChart>
     </div>
 </template>
 
