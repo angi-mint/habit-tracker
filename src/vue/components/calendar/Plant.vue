@@ -15,6 +15,10 @@ const fetchHabits = async () => {
 };
 
 const calcTotalPercentage = () => {
+    if (data.value.daily.length === 0 && data.value.weekly.length === 0 && data.value.monthly.length === 0 && data.value.done.length === 0) {
+        return 0;
+    }
+
     let totalEntries = 0;
     let totalFrequency = 0;
 
