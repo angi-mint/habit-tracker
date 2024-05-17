@@ -291,8 +291,8 @@ async function showDailyHabits() {
                             } else if (HabitState.interval === 3) {
                                 // Check if interval = 3 (monthly)
 
-                                const currentMonth = new Date().getMonth() + 1; // Months are zero-based
-                                const currentYear = new Date().getFullYear();
+                                const currentMonth = ('0' + (new Date().getMonth() + 1)).slice(-2);
+                                const currentYear = new Date().getFullYear().toString();
 
                                 db.get(
                                     'SELECT COUNT(*) as count FROM record WHERE habit_id = ? AND strftime("%m", date) = ? AND strftime("%Y", date) = ?',
