@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {BarChart} from 'vue-chart-3';
+import {BarChart, PieChart} from 'vue-chart-3';
 import {Chart, registerables} from "chart.js";
 import {Habit} from "../calendar/DailyOverview.vue";
 
@@ -39,6 +39,8 @@ function createLabels() {
         return ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
     } else if (DataProps.habit?.interval === 2) {
         return getLast4ISOWeekNumbers();
+    } else if (DataProps.habit?.interval === 3) {
+        return [new Intl.DateTimeFormat('de', { month: 'long' }).format(currentDay), "Verpasste Habits"];
     }
 }
 
@@ -55,7 +57,7 @@ function prepareArr(arr: Array<string>): Array<number> {
             resultArr[index] = (count / DataProps.habit!.frequency) * 100;
             date.setDate(date.getDate() + 1);
         });
-    } else {
+    } else if (DataProps.habit!.interval === 2) {
         const weekNumbers = getLast4ISOWeekNumbers();
         const day = new Date(currentDay);
         day.setDate(currentDay.getDate() - (currentDay.getDay() + 6 * 4));
@@ -69,6 +71,12 @@ function prepareArr(arr: Array<string>): Array<number> {
             }).length;
             resultArr[index] = (count / DataProps.habit!.frequency) * 100;
         });
+    } else {
+        console.log(newArr, DataProps.habit!.frequency)
+        const finished = (newArr.length / DataProps.habit!.frequency) * 100;
+        console.log(finished)
+        const remaining = 100 - finished;
+        resultArr.push(finished, remaining);
     }
     return resultArr;
 }
@@ -78,7 +86,7 @@ const HabitData = {
     datasets: [{
         label: '% der Erreichten Habits',
         data: prepareArr(DataProps.habit!.dates),
-        backgroundColor: DataProps.habit!.color,
+        backgroundColor: (DataProps.habit!.interval === 3) ? [DataProps.habit!.color, "#9d9a9a"] : DataProps.habit!.color,
     }]
 }
 
@@ -91,11 +99,14 @@ const chartOptions = {
     }
 };
 
+const interval = DataProps.habit!.interval === 1 ? "am Tag" : (DataProps.habit!.interval === 2 ? "in der Woche" : "im Monat");
+
 </script>
 
 <template>
-    <h2>{{DataProps.habit!.name}}</h2>
-    <BarChart :chartData="HabitData" :options="chartOptions"/>
+    <h2>{{DataProps.habit!.name}} ({{DataProps.habit!.frequency}} {{interval}})</h2>
+    <PieChart v-if="DataProps.habit!.interval === 3" :chartData="HabitData"/>
+    <BarChart v-else :chartData="HabitData" :options="chartOptions"/>
 </template>
 
 <style scoped>

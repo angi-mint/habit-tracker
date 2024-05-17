@@ -21,7 +21,9 @@ onMounted(async () => {
 </script>
 
 <template>
-<HabitBarChart v-for="habit in habitData" :habit="habit"></HabitBarChart>
+    <div class="stats-wrapper">
+        <HabitBarChart class="stats" v-for="habit in habitData" :habit="habit"></HabitBarChart>
+    </div>
 </template>
 
 <style scoped>
