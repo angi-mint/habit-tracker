@@ -43,13 +43,20 @@ function createICalEvent(habit: Habit) {
     vevent.addPropertyWithValue('UID', 'HABIT-' + habit.id.toString());
     vevent.addPropertyWithValue('SUMMARY', habit.name);
     vevent.addPropertyWithValue('DESCRIPTION', habit.category || '');
-    vevent.addPropertyWithValue('DTSTART', habit.startDate + 'T' + habit.startTime);
-    vevent.addPropertyWithValue('DTEND', habit.endDate + 'T' + habit.endTime);
+
+    const dtstart = ICAL.Time.fromDateString(habit.startDate + 'T' + habit.startTime);
+    const dtend = ICAL.Time.fromDateString(habit.endDate + 'T' + habit.endTime);
+
+    vevent.addPropertyWithValue('DTSTART', dtstart.toString());
+    vevent.addPropertyWithValue('DTEND', dtend.toString());
+
     const frequency = habit.interval === 0 ? 'DAILY' : habit.interval === 1 ? 'WEEKLY' : 'MONTHLY';
 
     if (habit.timeperiod) {
-        const duration = new ICAL.Duration(habit.endDate + 'T' + habit.endTime, habit.startDate + 'T' + habit.startTime);
-        const count = Math.ceil(duration.toDays()) / habit.frequency;
+        const startDate = new Date(habit.startDate);
+        const endDate = new Date(habit.endDate);
+        const durationDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+        const count = Math.ceil(durationDays / habit.frequency);
         vevent.addPropertyWithValue('RRULE', `FREQ=${frequency};COUNT=${count}`);
     } else {
         vevent.addPropertyWithValue('RRULE', `FREQ=${frequency};INTERVAL=${habit.frequency}`);
