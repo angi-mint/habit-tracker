@@ -39,8 +39,8 @@ const handleReloade = () => {
     </div>
     <Tabs :key="reloader">
         <template #selector>
-            <button @click="changeStates('home')" :class="{ 'tab-active': states.home }" class="tab-selector">Home</button>
-            <button @click="changeStates('statistics')" :class="{ 'tab-active': states.statistics }" class="tab-selector">Statistics</button>
+            <button @click="changeStates('home')" :class="{ 'tab-active': states.home }" class="tab-selector">Habits</button>
+            <button @click="changeStates('statistics')" :class="{ 'tab-active': states.statistics }" class="tab-selector">Statistiken</button>
         </template>
         <template #content>
             <Tab v-if="states.home">
