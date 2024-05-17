@@ -17,13 +17,18 @@ function changeStates(tab: string) {
         states.value[state] = state === tab;
     }
 }
+const reloader = ref(0);
+
+const handleReloade = () => {
+    reloader.value += 1;
+};
 
 </script>
 
 <template>
     <h1>Willkommen zurück!</h1>
     <div class="header-actions">
-        <CreateHabit :fixed="true" submit="Erstellen" :id="-1">
+        <CreateHabit @reload-create-habit="handleReloade()" :fixed="true" submit="Erstellen" :id="-1">
             <template #btn-content>+
             </template>
             <template #title>
@@ -32,7 +37,7 @@ function changeStates(tab: string) {
         </CreateHabit>
         <Settings />
     </div>
-    <Tabs>
+    <Tabs :key="reloader">
         <template #selector>
             <button @click="changeStates('home')" :class="{ 'tab-active': states.home }" class="tab-selector">Home</button>
             <button @click="changeStates('statistics')" :class="{ 'tab-active': states.statistics }" class="tab-selector">Statistics</button>
