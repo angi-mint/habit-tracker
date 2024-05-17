@@ -25,7 +25,7 @@ function prepareArray(arr: Array<string>): Array<number>{
         const count = newArr.filter((date) => date === dayNumber).length;
         resultArr[index] = (count / HabitWeekly.frequency!) * 100;
         firstDay.setDate(firstDay.getDate() + 1);
-    })
+    });
     return resultArr;
 }
 
