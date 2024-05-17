@@ -10,7 +10,7 @@ const startDate = new Date(currentDay);
 startDate.setDate(startDate.getDate() - (startDate.getDay() + 20));
 
 const endDate = new Date(currentDay);
-endDate.setDate(endDate.getDate() - (endDate.getDay() + 1));
+endDate.setDate(endDate.getDate() - endDate.getDay());
 
 const habitData = ref([]);
 
