@@ -3,7 +3,7 @@
     --color-menu: #EB7B7B;
     --color-background: #F0EFEC;
     --color-font: #414141;
-    --color-backdrop: rgba(161,139,139,0.75);
+    --color-backdrop: rgba(161, 139, 139, 0.75);
     --color-warning: red;
 
     --border-radius: 5px;
@@ -12,6 +12,7 @@
     --spacing-2: 10px;
     --spacing-3: 15px;
     --spacing-4: 20px;
+    --spacing-5: 30px;
 
     --font-1: 16px;
 }
@@ -20,6 +21,37 @@
     font-family: "Roboto", sans-serif;
     background-color: var(--color-background);
 }
+
+/*Menü oben links*/
+.header-actions {
+    display: flex;
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+
+.header-actions button {
+    margin-right: 10px;
+    padding: var(--spacing-1);
+    background-color: var(--color-menu);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+}
+
+#gear {
+    display: block;
+    margin: auto;
+    background-color: var(--color-menu);
+}
+
+#app {
+    margin-top: 70px;
+    margin-left: 20px;
+}
+
+/* Pop-up Fenster für das anlegen eines Habit */
 
 .modal {
     position: fixed;
@@ -41,7 +73,7 @@
     position: absolute;
     background-color: var(--color-background);
     border-radius: var(--border-radius);
-
+    width: 250px;
     padding: var(--spacing-4);
 }
 
@@ -50,13 +82,9 @@
     top: 5px;
     right: 5px;
     border-radius: var(--spacing-1);
-    border: 1px solid var(--color-menu); 
+    border: 1px solid var(--color-menu);
     padding: 5px;
-    color:#414141;
-}
-
-.btn-habit {
-    float: right;
+    color: #414141;
 }
 
 .form-label {
@@ -86,21 +114,33 @@
     color: var(--color-warning);
 }
 
-input[type="submit"] {
-    float: right;
+input[type="submit"], .btn-delete {
+    cursor: pointer;
     padding: var(--spacing-1);
     margin-top: var(--spacing-1);
 
     border-radius: 5px;
-    border: 1px solid var(--color-menu); 
+    border: 1px solid var(--color-menu);
 
     background-color: var(--color-menu);
     color: var(--color-background);
 }
 
+input[type="submit"] {
+    float: right;
+}
+
 button {
-    border-radius: 5px; 
-    border: 1px solid var(--color-menu); 
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.btn {
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid var(--color-menu);
     padding: var(--spacing-1);
     background-color: var(--color-menu);
     color: var(--color-background);
@@ -119,7 +159,7 @@ button {
     display: none;
 }
 
-.toggler-wrapper input[type="checkbox"]:checked+.toggler-slider {
+.toggler-wrapper input[type="checkbox"]:checked + .toggler-slider {
     background-color: var(--color-menu);
 }
 
@@ -147,6 +187,177 @@ button {
     background-color: var(--color-background);
 }
 
-.toggler-wrapper input[type="checkbox"]:checked+.toggler-slider .toggler-knob {
+.toggler-wrapper input[type="checkbox"]:checked + .toggler-slider .toggler-knob {
     left: calc(100% - 19px - 3px);
+}
+
+/* Ab hier wird die Normalansicht gestylt*/
+
+.tab-selector {
+    padding: var(--spacing-3);
+    background-color: var(--color-background);
+    color: var(--color-font);
+    border: 0;
+    font-size: var(--spacing-4);
+}
+
+.tab-active {
+    border-radius: 5px;
+    border: 1px solid var(--color-menu);
+    padding: var(--spacing-1);
+    background-color: var(--color-menu);
+    color: var(--color-background);
+}
+
+.tab-content {
+    margin-top: 10px;
+}
+
+/* progress circle */
+
+.tracker-circle {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+
+/* Tägliche Ansicht */
+
+.tab-content {
+    margin-left: var(--spacing-3);
+}
+
+/* Abstand der Überschrift zu den Habits */
+.habits-wrapper h2 {
+    margin: var(--spacing-4) 0 var(--spacing-3) 0;
+}
+
+.habit-wrapper {
+    display: flex;
+    padding: 5px;
+}
+
+.habit-info {
+    display: flex;
+    align-items: center;
+    width: 300px; /*  festen Breite damit alle gleich lang sind */
+    margin-left: var(--spacing-2);
+    margin-right: var(--spacing-2);
+    border-radius: var(--spacing-4);
+    padding: var(--spacing-1);
+    outline: 3px solid var(--color-menu);
+    color: var(--color-background);
+}
+
+.habit-name {
+    flex: 1;
+    margin: 0 var(--spacing-4) 0 var(--spacing-3);
+    color: var(--color-font);
+    border-radius: var(--spacing-4);
+}
+
+.habit-text {
+    margin: 0 10px 0 0;
+    color: var(--color-font);
+    background-color: var(--color-background);
+    border-radius: var(--spacing-4);
+}
+
+.monthly-week {
+    display: flex;
+}
+
+.btn-track {
+    border: none;
+    margin: 0;
+    padding: 0
+}
+
+.btn-track:disabled {
+    cursor: not-allowed;
+}
+
+/* Monatsansicht */
+
+.monthly-wrapper {
+    border-radius: var(--spacing-3);
+    width: 335px;
+    height: 270px;
+    margin-left: var(--spacing-2);
+}
+
+.monthly-name {
+    padding: var(--spacing-1);
+    border-radius: var(--spacing-3);
+    margin: 0;
+    color: var(--color-background);
+}
+
+.monthly-view {
+    padding: var(--spacing-3);
+}
+
+.monthly-habit {
+    padding: var(--spacing-2);
+    display: flex;
+}
+
+.monthly-day {
+    margin-right: var(--spacing-1);
+}
+
+/* Wochenansicht */
+
+.weekly-name {
+    padding: var(--spacing-1);
+    margin: 0;
+    color: var(--color-background);
+    border-radius: var(--spacing-2);
+}
+
+.weekly-habit {
+    padding: var(--spacing-2);
+    display: flex;
+}
+
+.weekly-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--spacing-3);
+    margin-left: var(--spacing-2);
+}
+
+.weekly-view {
+    padding: var(--spacing-3);
+    border-radius: var(--spacing-3);
+}
+
+.weekly-overview {
+    display: flex;
+    border-radius: var(--spacing-4);
+}
+
+/*Plant*/
+
+.plant-wrapper {
+    float: right;
+    margin-right: 50px;
+}
+
+/* Pflanze */
+
+.plant-wrapper {
+    position: right;
+}
+
+.plant {
+   text-align: center; 
 }

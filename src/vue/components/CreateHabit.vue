@@ -2,82 +2,101 @@
 
 import HabitIcon from "./icons/HabitIcon.vue";
 import LabelForm from "./form/LabelForm.vue";
-import {computed, Ref, ref} from "vue";
+import {computed, onMounted, PropType, Ref, ref} from "vue";
+import {Habit} from "./calendar/DailyOverview.vue";
 
 const open = ref(false);
 
-interface HabitProps {
-    name: string,
-    icon?: number,
-    color?: number,
-    category?: number,
-    frequency: number,
-    interval: number,
-    timeperiod: number,
-    startDate?: Date,
-    endDate?: Date
-}
-const habitData = ref({
-    name: '',
-    icon: '',
-    category: '',
-    interval: '',
-    frequency: 1,
-    range: false,
-    startDate: '',
-    endDate: '',
-})
-const onSubmit = () => {
-    console.log(habitData.value)
-    open.value = false;
-}
-
-interface DatabaseList {
-    pk: number;
-    value: string;
-}
-
-const categories: Ref<Array<DatabaseList>> = computed(() => {
-    const category = [
-        { pk: 1, value: "Sport" },
-        { pk: 2, value: "Health" }
-    ];
-
-    return category;
+const Props = defineProps({
+    id: Number,
+    fixed: Boolean,
+    submit: String,
+    delete: Boolean,
+    habitData: Object as PropType<Habit>
 });
 
-const icons: Ref<Array<DatabaseList>> = computed(() => {
-    const icon = [
-        { pk: 1, value: "heart" },
-        { pk: 2, value: "pill" },
-        { pk: 3, value: "book" },
-        { pk: 4, value: "glass" },
-    ];
+const defaultHabitData: Habit = {
+    id: -1,
+    name: '',
+    icon: '',
+    color: 1,
+    category: '',
+    frequency: 1,
+    entries: 0,
+    interval: '',
+    timeperiod: false,
+    startDate: '',
+    endDate: '',
+    calendar: false,
+    startTime: '',
+    endTime: '',
+    todo: false,
+};
 
-    return icon;
+const habitData = (Props.id === -1) ? ref(defaultHabitData) : ref(Props.habitData as Habit);
+
+interface DatabaseList {
+    id: number;
+    name: string;
+}
+
+const categories = ref<Array<DatabaseList>>([]);
+const colors = ref<Array<DatabaseList>>([]);
+
+const fetchList = async () => {
+    colors.value = (await window.api.getColorList()).map((color: DatabaseList) => ({
+        id: color.id,
+        name: color.name
+    }));
+
+    categories.value = (await window.api.getCategoryList()).map((category: DatabaseList) => ({
+        id: category.id,
+        name: category.name
+    }));
+};
+
+const icons: Ref<Array<DatabaseList>> = computed(() => {
+    return [{id: 1, name: "heart"}, {id: 2, name: "pill"}, {id: 3, name: "book"}, {id: 4, name: "glass"},];
 });
 
 const intervals: Ref<Array<DatabaseList>> = computed(() => {
-    const interval = [
-        { pk: 1, value: "täglich" },
-        { pk: 2, value: "wöchentlich" },
-        { pk: 3, value: "zweiwöchentlich" },
-        { pk: 4, value: "monatlich" },
-    ];
-    return interval;
+    return [{ id: 1, name: "täglich" }, { id: 2, name: "wöchentlich" }, { id: 3, name: "monatlich"}];
 });
+
+onMounted(async () => {
+    await fetchList();
+});
+
+const emit = defineEmits(['reloadCreateHabit']);
+const onSubmit = async () => {
+    if (Props.fixed) await window.api.sendHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+    else await window.api.updateHabitObject(JSON.parse(JSON.stringify(habitData.value)));
+
+    await fetchList();
+    emit('reloadCreateHabit');
+    habitData.value = defaultHabitData;
+    open.value = false;
+}
+
+async function deleteHabit() {
+    await window.api.deleteHabit(habitData.value.id);
+    emit('reloadCreateHabit');
+    habitData.value = defaultHabitData;
+    open.value = false;
+}
 
 </script>
 
 <template>
-    <button class="btn-habit" @click="open = true">Neues Habit</button>
+    <button :class="{'btn-habit btn': Props.fixed}" @click="open = true">
+        <slot name="btn-content"></slot>
+    </button>
     <Teleport to="body">
         <div v-if="open" class="modal">
             <div class="modal-content">
-                <h3>Neues Habit erstellen</h3>
-                <button @click="open = false" class="btn-exit">x</button>
+                <slot name="title"></slot>
+                <button @click="open = false" class="btn-exit btn">x</button>
                 <form @submit.prevent="onSubmit">
-
                     <LabelForm required>
                         <template #form-label><p>Name</p></template>
                         <template #input>
@@ -88,22 +107,31 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                     <LabelForm>
                         <template #form-label><p>Kategorie</p></template>
                         <template #input>
-                            <select class="form-input" v-if="categories.length > 0" v-model="habitData.category">
-                                <option disabled value=""> Wähle eine Kategorie</option>
-                                <option v-for="items in categories" :value="items.pk">
-                                    {{ items.value }}
-                                </option>
-                            </select>
-                            <p v-else>Es gibt keine Kategorien</p>
+                            <input class="form-input" list="categories" v-model="habitData.category">
+                            <datalist id="categories">
+                                <option v-for="items in categories" :value="items.name"></option>
+                            </datalist>
                         </template>
                     </LabelForm>
 
-                    <LabelForm>
+                    <LabelForm required>
+                        <template #form-label><p>Farbe</p></template>
+                        <template #input>
+                            <label v-for="items in colors">
+                                <input type="radio" v-model="habitData.color" :value="items.id" :checked="Props.habitData?.color === items.name" name="color" required>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" :fill="items.name" viewBox="0 0 16 16">
+                                    <circle cx="8" cy="8" r="8"/>
+                                </svg>
+                            </label>
+                        </template>
+                    </LabelForm>
+
+                    <LabelForm required>
                         <template #form-label><p>Icon</p></template>
                         <template #input>
                             <label v-for="items in icons">
-                                <input type="radio" v-model="habitData.icon" :value=items.pk />
-                                <HabitIcon :id=items.value />
+                                <input type="radio" v-model="habitData.icon" :value=items.id :checked="Props.habitData?.icon === items.name" name="icon" required>
+                                <HabitIcon :id=items.name />
                             </label>
                         </template>
                     </LabelForm>
@@ -113,8 +141,8 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
                         <template #input>
                             <select class="form-input" v-model="habitData.interval" required>
                                 <option disabled value="">Wähle ein Intervall</option>
-                                <option v-for="items in intervals" :value="items.pk">
-                                    {{ items.value }}
+                                <option v-for="items in intervals" :value="items.id">
+                                    {{ items.name }}
                                 </option>
                             </select>
                         </template>
@@ -129,22 +157,38 @@ const intervals: Ref<Array<DatabaseList>> = computed(() => {
 
                     <LabelForm>
                         <template #form-label><p>Zeitraum</p>
-                            <label class="toggler-wrapper">
-                                <input type="checkbox" v-model="habitData.range">
-                                <div class="toggler-slider">
-                                    <div class="toggler-knob"></div>
-                                </div>
-                            </label>
+                                <input type="checkbox" v-model="habitData.timeperiod" v-bind:true-value="1">
                         </template>
                         <template #input>
-                            <div v-if="habitData.range" class="form-input">
+                            <div v-if="habitData.timeperiod" class="form-input">
                                 <input class="form-input" type="date" v-model="habitData.startDate" required>
                                 <span> - </span>
                                 <input class="form-input" type="date" v-model="habitData.endDate" required>
                             </div>
                         </template>
                     </LabelForm>
-                    <input type="submit">
+
+                    <LabelForm>
+                        <template #form-label><p>Im Kalendar anzeigen</p>
+                            <input type="checkbox" v-model="habitData.calendar" v-bind:true-value="1">
+                        </template>
+                        <template #input>
+                            <div v-if="habitData.calendar" class="form-input">
+                                <p>Uhrzeit festlegen:</p>
+                                <input class="form-input" type="time" v-model="habitData.startTime" required>
+                                <span> - </span>
+                                <input class="form-input" type="time" v-model="habitData.endTime" required>
+                            </div>
+                        </template>
+                    </LabelForm>
+
+                    <LabelForm>
+                        <template #form-label><p>Als ToDo anzeigen</p>
+                            <input type="checkbox" v-model="habitData.todo" v-bind:true-value="1">
+                        </template>
+                    </LabelForm>
+                    <button class="btn-delete" v-if="Props.delete" @click="deleteHabit();">Löschen</button>
+                    <input type="submit" :value="Props.submit">
                 </form>
             </div>
         </div>
