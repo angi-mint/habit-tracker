@@ -344,3 +344,10 @@ button {
     display: flex;
     border-radius: var(--spacing-4);
 }
+
+/*Plant*/
+
+.plant-wrapper {
+    float: right;
+    margin-right: 50px;
+}
