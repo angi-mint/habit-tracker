@@ -10,8 +10,11 @@ export interface WeekInfo {
 
 function weekInfo(): WeekInfo {
     const today = new Date();
-    const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 1));
-    const lastDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 7));
+    const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+    const firstDayOfWeek = new Date(today);
+    firstDayOfWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6);
     return {firstDayOfWeek: firstDayOfWeek, lastDayOfWeek: lastDayOfWeek};
 }
 

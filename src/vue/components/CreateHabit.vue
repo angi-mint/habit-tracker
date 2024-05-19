@@ -73,8 +73,8 @@ const onSubmit = async () => {
     else await window.api.updateHabitObject(JSON.parse(JSON.stringify(habitData.value)));
 
     await fetchList();
-    emit('reloadCreateHabit');
     habitData.value = defaultHabitData;
+    emit('reloadCreateHabit');
     open.value = false;
 }
 
